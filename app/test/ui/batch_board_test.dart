@@ -93,6 +93,7 @@ Future<void> _pump(
   double textScale = 1,
   Brightness brightness = Brightness.dark,
   double bottomInset = 0,
+  Locale? locale,
 }) async {
   tester.view
     ..physicalSize = Size(width, height) * 2
@@ -110,6 +111,7 @@ Future<void> _pump(
       child: MaterialApp(
         theme: brightness == Brightness.dark ? AppTheme.dark() : AppTheme.light(),
         navigatorObservers: [ToastRouteObserver()],
+        locale: locale,
         builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale)),
           child: child!,
@@ -579,6 +581,43 @@ void main() {
       h.transports['b']!.failure = null;
       await teardownBoard(tester, h);
     });
+
+    testWidgets('Japanese localizes the sheet, progress and result, keeping remote text', (tester) async {
+      final h = await _studio(_ten());
+      await _pump(tester, h, locale: const Locale('ja'));
+      await _pick(tester, ['task 1', 'task 4']);
+      await _tap(tester, find.text('停止'));
+
+      expect(find.text('エージェントを停止'), findsOneWidget);
+      expect(find.text('停止するエージェント'), findsOneWidget);
+      expect(find.text('エージェント1件を停止'), findsOneWidget);
+      expect(find.text('スキップ済み'), findsOneWidget);
+      expect(find.text('回答待ち'), findsOneWidget, reason: 'the skipped row keeps its reason');
+      expect(find.text('task 4'), findsOneWidget, reason: 'the agent title stays as received');
+      expect(find.text('Claude Code · studio-mac'), findsNWidgets(2), reason: 'names and labels stay as received');
+
+      await _tap(tester, find.text('エージェント1件を停止'));
+      expect(_panesOf(_sent(h, 'a', 'pane.send_keys')), ['w1:p1']);
+      expect(find.text('1件停止 · 1件スキップ'), findsOneWidget);
+      await teardownBoard(tester, h);
+    });
+
+    testWidgets('Japanese names a partial failure but leaves the remote error untouched', (tester) async {
+      final h = await BoardHarness.create([
+        _machine('a', [_pane(1, 'working')], label: 'studio-mac'),
+        _machine('b', [_pane(2, 'working')], label: 'build-box'),
+      ]);
+      await _pump(tester, h, locale: const Locale('ja'));
+      await _pick(tester, ['task 1', 'task 2']);
+      await _tap(tester, find.text('停止'));
+      h.transports['b']!.failure = const HerdrTransportException('Connection reset');
+
+      await _tap(tester, find.text('エージェント2件を停止'));
+      expect(_panesOf(_sent(h, 'a', 'pane.send_keys')), ['w1:p1']);
+      expect(find.text('1件停止 · 失敗1件：build-box: Connection reset'), findsOneWidget);
+      h.transports['b']!.failure = null;
+      await teardownBoard(tester, h);
+    });
   });
 
   group('message', () {
@@ -881,6 +920,26 @@ void main() {
       expect(find.byType(BusySpinner), findsNothing);
       expect(find.textContaining('selected'), findsNothing);
       expect(find.text('Closed 1'), findsOneWidget);
+      sessions.dispose();
+      await teardownBoard(tester, h);
+    });
+
+    testWidgets('Japanese says the close title, button and progress in its own words', (tester) async {
+      final h = await _studio([_pane(1, 'idle')]);
+      final slow = _SlowEnd(key: 'a/k1', title: 'agent one', machine: h.fleet.connection('a'));
+      final sessions = _Sessions([slow]);
+      await _pump(tester, h, sessions: sessions, locale: const Locale('ja'));
+
+      await _pick(tester, ['agent one']);
+      await _tap(tester, find.text('閉じる'));
+      expect(find.text('エージェントを閉じる'), findsOneWidget);
+      expect(find.text('エージェント1件を閉じる'), findsOneWidget);
+      await _tap(tester, find.text('エージェント1件を閉じる'));
+      expect(find.text('エージェント1件を閉じています…'), findsOneWidget);
+
+      slow.gate.complete();
+      await _settle(tester);
+      expect(find.text('1件終了'), findsOneWidget);
       sessions.dispose();
       await teardownBoard(tester, h);
     });
