@@ -347,8 +347,8 @@ line.
   `app/lib/data/repositories/reviewed_state.dart`).
 - **`FleetRepository`** owns every connection and merges their agent panes into
   one list (`app/lib/data/repositories/fleet_repository.dart`).
-- **Observed sessions.** A terminal pane running `omp`, Claude Code or Codex
-  can also be shown as a chat. The chat is read from the agent's own session log
+- **Observed sessions.** A terminal pane running `omp`, Claude Code, Codex or
+  dsh can also be shown as a chat. The chat is read from the agent's own session log
   through the keeper's `follow`, mapped to the same updates an ACP session
   gives (`app/lib/data/repositories/observed_sessions.dart`,
   `app/lib/data/observed/`). One `ObservedKind` per agent says how its log is
@@ -356,8 +356,11 @@ line.
   a session id once herdr's integration is installed, else the running
   process's `~/.claude/sessions/<pid>.json` names the session; Codex reports a
   thread id, found by the UUIDv7's creation time in
-  `~/.codex/sessions/YYYY/MM/DD`, and with no report stays a terminal), how a
-  line is read (`OmpLogMapper`, `ClaudeLogMapper`, `CodexLogMapper`), where its
+  `~/.codex/sessions/YYYY/MM/DD`, and with no report stays a terminal; dsh can
+  report nothing, so its log is the mirror the dsh-herdr plugin writes at
+  `~/.dsh/herdr/<session>/<pane>.jsonl`), how a
+  line is read (`OmpLogMapper`, `ClaudeLogMapper`, `CodexLogMapper`,
+  `DshLogMapper`), where its
   subagents' transcripts are, and what the phone can do (answer its question
   tool by keys, ask it to stop a background job). Approvals are read from the
   screen by the prompt detector for all three. Facts that took a capture to

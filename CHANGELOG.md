@@ -6,12 +6,25 @@ release.
 
 ## [Unreleased]
 
+### dsh opens as a chat
+
+A `dsh` pane now opens as the chat it ran, like omp, Claude Code and Codex:
+its messages, thinking, tool calls and plan, read from the JSONL the
+dsh-herdr plugin mirrors the session to.
+
+> [!TIP]
+> Try it: run `dsh` in a herdr pane on a machine with the dsh-herdr plugin,
+> then tap the pane in the app. A pane whose dsh has no plugin says what to
+> install.
+
+- herdr cannot carry a dsh session reference (only its own integrations may),
+  so the app derives the mirror's path from the pane.
+- The mirror is written by dsh-herdr (the dsh plugin).
+
 ### dsh is one of the agents the app knows
 
 `dsh` now has its name everywhere the app names an agent, next to omp, Codex,
-Claude Code and pi, and Settings says where it opens: dsh runs in a terminal,
-because the app reads no dsh session log yet. Nothing about the other four
-changes.
+Claude Code and pi. Nothing about the other four changes.
 
 ## [0.1.50] - 2026-11-05
 

@@ -884,6 +884,15 @@ when it was installed reports nothing until it is restarted or resumed).
   UUIDv7 whose first 48 bits are that moment in UTC: look in the day before,
   of and after. The file is made at the first prompt. herdr's hook reports the
   thread id only. With no report nothing links a pane to a thread.
+- dsh: herdr cannot carry this one. `agent_session` accepts only its own
+  official integrations (`src/agent_resume.rs: is_official_agent_source`), and
+  of those only `pi` and `omp` may report a path; a `dsh` report is accepted and
+  dropped. The dsh-herdr plugin therefore mirrors the pane's session as plain
+  JSONL at `~/.dsh/herdr/<herdr session>/<pane id, ':' as '-' >.jsonl`
+  (`~/.dsh/herdr/default/w5-pJ.jsonl`), derived from the pane with no report at
+  all. The header line names the pane, session, pid and cwd; after it are the
+  events a chat shows (the plugin leaves out the system prompt, tool schemas,
+  provider streams and the text dsh injects as `user/message`).
 
 **Pictures.** The host cuts every binary payload out of the log it sends and
 leaves `[N bytes of data not sent; ref=<start>.<hash>]` (`start` is the byte
