@@ -80,12 +80,18 @@ class SubagentsChip extends StatelessWidget {
         label = needYou(v.blocked);
         tint = ds.blockedText;
       } else if (running > 0 && v.live) {
-        label = observed ? '$running running' : '$running of $total running';
+        label = observed
+            ? context.l10n.messageCountRunning('$running')
+            : context.l10n.messageRunningOfTotal('$running', '$total');
       } else if (!observed && v.summary.failed > 0) {
-        label = '${v.summary.failed} of $total failed';
+        label = context.l10n.messageFailedOfTotal('${v.summary.failed}', '$total');
         tint = ds.dangerText;
       } else {
-        label = observed ? '$total${v.partial ? '+' : ''} ${plural(total, 'subagent')}' : countOf(total, 'subagent');
+        label = observed
+            ? (total == 1
+                  ? context.l10n.messagePlusSubagent('$total${v.partial ? '+' : ''}')
+                  : context.l10n.messagePlusSubagents('$total${v.partial ? '+' : ''}'))
+            : context.l10n.messageSubagentCount(total);
       }
       return Padding(
         padding: const EdgeInsets.only(bottom: Gap.hair),
@@ -158,7 +164,7 @@ class SubagentRoster extends StatelessWidget {
             child: Semantics(
               header: true,
               child: Text(
-                '${section.title} · $count',
+                '${section.label(context.l10n)} · $count',
                 style: Type.labelStrong.copyWith(color: ds.textSecondary, fontFeatures: Type.tabular),
               ),
             ),
@@ -180,9 +186,9 @@ class SubagentRoster extends StatelessWidget {
         kind: SheetKind.list,
         scrolls: items.isNotEmpty,
         child: items.isEmpty
-            ? const EmptyState.inline(
-                'None started yet.',
-                padding: EdgeInsets.only(left: Gap.lg, right: Gap.lg, bottom: Gap.sm),
+            ? EmptyState.inline(
+                context.l10n.uiNoneStartedYet,
+                padding: const EdgeInsets.only(left: Gap.lg, right: Gap.lg, bottom: Gap.sm),
               )
             : list,
       );

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/app_localizations_en.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show PlatformException;
 
@@ -47,11 +49,18 @@ typedef TransportFactory = HerdrTransport Function(
 );
 
 class MachineFormViewModel extends ChangeNotifier {
-  MachineFormViewModel({required this._repo, this.existing, required this._transportFactory});
+  MachineFormViewModel({required this._repo, this.existing, required this._transportFactory, AppLocalizations? l10n})
+    : _l10n = l10n;
 
   final MachineRepository _repo;
   final MachineProfile? existing;
   final TransportFactory _transportFactory;
+
+  /// Null only in tests and other callers outside the widget tree: English
+  /// then, as the form's own fallback.
+  final AppLocalizations? _l10n;
+
+  AppLocalizations get words => _l10n ?? AppLocalizationsEn();
 
   TestState _testState = TestState.idle;
 
@@ -195,7 +204,7 @@ class MachineFormViewModel extends ChangeNotifier {
       final pem = saved.privateKeyPem;
       if (pem == null || pem.isEmpty) {
         _hasSavedKey = false;
-        _publicKeyError = 'No private key is saved for this machine.';
+        _publicKeyError = words.uiNoPrivateKeyIsSavedForThisMachine;
         return;
       }
       final result = await KeyGenerator.readPublicKeyOffThread(
@@ -205,9 +214,9 @@ class MachineFormViewModel extends ChangeNotifier {
       _publicKey = result.line;
       _publicKeyError = switch (result.failure) {
         null => null,
-        KeyReadFailure.needsPassphrase => 'This key has a passphrase. Enter it in the field below.',
-        KeyReadFailure.wrongPassphrase => 'That passphrase doesn’t open the saved key.',
-        KeyReadFailure.unreadable => 'The saved key couldn’t be read.',
+        KeyReadFailure.needsPassphrase => words.uiThisKeyHasAPassphrase,
+        KeyReadFailure.wrongPassphrase => words.uiThatPassphraseDoesnTOpenTheSavedKey,
+        KeyReadFailure.unreadable => words.uiTheSavedKeyCouldnTBeRead,
       };
     } finally {
       _readingKey = false;
@@ -328,13 +337,9 @@ class MachineFormViewModel extends ChangeNotifier {
         _message = switch (e) {
           HerdrTransportException(:final message) => message,
           HerdrApiException() => e.toString(),
-          _ when secrets == null =>
-            'The saved secrets couldn’t be read from this phone’s keystore (${_describe(e)}). '
-                'Test again; if it keeps failing, restart the app.',
-          TimeoutException() =>
-            'The machine didn’t answer in time. Check that it is on and '
-                'reachable from this phone, then test again.',
-          _ => 'The test stopped: ${_describe(e)}. Check the host and port, then test again.',
+          _ when secrets == null => words.messageTheSavedSecretsCouldnTBeRead(_describe(e)),
+          TimeoutException() => words.uiTheMachineDidnTAnswerInTimeCheck,
+          _ => words.messageTheTestStopped(_describe(e)),
         };
       }
     } finally {
@@ -379,9 +384,7 @@ class MachineFormViewModel extends ChangeNotifier {
       dropKeyDraft();
       return true;
     } on Object catch (e) {
-      _saveError =
-          'This phone’s storage refused it (${_describe(e)}). Everything you entered '
-          'is still here: save again. If it keeps failing, restart the app.';
+      _saveError = words.messageThisPhoneSStorageRefusedIt(_describe(e));
       return false;
     } finally {
       _saving = false;

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import '../../../data/words/plural.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
@@ -17,9 +20,9 @@ class DiffStats extends StatelessWidget {
   final TextStyle? style;
 
   /// The words a screen reader says.
-  static String words(int added, int removed) => [
-    if (added > 0) '${countOf(added, 'line')} added',
-    if (removed > 0) '${countOf(removed, 'line')} removed',
+  static String words(int added, int removed, {AppLocalizations? l10n}) => [
+    if (added > 0) l10n?.messageLinesAdded(added) ?? '${countOf(added, 'line')} added',
+    if (removed > 0) l10n?.messageLinesRemoved(removed) ?? '${countOf(removed, 'line')} removed',
   ].join(', ');
 
   @override
@@ -27,7 +30,7 @@ class DiffStats extends StatelessWidget {
     final ds = context.ds;
     final base = (style ?? Type.captionStrong).copyWith(fontFeatures: Type.tabular);
     return Semantics(
-      label: words(added, removed),
+      label: words(added, removed, l10n: context.l10n),
       excludeSemantics: true,
       // Never wider than 40% of the screen: past that it shrinks to fit
       // instead of pushing the line it belongs to out of its row.

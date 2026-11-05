@@ -1,0 +1,67 @@
+{
+  "entries": [
+    {"key": "uiCode", "en": "Code", "ja": "コード"},
+    {"key": "uiShowAll", "en": "Show all", "ja": "すべて表示"},
+    {"key": "uiCodeCopied", "en": "Code copied", "ja": "コードをコピーしました"},
+    {"key": "uiTableCopied", "en": "Table copied", "ja": "表をコピーしました"},
+    {"key": "uiTableCopiedAsTSV", "en": "Table copied as TSV", "ja": "表をTSVでコピーしました"},
+    {"key": "uiDiagramSourceCopied", "en": "Diagram source copied", "ja": "図のソースをコピーしました"},
+    {"key": "uiColumn", "en": "column", "ja": "列"},
+    {"key": "messageColumns", "en": "{p0} columns", "ja": "{p0}列", "placeholders": {"p0": "String"}},
+    {"key": "uiCopy", "en": "Copy", "ja": "コピー"},
+    {"key": "uiNote", "en": "Note", "ja": "メモ"},
+    {"key": "uiTip", "en": "Tip", "ja": "ヒント"},
+    {"key": "uiImportant", "en": "Important", "ja": "重要"},
+    {"key": "uiWarning", "en": "Warning", "ja": "警告"},
+    {"key": "uiCaution", "en": "Caution", "ja": "注意"},
+    {"key": "uiFlowchart", "en": "Flowchart", "ja": "フローチャート"},
+    {"key": "uiSequenceDiagram", "en": "Sequence diagram", "ja": "シーケンス図"},
+    {"key": "uiStateDiagram", "en": "State diagram", "ja": "ステート図"},
+    {"key": "uiERDiagram", "en": "ER diagram", "ja": "ER図"},
+    {"key": "uiClassDiagram", "en": "Class diagram", "ja": "クラス図"},
+    {"key": "messageNewLine", "en": "1 new line", "ja": "新着1行"},
+    {"key": "messageNewLines", "en": "{p0} new lines", "ja": "新着{p0}行", "placeholders": {"p0": "String"}},
+    {"key": "message99New", "en": "99+ new", "ja": "新着99+行"},
+    {"key": "uiNothingToDraw", "en": "Nothing to draw", "ja": "描く内容がありません"},
+    {
+      "key": "messageTooLargeToDrawHere",
+      "en": "Too large to draw here · showing the source",
+      "ja": "大きすぎて描けません · ソースを表示中"
+    },
+    {
+      "key": "messageCouldnTTellTheDiagramKind",
+      "en": "Couldn’t tell which kind of diagram this is · showing the source",
+      "ja": "図の種類を判別できません · ソースを表示中"
+    },
+    {
+      "key": "messageCanTDrawDiagramsYet",
+      "en": "Can’t draw {p0} diagrams yet · showing the source",
+      "ja": "{p0}の図はまだ描けません · ソースを表示中",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "messageCouldnTDrawThisDiagram",
+      "en": "Couldn’t draw this diagram · showing the source",
+      "ja": "この図は描けませんでした · ソースを表示中"
+    },
+    {
+      "key": "messageCouldnTDrawThisDiagramLine",
+      "en": "Couldn’t draw this diagram · line {p0} · showing the source",
+      "ja": "この図は描けませんでした · {p0}行目 · ソースを表示中",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "uiLoadingEarlierOutput", "en": "Loading earlier output…", "ja": "以前の出力を読み込み中…"},
+    {"key": "uiEarlierOutputIsnTAvailable", "en": "Earlier output isn’t available.", "ja": "以前の出力はありません。"},
+    {
+      "key": "uiHerdrServesTheLast1000Rows",
+      "en": "herdr serves the last 1000 rows of a pane.",
+      "ja": "herdr が保持するのはペインの直近1000行です。"
+    },
+    {"key": "uiEarlierOutputIsnTKept", "en": "Earlier output isn’t kept.", "ja": "以前の出力は残っていません。"},
+    {
+      "key": "uiThePhoneHoldsTheMostRecentRowsOnly",
+      "en": "The phone holds the most recent rows only.",
+      "ja": "スマートフォンが保持するのは直近の行だけです。"
+    }
+  ]
+}

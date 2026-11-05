@@ -4,6 +4,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+
 import '../../../data/acp/acp_models.dart';
 import '../../../data/observed/log_picture.dart';
 import '../../../data/services/disk_cache.dart' show diskCacheEntryLimit;
@@ -62,24 +64,27 @@ Uint8List _decodeBase64(String data) {
 /// The bytes of base64 [data]. Throws [ImageProblem] when there is nothing, it
 /// is bigger than [imageDecodeLimit], or it is not base64. Long text is decoded
 /// in another isolate.
-Future<Uint8List> decodeImageData(String data) async {
-  if (data.isEmpty) throw const ImageProblem('The agent sent no picture data.');
+Future<Uint8List> decodeImageData(String data, {AppLocalizations? words}) async {
+  if (data.isEmpty) throw ImageProblem(words?.uiTheAgentSentNoPictureData ?? 'The agent sent no picture data.');
   final size = base64DecodedLength(data);
   if (size > imageDecodeLimit) {
-    throw ImageProblem('Too large to show here (${formatBytes(size)}).', tooLarge: true);
+    throw ImageProblem(
+      words?.messageTooLargeToShowHere(formatBytes(size)) ?? 'Too large to show here (${formatBytes(size)}).',
+      tooLarge: true,
+    );
   }
   try {
     return data.length > _isolateFromChars ? await compute(_decodeBase64, data) : _decodeBase64(data);
   } on Object {
-    throw const ImageProblem('The picture data is damaged.');
+    throw ImageProblem(words?.uiThePictureDataIsDamaged ?? 'The picture data is damaged.');
   }
 }
 
 /// The bytes of [block] for the full-screen viewer; a picture that cannot be
 /// read says why as a [PhotoSourceException].
-Future<Uint8List> decodeImageDataFor(ImageBlock block) async {
+Future<Uint8List> decodeImageDataFor(ImageBlock block, {AppLocalizations? words}) async {
   try {
-    return await decodeImageData(block.data);
+    return await decodeImageData(block.data, words: words);
   } on ImageProblem catch (e) {
     throw PhotoSourceException(e.note, tooLarge: e.tooLarge);
   }
@@ -94,17 +99,18 @@ Future<DecodedImage> decodeImageBlock(
   int maxDimension = imagePreviewDimension,
   ImageDecoder decoder = decodeImageBytes,
   Future<Uint8List> Function()? fetch,
+  AppLocalizations? words,
 }) async {
-  final bytes = fetch != null ? await fetch() : await decodeImageData(block.data);
+  final bytes = fetch != null ? await fetch() : await decodeImageData(block.data, words: words);
   final DecodedImage image;
   try {
     image = await decoder(bytes, maxDimension: maxDimension);
   } on Object {
-    throw const ImageProblem('This picture is in a format the phone can’t show.');
+    throw ImageProblem(words?.uiThisPictureIsInAFormatThePhoneCanTShow ?? 'This picture is in a format the phone can’t show.');
   }
   if (image.width <= 0 || image.height <= 0) {
     image.dispose();
-    throw const ImageProblem('The picture is empty (0 × 0).');
+    throw ImageProblem(words?.uiThePictureIsEmpty ?? 'The picture is empty (0 × 0).');
   }
   return image;
 }
@@ -115,9 +121,12 @@ Future<DecodedImage> decodeImageBlock(
 /// [ImagePreviewCache.release]); the bitmap is disposed when the cache lets go
 /// of the entry, never while something draws it.
 class ImageEntry extends ChangeNotifier {
-  ImageEntry._(this.block, this._fetch);
+  ImageEntry._(this.block, this._fetch, this._words);
 
   final ImageBlock block;
+
+  /// The words of the surface that holds it, for a note the person reads.
+  AppLocalizations? _words;
 
   /// Brings the bytes of a [LogImageBlock] (a network wait the person started).
   /// The newest holder's: a session that came and went must not be asked again.
@@ -202,11 +211,11 @@ class ImagePreviewCache {
   /// The entry of [block] (decoding starts at the first call), most recently
   /// used. Pair with [release]. [fetch] brings the bytes of a [LogImageBlock],
   /// which the cache cannot reach by itself (it knows no session).
-  ImageEntry acquire(ImageBlock block, {Future<Uint8List> Function()? fetch}) {
+  ImageEntry acquire(ImageBlock block, {Future<Uint8List> Function()? fetch, AppLocalizations? words}) {
     final key = keyOf(block);
     var entry = _entries.remove(key);
     if (entry == null) {
-      entry = ImageEntry._(block, fetch);
+      entry = ImageEntry._(block, fetch, words);
       unawaited(_load(entry));
     } else if (entry._refs == 0 && entry.problem != null && entry.retryable && fetch != null) {
       // A failure nobody was looking at is not the answer to a new ask (a tap
@@ -214,6 +223,8 @@ class ImagePreviewCache {
       entry._fetch = fetch;
       entry._restart();
       unawaited(_load(entry));
+    } else if (words != null) {
+      entry._words = words;
     }
     _entries[key] = entry;
     entry._refs++;
@@ -241,17 +252,24 @@ class ImagePreviewCache {
 
   Future<void> _load(ImageEntry entry) async {
     try {
-      if (entry.block is LogImageBlock && entry._fetch == null) throw const ImageProblem('Not available here');
-      final image = await decodeImageBlock(entry.block, decoder: _decoder, fetch: entry._fetch);
+      if (entry.block is LogImageBlock && entry._fetch == null) {
+        throw ImageProblem(entry._words?.uiNotAvailableHere ?? 'Not available here');
+      }
+      final image = await decodeImageBlock(entry.block, decoder: _decoder, fetch: entry._fetch, words: entry._words);
       entry._finish(image, null);
     } on ImageProblem catch (e) {
       entry._finish(null, e.note, retryable: !e.tooLarge);
     } on LogPictureTooLarge catch (e) {
-      entry._finish(null, 'Too large to show here (${formatBytes(e.bytes)}).', retryable: false);
+      entry._finish(
+        null,
+        entry._words?.messageTooLargeToShowHere(formatBytes(e.bytes)) ??
+            'Too large to show here (${formatBytes(e.bytes)}).',
+        retryable: false,
+      );
     } on LogPictureException catch (e) {
       entry._finish(null, e.message, retryable: e.retryable);
     } on Object {
-      entry._finish(null, 'The picture couldn’t be shown.');
+      entry._finish(null, entry._words?.uiThePictureCouldnTBeShown ?? 'The picture couldn’t be shown.');
     }
   }
 

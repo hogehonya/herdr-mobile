@@ -447,7 +447,7 @@ class _AgentSessionScreenState extends State<AgentSessionScreen> with WidgetsBin
       showToast(context, why);
     }
 
-    if (session.link != AgentLink.live) return refuse('Not connected. Try again when it is back');
+    if (session.link != AgentLink.live) return refuse(context.l10n.uiNotConnectedTryAgainWhenItIsBack);
     final blocked = session.sendBlocked;
     if (blocked != null) return refuse(blocked);
     // An agent in a terminal says `working` while it waits on a job; that
@@ -456,7 +456,7 @@ class _AgentSessionScreenState extends State<AgentSessionScreen> with WidgetsBin
         session.relayNote == null &&
         session.phase != AgentPhase.idle &&
         !session.waitingOnBackground) {
-      return refuse('The agent is working. Send it once it is idle');
+      return refuse(context.l10n.uiTheAgentIsWorkingSendItOnceItIsIdle);
     }
     if (!_attachments.canSend) return;
     final text = _input.text.trim();
@@ -566,11 +566,9 @@ class _AgentSessionScreenState extends State<AgentSessionScreen> with WidgetsBin
       final newer = screens.draftOf(agent);
       screens.keepDraft(agent, newer.isEmpty ? text : '$text\n$newer');
     }
-    final lost = chips.isEmpty ? '' : ' Its attachments were not kept: attach them again.';
-    toaster?.show(
-      '${keep ? 'Not sent. Your message is back in the draft.' : 'Not sent.'}$lost',
-      kind: ToastKind.failed,
-    );
+    final lost = chips.isEmpty ? '' : ' ${context.l10n.uiItsAttachmentsWereNotKeptAttachThemAgain}';
+    final said = keep ? context.l10n.uiNotSentYourMessageIsBackInTheDraft : context.l10n.uiNotSent;
+    toaster?.show('$said$lost', kind: ToastKind.failed);
   }
 
   /// Puts the text of a send that failed back in the field. What was typed
@@ -764,7 +762,7 @@ class _WaitsUntilLive extends StatelessWidget {
               child: StatusStrip(
                 color: context.ds.blocked,
                 title: context.l10n.uiNeedsYou,
-                detail: 'Its request shows here once connected.',
+                detail: context.l10n.uiItsRequestShowsHereOnceConnected,
                 leading: const StatusGlyph(status: AgentStatus.blocked, size: IconSize.row),
               ),
             ),
@@ -876,35 +874,51 @@ class _LinkStrip extends StatelessWidget {
           color: ds.blocked,
           state: LinkState.attention,
           title: context.l10n.uiNeedsYouInTheTerminal,
-          detail: 'It asks something the chat can’t show.',
+          detail: context.l10n.uiItAsksSomethingTheChatCanTShow,
           action: openTerminal,
         );
       }
       if (error != null) {
         // Only what the agent answered is its error; the app's own trouble
         // (not connected, the message not sent) leads with what happened.
-        final (title, detail) = fromAgent ? ('The agent reported an error', error) : _firstSentence(error);
+        final (title, detail) = fromAgent
+            ? (context.l10n.uiTheAgentReportedAnError, error)
+            : _firstSentence(error);
         return _strip(color: ds.danger, state: LinkState.attention, title: title, detail: detail, action: openTerminal);
       }
       return null;
     }
-    final action = evicted ? 'Take over' : (link == AgentLink.failed && !observed ? 'Retry' : null);
+    final action = evicted
+        ? context.l10n.uiTakeOver
+        : (link == AgentLink.failed && !observed ? context.l10n.uiRetry : null);
     // The keeper is gone but the agent still has the conversation.
     final canContinue = link == AgentLink.ended && !evicted && resumable;
     final (color, state, title, fallback) = switch (link) {
-      AgentLink.connecting when cachedAsOf != null => (ds.working, LinkState.connecting, 'Updating…', null),
-      AgentLink.connecting => (ds.working, LinkState.connecting, 'Connecting…', null),
+      AgentLink.connecting when cachedAsOf != null => (
+        ds.working,
+        LinkState.connecting,
+        context.l10n.uiUpdating,
+        null,
+      ),
+      AgentLink.connecting => (ds.working, LinkState.connecting, context.l10n.uiConnecting, null),
       AgentLink.reconnecting => (
         ds.working,
         LinkState.reconnecting,
-        'Reconnecting…',
-        observed ? 'The agent keeps running in its terminal.' : 'The agent keeps running on the machine.',
+        context.l10n.uiReconnecting,
+        observed
+            ? context.l10n.uiTheAgentKeepsRunningInItsTerminal
+            : context.l10n.uiTheAgentKeepsRunningOnTheMachine,
       ),
-      AgentLink.ended => (ds.textTertiary, LinkState.offline, evicted ? 'Taken over' : 'Session ended', null),
+      AgentLink.ended => (
+        ds.textTertiary,
+        LinkState.offline,
+        evicted ? context.l10n.uiTakenOver : context.l10n.uiSessionEnded,
+        null,
+      ),
       AgentLink.failed => (
         ds.danger,
         LinkState.attention,
-        observed ? 'Can’t read the session log' : 'Couldn’t connect',
+        observed ? context.l10n.uiCanTReadTheSessionLog : context.l10n.uiCouldnTConnect,
         null,
       ),
       AgentLink.live => (ds.done, LinkState.online, '', null),
@@ -913,7 +927,7 @@ class _LinkStrip extends StatelessWidget {
       color: color,
       state: state,
       title: title,
-      detail: _withCopy(cachedAsOf, canContinue ? _keptByAgent(error) : error ?? fallback),
+      detail: _withCopy(context, cachedAsOf, canContinue ? _keptByAgent(context, error) : error ?? fallback),
       // Beside the button the strip is short of room: a tap shows it all.
       expandFrom: canContinue ? 40 : 70,
       action: canContinue
@@ -932,8 +946,8 @@ class _LinkStrip extends StatelessWidget {
   }
 
   /// What Continue brings back, then the reason the session ended.
-  static String _keptByAgent(String? reason) {
-    const kept = 'The agent kept the conversation.';
+  static String _keptByAgent(BuildContext context, String? reason) {
+    final kept = context.l10n.uiTheAgentKeptTheConversation;
     final said = reason?.trim() ?? '';
     return said.isEmpty ? kept : '$kept $said';
   }
@@ -942,9 +956,9 @@ class _LinkStrip extends StatelessWidget {
   /// ([cachedAsOf]). Named in every state but live, not only while
   /// connecting: after a failed connect or a drop the copy would otherwise
   /// read as the live session, and nothing in it can be answered.
-  static String? _withCopy(DateTime? cachedAsOf, String? said) {
+  static String? _withCopy(BuildContext context, DateTime? cachedAsOf, String? said) {
     if (cachedAsOf == null) return said;
-    final copy = savedCopyNotice(cachedAsOf, DateTime.now());
+    final copy = savedCopyNotice(cachedAsOf, DateTime.now(), words: context.l10n);
     return said == null || said.trim().isEmpty ? copy : '$copy $said';
   }
 

@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -35,39 +36,53 @@ String megapixels(int width, int height) {
 /// What the sheet says about the picture of [entry]: enough to tell whether it
 /// is the right one (where it is, how big, when it was made, what made it).
 /// Lines whose value is not known are left out.
-List<PhotoInfoRow> photoInfoRows(PhotoEntry entry) {
+List<PhotoInfoRow> photoInfoRows(PhotoEntry entry, [AppLocalizations? l10n]) {
   final item = entry.item;
   final image = entry.image;
   final exif = entry.exif;
   final size = item.size ?? entry.bytes?.length;
-  final rows = <PhotoInfoRow>[PhotoInfoRow('Name', item.name)];
+  final rows = <PhotoInfoRow>[PhotoInfoRow(l10n?.uiName ?? 'Name', item.name)];
   if (item.path != null) {
-    rows.add(PhotoInfoRow('Path', item.path!, mono: true, copy: item.path));
+    rows.add(PhotoInfoRow(l10n?.uiPath ?? 'Path', item.path!, mono: true, copy: item.path));
   }
-  if (item.origin != null) rows.add(PhotoInfoRow('From', item.origin!));
+  if (item.origin != null) rows.add(PhotoInfoRow(l10n?.uiFrom ?? 'From', item.origin!));
   if (image != null) {
     final mp = megapixels(image.width, image.height);
     rows.add(
       PhotoInfoRow(
-        'Dimensions',
+        l10n?.uiDimensions ?? 'Dimensions',
         '${groupDigits(image.width)} × ${groupDigits(image.height)}${mp.isEmpty ? '' : ' · $mp'}',
       ),
     );
   }
-  if (size != null) rows.add(PhotoInfoRow('Size', formatBytes(size)));
+  if (size != null) rows.add(PhotoInfoRow(l10n?.uiSize ?? 'Size', formatBytes(size)));
   final format = entry.format ?? (item.mime != null && item.mime!.isNotEmpty ? item.mime! : null);
-  if (format != null) rows.add(PhotoInfoRow('Format', format));
-  if (item.modified != null) rows.add(PhotoInfoRow('Modified', formatWhen(item.modified!, DateTime.now())));
+  if (format != null) rows.add(PhotoInfoRow(l10n?.uiFormat ?? 'Format', format));
+  if (item.modified != null) {
+    rows.add(PhotoInfoRow(l10n?.uiModified ?? 'Modified', formatWhen(item.modified!, DateTime.now())));
+  }
   if (exif != null) {
-    if (exif.taken != null) rows.add(PhotoInfoRow('Taken', formatWhen(exif.taken!, DateTime.now())));
-    if (exif.camera != null) rows.add(PhotoInfoRow('Camera', exif.camera!));
-    if (exif.lens != null) rows.add(PhotoInfoRow('Lens', exif.lens!));
-    if (exif.settings != null) rows.add(PhotoInfoRow('Exposure', exif.settings!));
+    if (exif.taken != null) rows.add(PhotoInfoRow(l10n?.uiTaken ?? 'Taken', formatWhen(exif.taken!, DateTime.now())));
+    if (exif.camera != null) rows.add(PhotoInfoRow(l10n?.uiCamera ?? 'Camera', exif.camera!));
+    if (exif.lens != null) rows.add(PhotoInfoRow(l10n?.uiLens ?? 'Lens', exif.lens!));
+    if (exif.settings != null) rows.add(PhotoInfoRow(l10n?.uiExposure ?? 'Exposure', exif.settings!));
     final o = exif.orientation;
-    if (o != null && o != 1) rows.add(PhotoInfoRow('Orientation', 'Turned upright (EXIF $o)'));
+    if (o != null && o != 1) {
+      rows.add(
+        PhotoInfoRow(
+          l10n?.uiOrientation ?? 'Orientation',
+          l10n?.messageTurnedUprightExif('$o') ?? 'Turned upright (EXIF $o)',
+        ),
+      );
+    }
   }
   if (image != null && image.downscaled && entry.sharp == null) {
-    rows.add(const PhotoInfoRow('Showing', 'Screen-size preview; it sharpens as you zoom in'));
+    rows.add(
+      PhotoInfoRow(
+        l10n?.uiShowing ?? 'Showing',
+        l10n?.uiScreenSizePreviewItSharpensAsYouZoomIn ?? 'Screen-size preview; it sharpens as you zoom in',
+      ),
+    );
   }
   return rows;
 }
@@ -77,7 +92,7 @@ Future<void> showPhotoInfo(BuildContext context, PhotoEntry entry) => showAppShe
   context,
   builder: (ctx) => ListenableBuilder(
     listenable: entry,
-    builder: (ctx, _) => _InfoBody(rows: photoInfoRows(entry)),
+    builder: (ctx, _) => _InfoBody(rows: photoInfoRows(entry, ctx.l10n)),
   ),
 );
 
@@ -142,7 +157,7 @@ class _Row extends StatelessWidget {
                 icon: LucideIcons.copy,
                 tooltip: context.l10n.messageCopy(row.label.toLowerCase()),
                 size: CircleButton.compact,
-                onPressed: () => copyText(context, copy, what: '${row.label} copied'),
+                onPressed: () => copyText(context, copy, what: context.l10n.messageCopied(row.label)),
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../data/acp/past_session.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
 
@@ -11,25 +12,25 @@ import '../../../data/words/elapsed.dart';
 import '../files/file_format.dart' show groupDigits;
 
 /// `Untitled session`, or the agent's title.
-String pastSessionTitle(PastSession s) {
+String pastSessionTitle(PastSession s, {AppLocalizations? words}) {
   final title = s.title;
-  return title == null ? 'Untitled session' : visibleText(title);
+  return title == null ? words?.uiUntitledSession ?? 'Untitled session' : visibleText(title);
 }
 
 /// `No messages`, `1 message`, `14 messages`, `12,480 messages`; empty when the
 /// agent does not say.
-String messageCountLabel(int? count) => switch (count) {
+String messageCountLabel(int? count, {AppLocalizations? words}) => switch (count) {
   null => '',
-  <= 0 => 'No messages',
-  1 => '1 message',
-  final n => '${groupDigits(n)} messages',
+  <= 0 => words?.uiNoMessages ?? 'No messages',
+  1 => words?.message1Message ?? '1 message',
+  final n => words?.messageMessages(groupDigits(n)) ?? '${groupDigits(n)} messages',
 };
 
 /// `2 h ago · 14 messages`: when it last changed and how long it is, whichever
 /// the agent reports.
-String pastSessionDetail(PastSession s, DateTime now) => [
+String pastSessionDetail(PastSession s, DateTime now, {AppLocalizations? words}) => [
   if (s.updatedAt case final at?) formatAgo(at, now),
-  messageCountLabel(s.messageCount),
+  messageCountLabel(s.messageCount, words: words),
 ].where((p) => p.isNotEmpty).join(' · ');
 
 /// One session an agent remembers: its title, the folder it ran in, when it
@@ -60,9 +61,9 @@ class PastSessionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final ds = context.ds;
     final folder = visibleText(cwdTail(session.cwd));
-    final detail = pastSessionDetail(session, now);
+    final detail = pastSessionDetail(session, now, words: context.l10n);
     return ListRow(
-      title: pastSessionTitle(session),
+      title: pastSessionTitle(session, words: context.l10n),
       subtitle: folder.isEmpty ? null : folder,
       subtitle2: detail.isEmpty ? null : detail,
       onTap: busy ? null : onTap,

@@ -103,7 +103,7 @@ class _SwitcherSheet extends StatelessWidget {
     final several = context.read<FleetRepository>().connections.length > 1;
     final ds = context.ds;
     return SheetScaffold(
-      title: switchAgentLabel,
+      title: context.l10n.uiSwitchAgent,
       kind: SheetKind.list,
       bleed: true,
       child: Column(

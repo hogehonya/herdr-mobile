@@ -134,6 +134,7 @@ class PhotoViewer extends StatefulWidget {
 
 class PhotoViewerState extends State<PhotoViewer> with SingleTickerProviderStateMixin {
   late final PhotoViewerViewModel model = PhotoViewerViewModel(
+    words: context.l10n,
     items: widget.items,
     initialIndex: widget.initialIndex,
     decoder: widget.decoder ?? decodeImageFit,
@@ -193,20 +194,20 @@ class PhotoViewerState extends State<PhotoViewer> with SingleTickerProviderState
         SheetAction(
           label: context.l10n.uiSaveToPhone,
           icon: LucideIcons.download,
-          unavailable: entry.bytes == null ? 'Available once the picture has loaded' : null,
+          unavailable: entry.bytes == null ? context.l10n.uiAvailableOnceThePictureHasLoaded : null,
           onTap: () => unawaited(_run(context, model.save)),
         ),
         SheetAction(
           label: context.l10n.uiShare,
           icon: LucideIcons.share2,
-          unavailable: entry.bytes == null ? 'Available once the picture has loaded' : null,
+          unavailable: entry.bytes == null ? context.l10n.uiAvailableOnceThePictureHasLoaded : null,
           onTap: () => unawaited(_run(context, model.share)),
         ),
         if (entry.item.path != null)
           SheetAction(
             label: context.l10n.uiCopyPath,
             icon: LucideIcons.link,
-            onTap: () => copyText(context, entry.item.path!, what: 'Path copied'),
+            onTap: () => copyText(context, entry.item.path!, what: context.l10n.uiPathCopied),
           ),
       ],
     );
@@ -352,7 +353,9 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entry = model.count == 0 ? null : model.currentEntry;
-    final title = model.count > 1 ? model.positionLabel : (model.count == 0 ? 'Photo' : model.current.name);
+    final title = model.count > 1
+        ? model.positionLabel
+        : (model.count == 0 ? context.l10n.uiPhoto : model.current.name);
     return AppTopBar(
       overlay: true,
       announceTitle: true,
@@ -481,10 +484,10 @@ class _FailureView extends StatelessWidget {
     final ds = context.ds;
     final failure = entry.failure!;
     final (icon, title) = switch (failure.kind) {
-      PhotoFailureKind.tooLarge => (LucideIcons.fileWarning, 'Too large to open here'),
-      PhotoFailureKind.notAnImage => (HerdrIcons.pictureOff, 'Can’t show this as a picture'),
-      PhotoFailureKind.network => (LucideIcons.cloudOff, 'Connection lost'),
-      PhotoFailureKind.unreadable => (LucideIcons.circleAlert, 'Couldn’t open this photo'),
+      PhotoFailureKind.tooLarge => (LucideIcons.fileWarning, context.l10n.uiTooLargeToOpenHere),
+      PhotoFailureKind.notAnImage => (HerdrIcons.pictureOff, context.l10n.uiCanTShowThisAsAPicture),
+      PhotoFailureKind.network => (LucideIcons.cloudOff, context.l10n.uiConnectionLost),
+      PhotoFailureKind.unreadable => (LucideIcons.circleAlert, context.l10n.uiCouldnTOpenThisPhoto),
     };
     final exporting = entry.exporting;
     final large = failure.kind == PhotoFailureKind.tooLarge && model.canShareLarge;
@@ -545,7 +548,7 @@ class _FailureView extends StatelessWidget {
                         label: context.l10n.uiCopyPath,
                         icon: LucideIcons.copy,
                         kind: AppButtonKind.secondary,
-                        onPressed: () => copyText(context, entry.item.path!, what: 'Path copied'),
+                        onPressed: () => copyText(context, entry.item.path!, what: context.l10n.uiPathCopied),
                       ),
                   ],
                 ),

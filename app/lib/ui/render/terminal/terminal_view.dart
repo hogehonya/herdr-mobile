@@ -1,3 +1,5 @@
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import 'dart:async' show unawaited;
 import 'dart:math' as math;
 import 'dart:typed_data';
@@ -692,10 +694,11 @@ class _TopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final secondary = Type.secondary.copyWith(color: context.terminal.dim);
+    final words = context.l10n;
     final (String title, String? detail) = switch (top) {
-      TerminalTop.loading => ('Loading earlier output…', null),
-      TerminalTop.serverLimit => ('Earlier output isn’t available.', 'herdr serves the last 1000 rows of a pane.'),
-      TerminalTop.localLimit => ('Earlier output isn’t kept.', 'The phone holds the most recent rows only.'),
+      TerminalTop.loading => (words.uiLoadingEarlierOutput, null),
+      TerminalTop.serverLimit => (words.uiEarlierOutputIsnTAvailable, words.uiHerdrServesTheLast1000Rows),
+      TerminalTop.localLimit => (words.uiEarlierOutputIsnTKept, words.uiThePhoneHoldsTheMostRecentRowsOnly),
       TerminalTop.none => ('', null),
     };
     // Align, so the box may be narrower than the (possibly wider) content.

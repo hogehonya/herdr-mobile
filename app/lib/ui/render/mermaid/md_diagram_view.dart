@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 
 import 'dart:async';
@@ -110,7 +111,7 @@ class _MdDiagramViewState extends State<MdDiagramView> {
   }
 
   Future<void> _copy() async {
-    if (!await copyText(context, widget.code.text, what: 'Diagram source copied')) return;
+    if (!await copyText(context, widget.code.text, what: context.l10n.uiDiagramSourceCopied)) return;
     if (!mounted) return;
     setState(() => _copied = true);
     _reset?.cancel();
@@ -134,7 +135,7 @@ class _MdDiagramViewState extends State<MdDiagramView> {
             code,
             Padding(
               padding: const EdgeInsets.only(top: Gap.xs),
-              child: Text(reason, style: Type.caption.copyWith(color: context.ds.textMuted)),
+              child: Text(_reasonText(reason, context.l10n), style: Type.caption.copyWith(color: context.ds.textMuted)),
             ),
           ],
         );
@@ -186,7 +187,7 @@ class _MdDiagramViewState extends State<MdDiagramView> {
         final more = size.height > mdDiagramCap
             ? MoreRow(
                 label: widget.expanded ? context.l10n.uiWholeDiagram : context.l10n.uiCropped,
-                action: widget.expanded ? 'Show less' : 'Show all',
+                action: widget.expanded ? context.l10n.uiShowLess : context.l10n.uiShowAll,
                 onTap: widget.onToggleExpanded ?? () {},
               )
             : null;
@@ -214,7 +215,9 @@ class _MdDiagramViewState extends State<MdDiagramView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _Header(
-                label: d.turned ? context.l10n.messageTopDown(d.kind.label) : d.kind.label,
+                label: d.turned
+                    ? context.l10n.messageTopDown(_kindLabel(d.kind, context.l10n))
+                    : _kindLabel(d.kind, context.l10n),
                 copied: _copied,
                 onCopy: _copy,
                 onOpen: open == null ? null : () => open(context, d),
@@ -228,11 +231,37 @@ class _MdDiagramViewState extends State<MdDiagramView> {
     return Semantics(
       container: true,
       explicitChildNodes: true,
-      label: context.l10n.messageDiagram(d.kind.label.toLowerCase()),
+      label: context.l10n.messageDiagram(_kindLabel(d.kind, context.l10n).toLowerCase()),
       value: d.labels.take(40).join(', '),
       child: plate,
     );
   }
+}
+
+/// A diagram kind's name in the header, in the person's language.
+String _kindLabel(MermaidKind kind, AppLocalizations words) => switch (kind) {
+  MermaidKind.flowchart => words.uiFlowchart,
+  MermaidKind.sequence => words.uiSequenceDiagram,
+  MermaidKind.state => words.uiStateDiagram,
+  MermaidKind.er => words.uiERDiagram,
+  MermaidKind.classDiagram => words.uiClassDiagram,
+};
+
+/// What to say under a diagram that stayed a code block: the layout runs in an
+/// isolate where no [AppLocalizations] exists, so it names its reason and the
+/// sentence is chosen here. A reason this does not know is shown as it came.
+String _reasonText(String reason, AppLocalizations words) {
+  if (reason == 'Nothing to draw') return words.uiNothingToDraw;
+  if (reason == 'Too large to draw here · showing the source') return words.messageTooLargeToDrawHere;
+  if (reason == 'Couldn’t tell which kind of diagram this is · showing the source') {
+    return words.messageCouldnTTellTheDiagramKind;
+  }
+  if (reason == 'Couldn’t draw this diagram · showing the source') return words.messageCouldnTDrawThisDiagram;
+  final line = RegExp(r'^Couldn’t draw this diagram · line (\d+) · showing the source$').firstMatch(reason);
+  if (line != null) return words.messageCouldnTDrawThisDiagramLine(line[1]!);
+  final unsupported = RegExp(r'^Can’t draw (.+) diagrams yet · showing the source$').firstMatch(reason);
+  if (unsupported != null) return words.messageCanTDrawDiagramsYet(unsupported[1]!);
+  return reason;
 }
 
 /// Draws a recorded scene at [scale]. The picture is the cache's: this never

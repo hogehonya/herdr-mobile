@@ -546,7 +546,7 @@ class _AgentsScreenState extends State<AgentsScreen> with RestorationMixin {
     ],
   );
 
-  static const _answerOneByOne = 'Answer one by one';
+  String get _answerOneByOne => context.l10n.uiAnswerOneByOne;
 
   /// Whether the status line already counts this section.
   static bool _countedAbove(AgentStatus s) =>

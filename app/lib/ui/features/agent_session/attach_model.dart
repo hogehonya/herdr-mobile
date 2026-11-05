@@ -5,6 +5,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+
 import '../../../data/acp/acp_models.dart';
 import '../../../data/acp/prompt_content.dart';
 import '../../../data/models/remote_file.dart' show RemoteFileException;
@@ -177,6 +179,7 @@ class ComposerAttachments extends ChangeNotifier {
     this.writeTemp = writeTempFile,
     this.deleteTemp = deleteTempFile,
     this.onProblem,
+    this.words,
     this._kit,
     this._uploader,
   });
@@ -202,6 +205,10 @@ class ComposerAttachments extends ChangeNotifier {
 
   /// A plain message for the person (a toast): too large, unreadable, no camera.
   void Function(String message)? onProblem;
+
+  /// The words of the screen that owns this model; English when it was made
+  /// outside a widget tree (a test).
+  final AppLocalizations? words;
 
   final AttachKit? _kit;
   AttachUploader? _uploader;
@@ -243,10 +250,12 @@ class ComposerAttachments extends ChangeNotifier {
   String? get waitingReason {
     final uploading = _items.where((a) => a.uploading).toList();
     if (uploading.isNotEmpty) {
-      return uploading.length == 1 ? 'Uploading ${uploading.first.label}…' : 'Uploading ${uploading.length} files…';
+      return uploading.length == 1
+          ? (words?.messageUploadingLabel(uploading.first.label) ?? 'Uploading ${uploading.first.label}…')
+          : (words?.messageUploadingFiles('${uploading.length}') ?? 'Uploading ${uploading.length} files…');
     }
-    if (_items.any((a) => a.preparing)) return 'Preparing your attachments…';
-    if (hasFailed) return 'An upload failed: retry it or remove it';
+    if (_items.any((a) => a.preparing)) return words?.messagePreparingYourAttachments ?? 'Preparing your attachments…';
+    if (hasFailed) return words?.uiAnUploadFailedRetryItOrRemoveIt ?? 'An upload failed: retry it or remove it';
     return null;
   }
 
@@ -271,8 +280,10 @@ class ComposerAttachments extends ChangeNotifier {
     if (lost > 0) {
       _problem(
         lost == 1
-            ? 'One attachment didn’t fit back and was removed.'
-            : '$lost attachments didn’t fit back and were removed.',
+            ? (words?.messageOneAttachmentDidnTFitBackAndWasRemoved ??
+                  'One attachment didn’t fit back and was removed.')
+            : (words?.messageAttachmentsDidnTFitBackAndWereRemoved('$lost') ??
+                  '$lost attachments didn’t fit back and were removed.'),
       );
     }
     notifyListeners();
@@ -329,7 +340,7 @@ class ComposerAttachments extends ChangeNotifier {
       return;
     }
     if (sizeVerdict(photo.size) == SizeVerdict.tooLarge) {
-      _problem(tooLargeMessage(photo.name, photo.size));
+      _problem(tooLargeMessage(photo.name, photo.size, words: words));
       return;
     }
     final id = _next++;
@@ -388,7 +399,7 @@ class ComposerAttachments extends ChangeNotifier {
         case PhonePick():
           final image = typeForName(pick.name).kind == FileKind.image;
           if (sizeVerdict(pick.size) == SizeVerdict.tooLarge) {
-            _problem(tooLargeMessage(pick.name, pick.size));
+            _problem(tooLargeMessage(pick.name, pick.size, words: words));
             continue;
           }
           _items.add(
@@ -420,7 +431,7 @@ class ComposerAttachments extends ChangeNotifier {
       if (pick is PhonePick && sizeVerdict(pick.size) == SizeVerdict.large) big.add(pick.name);
       unawaited(_begin(job));
     }
-    if (big.isNotEmpty) _problem(largeMessage(big.first, count: big.length));
+    if (big.isNotEmpty) _problem(largeMessage(big.first, count: big.length, words: words));
   }
 
   /// Tries a failed upload again.
@@ -432,20 +443,27 @@ class ComposerAttachments extends ChangeNotifier {
   }
 
   static const _noImagesNote = 'Sent as a file · this agent takes no images';
-  static const _fullMessage = 'At most $maxAttachments attachments per message.';
+  static const _fullMessageEnglish = 'At most $maxAttachments attachments per message.';
+
+  String get _fullMessage => words?.messageAtMostAttachmentsPerMessage('$maxAttachments') ?? _fullMessageEnglish;
 
   /// The second line of a picture's chip: an agent that takes no images gets
   /// it as a file, and the chip says so from the start.
-  String? get _pictureNote => target.preparesPictures ? null : _noImagesNote;
+  String? get _pictureNote =>
+      target.preparesPictures ? null : (words?.uiSentAsAFileThisAgentTakesNoImages ?? _noImagesNote);
+
+  String get _unreadablePictureText => words?.messageCouldnTReadThatPicturePickItAgain ?? _unreadablePicture;
 
   /// `report.pdf is 312 MB. Files up to 200 MB can be attached.`
-  static String tooLargeMessage(String name, int bytes) =>
+  static String tooLargeMessage(String name, int bytes, {AppLocalizations? words}) =>
+      words?.messageNameIsSizeFilesUpToCanBeAttached(name, formatBytes(bytes), formatBytes(attachRefuseBytes)) ??
       '$name is ${formatBytes(bytes)}. Files up to ${formatBytes(attachRefuseBytes)} can be attached.';
 
   /// `Large file: uploading may take a while.`
-  static String largeMessage(String name, {int count = 1}) => count == 1
-      ? '$name is large; uploading it may take a while.'
-      : '$count large files; uploading them may take a while.';
+  static String largeMessage(String name, {int count = 1, AppLocalizations? words}) => count == 1
+      ? (words?.messageNameIsLargeUploadingItMayTakeAWhile(name) ?? '$name is large; uploading it may take a while.')
+      : (words?.messageCountLargeFilesUploadingThemMayTakeAWhile('$count') ??
+            '$count large files; uploading them may take a while.');
 
   void _stageHost(int id, String path) {
     final name = path.split('/').lastWhere((s) => s.isNotEmpty, orElse: () => path);
@@ -513,7 +531,7 @@ class ComposerAttachments extends ChangeNotifier {
         return;
       } on Object {
         _drop(id);
-        _problem(_unreadablePicture);
+        _problem(_unreadablePictureText);
         return;
       }
     }
@@ -526,12 +544,12 @@ class ComposerAttachments extends ChangeNotifier {
     final file = known ?? await _galleryFile(pick);
     if (file == null || _disposed) {
       _drop(id);
-      _problem(_unreadablePicture);
+      _problem(_unreadablePictureText);
       return;
     }
     if (sizeVerdict(file.size) == SizeVerdict.tooLarge) {
       _drop(id);
-      _problem(tooLargeMessage(file.name, file.size));
+      _problem(tooLargeMessage(file.name, file.size, words: words));
       return;
     }
     _beginUpload(id, path: file.path, name: file.name, size: file.size, recent: false);
@@ -545,7 +563,7 @@ class ComposerAttachments extends ChangeNotifier {
   Future<PreparedImage> _prepareGallery(GalleryPick pick) async {
     final f = await _galleryFile(pick);
     if (pick.work.cancelled) throw const _Abandoned();
-    if (f == null) throw ImagePrepException(_unreadablePicture);
+    if (f == null) throw ImagePrepException(_unreadablePictureText);
     if (f.size > maxImageInputBytes) throw _TooBigForImage(f);
     final bytes = await readFile(f.path);
     if (pick.work.cancelled) throw const _Abandoned();
@@ -582,7 +600,7 @@ class ComposerAttachments extends ChangeNotifier {
       _problem(e.message);
     } on Object {
       _drop(id);
-      _problem(_unreadablePicture);
+      _problem(_unreadablePictureText);
     }
   }
 
@@ -606,7 +624,7 @@ class ComposerAttachments extends ChangeNotifier {
       path = await writeTemp(image.bytes, name);
     } on Object {
       _drop(id);
-      _problem('Couldn’t prepare that picture.');
+      _problem(words?.messageCouldnTPrepareThatPicture ?? 'Couldn’t prepare that picture.');
       return;
     }
     if (_disposed || !_items.any((a) => a.id == id)) {
@@ -675,7 +693,7 @@ class ComposerAttachments extends ChangeNotifier {
         onProgress: (sent, total) => t.progress.value = total <= 0 ? 0 : (sent / total).clamp(0.0, 1.0),
       );
     } on Object {
-      _replace(id, (a) => a._with(phase: AttachPhase.failed, error: 'Couldn’t start the upload · attach it again'));
+      _replace(id, (a) => a._with(phase: AttachPhase.failed, error: words?.messageCouldnTStartTheUploadAttachItAgain ?? 'Couldn’t start the upload · attach it again'));
       return;
     }
     t.upload = upload;
@@ -690,7 +708,7 @@ class ComposerAttachments extends ChangeNotifier {
             block: fileLinkBlock(remote, cwd: target.cwd, size: t.size),
             detail: remote,
             size: t.size,
-            note: a.note ?? 'Uploaded \u00b7 ${formatBytes(t.size)}',
+            note: a.note ?? (words?.messageUploadedSize(formatBytes(t.size)) ?? 'Uploaded \u00b7 ${formatBytes(t.size)}'),
           ),
         );
         if (_recent[id] ?? false) {
@@ -704,7 +722,7 @@ class ComposerAttachments extends ChangeNotifier {
       },
       onError: (Object e) {
         if (_disposed || t.cancelled || _transfers[id] != t) return;
-        final message = e is RemoteFileException ? e.message : 'The upload failed';
+        final message = e is RemoteFileException ? e.message : words?.uiTheUploadFailed ?? 'The upload failed';
         _replace(id, (a) => a._with(phase: AttachPhase.failed, error: message));
       },
     );

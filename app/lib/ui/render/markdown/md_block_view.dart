@@ -281,12 +281,13 @@ class _Alert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ds = context.ds;
+    final words = context.l10n;
     final (icon, title, color) = switch (alert.kind) {
-      MdAlertKind.note => (LucideIcons.info, 'Note', ds.textSecondary),
-      MdAlertKind.tip => (LucideIcons.lightbulb, 'Tip', ds.textSecondary),
-      MdAlertKind.important => (LucideIcons.messageSquareWarning, 'Important', ds.textSecondary),
-      MdAlertKind.warning => (LucideIcons.triangleAlert, 'Warning', ds.blockedText),
-      MdAlertKind.caution => (LucideIcons.octagonAlert, 'Caution', ds.dangerText),
+      MdAlertKind.note => (LucideIcons.info, words.uiNote, ds.textSecondary),
+      MdAlertKind.tip => (LucideIcons.lightbulb, words.uiTip, ds.textSecondary),
+      MdAlertKind.important => (LucideIcons.messageSquareWarning, words.uiImportant, ds.textSecondary),
+      MdAlertKind.warning => (LucideIcons.triangleAlert, words.uiWarning, ds.blockedText),
+      MdAlertKind.caution => (LucideIcons.octagonAlert, words.uiCaution, ds.dangerText),
     };
     return DecoratedBox(
       decoration: BoxDecoration(color: ds.fill, borderRadius: BorderRadius.circular(Radii.sm)),

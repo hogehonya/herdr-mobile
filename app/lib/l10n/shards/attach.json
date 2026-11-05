@@ -1,0 +1,172 @@
+{
+  "entries": [
+    {
+      "key": "uiAttachedToYourMessageWhatIsSent",
+      "en": "Attached to your message (what is sent)",
+      "ja": "メッセージへの添付（送信される内容）"
+    },
+    { "key": "messageUploadingPercent", "en": "Uploading {p0}%", "ja": "アップロード中 {p0}%", "placeholders": { "p0": "String" } },
+    {
+      "key": "messageUploadingPercentWithSize",
+      "en": "Uploading {p0}% · {p1}",
+      "ja": "アップロード中 {p0}% · {p1}",
+      "placeholders": { "p0": "String", "p1": "String" }
+    },
+    { "key": "uiUploadFailed", "en": "Upload failed", "ja": "アップロード失敗" },
+    { "key": "uiTextIncluded", "en": "Text included", "ja": "テキストを含む" },
+    { "key": "uiSentAsAPath", "en": "Sent as a path", "ja": "パスとして送信" },
+    {
+      "key": "messageCouldnTReadThatPicturePickItAgain",
+      "en": "Couldn’t read that picture. Pick it again.",
+      "ja": "画像を読み込めませんでした。もう一度選択してください。"
+    },
+    { "key": "messageUploadingLabel", "en": "Uploading {p0}…", "ja": "{p0}をアップロード中…", "placeholders": { "p0": "String" } },
+    {
+      "key": "messageUploadingFiles",
+      "en": "Uploading {p0} files…",
+      "ja": "{p0}件のファイルをアップロード中…",
+      "placeholders": { "p0": "String" }
+    },
+    { "key": "messagePreparingYourAttachments", "en": "Preparing your attachments…", "ja": "添付を準備中…" },
+    {
+      "key": "uiAnUploadFailedRetryItOrRemoveIt",
+      "en": "An upload failed: retry it or remove it",
+      "ja": "アップロードに失敗しました。再試行するか削除してください"
+    },
+    {
+      "key": "messageOneAttachmentDidnTFitBackAndWasRemoved",
+      "en": "One attachment didn’t fit back and was removed.",
+      "ja": "添付1件を戻せず削除しました。"
+    },
+    {
+      "key": "messageAttachmentsDidnTFitBackAndWereRemoved",
+      "en": "{p0} attachments didn’t fit back and were removed.",
+      "ja": "添付{p0}件を戻せず削除しました。",
+      "placeholders": { "p0": "String" }
+    },
+    {
+      "key": "uiSentAsAFileThisAgentTakesNoImages",
+      "en": "Sent as a file · this agent takes no images",
+      "ja": "ファイルとして送信 · このエージェントは画像を受け付けません"
+    },
+    {
+      "key": "messageNameIsSizeFilesUpToCanBeAttached",
+      "en": "{p0} is {p1}. Files up to {p2} can be attached.",
+      "ja": "{p0}は{p1}です。添付できるファイルは{p2}までです。",
+      "placeholders": { "p0": "String", "p1": "String", "p2": "String" }
+    },
+    {
+      "key": "messageNameIsLargeUploadingItMayTakeAWhile",
+      "en": "{p0} is large; uploading it may take a while.",
+      "ja": "{p0}は大きいため、アップロードに時間がかかる場合があります。",
+      "placeholders": { "p0": "String" }
+    },
+    {
+      "key": "messageCountLargeFilesUploadingThemMayTakeAWhile",
+      "en": "{p0} large files; uploading them may take a while.",
+      "ja": "大きいファイルが{p0}件あります。アップロードに時間がかかる場合があります。",
+      "placeholders": { "p0": "String" }
+    },
+    { "key": "messageCouldnTPrepareThatPicture", "en": "Couldn’t prepare that picture.", "ja": "画像を準備できませんでした。" },
+    {
+      "key": "messageCouldnTStartTheUploadAttachItAgain",
+      "en": "Couldn’t start the upload · attach it again",
+      "ja": "アップロードを開始できませんでした · もう一度添付してください"
+    },
+    { "key": "messageUploadedSize", "en": "Uploaded · {p0}", "ja": "アップロード済み · {p0}", "placeholders": { "p0": "String" } },
+    { "key": "uiTheUploadFailed", "en": "The upload failed", "ja": "アップロードに失敗しました" },
+    { "key": "uiFirst12LinesOfThePlan", "en": "First 12 lines of the plan", "ja": "プランの最初の12行" },
+    {
+      "key": "messageCharactersOfThisFileNotCompared",
+      "en": "… {p0} characters of this file are not compared",
+      "ja": "… このファイルの{p0}文字は比較していません",
+      "placeholders": { "p0": "String" }
+    },
+    {
+      "key": "messageMoreFilesNotShown",
+      "en": "{p0, plural, =1{1 more file not shown} other{{p0} more files not shown}}",
+      "ja": "ほか{p0}件のファイルは非表示",
+      "placeholders": { "p0": "int" }
+    },
+    { "key": "messageUpToCounts", "en": "up to {p0}", "ja": "最大 {p0}", "placeholders": { "p0": "String" } },
+    { "key": "messageNewFileCounts", "en": "new file {p0}", "ja": "新規ファイル {p0}", "placeholders": { "p0": "String" } },
+    {
+      "key": "messageLinesAdded",
+      "en": "{p0, plural, =1{1 line added} other{{p0} lines added}}",
+      "ja": "{p0}行を追加",
+      "placeholders": { "p0": "int" }
+    },
+    {
+      "key": "messageLinesRemoved",
+      "en": "{p0, plural, =1{1 line removed} other{{p0} lines removed}}",
+      "ja": "{p0}行を削除",
+      "placeholders": { "p0": "int" }
+    },
+    { "key": "uiAdded", "en": "added", "ja": "追加" },
+    { "key": "uiRemoved", "en": "removed", "ja": "削除" },
+    { "key": "uiThePictureDataIsDamaged", "en": "The picture data is damaged.", "ja": "画像データが壊れています。" },
+    {
+      "key": "uiThisPictureIsInAFormatThePhoneCanTShow",
+      "en": "This picture is in a format the phone can’t show.",
+      "ja": "この画像は端末で表示できない形式です。"
+    },
+    { "key": "uiThePictureIsEmpty", "en": "The picture is empty (0 × 0).", "ja": "画像が空です（0 × 0）。" },
+    { "key": "uiThePictureCouldnTBeShown", "en": "The picture couldn’t be shown.", "ja": "画像を表示できませんでした。" },
+    {
+      "key": "messageTooLargeToShowHere",
+      "en": "Too large to show here ({p0}).",
+      "ja": "ここでは大きすぎて表示できません（{p0}）。",
+      "placeholders": { "p0": "String" }
+    },
+    { "key": "uiNotAvailableHere", "en": "Not available here", "ja": "ここでは利用できません" },
+    { "key": "uiTapToLoad", "en": "Tap to load", "ja": "タップして読み込む" },
+    {
+      "key": "uiTheAgentSentNoPictureData",
+      "en": "The agent sent no picture data.",
+      "ja": "エージェントは画像データを送っていません。"
+    },
+    { "key": "messageTapToRetry", "en": "{p0} Tap to retry.", "ja": "{p0} タップして再試行。", "placeholders": { "p0": "String" } },
+    { "key": "uiYouAttachedIt", "en": "You attached it", "ja": "あなたが添付" },
+    { "key": "messageSentByAgent", "en": "Sent by {p0}", "ja": "{p0}が送信", "placeholders": { "p0": "String" } },
+    { "key": "messageAgentThinking", "en": "{p0} thinking", "ja": "{p0}が思考中", "placeholders": { "p0": "String" } },
+    { "key": "messageToolResult", "en": "Tool result · {p0}", "ja": "ツール結果 · {p0}", "placeholders": { "p0": "String" } },
+    { "key": "uiSentInTheConversation", "en": "Sent in the conversation", "ja": "会話内で送信" },
+    { "key": "uiTheAttachmentIsEmpty", "en": "The attachment is empty.", "ja": "添付は空です。" },
+    { "key": "uiMessageCopied", "en": "Message copied", "ja": "メッセージをコピーしました" },
+    { "key": "uiMarkdownCopied", "en": "Markdown copied", "ja": "Markdownをコピーしました" },
+    { "key": "uiLongCommandReadItAll", "en": "long command, read it all", "ja": "長いコマンドです。最後まで確認してください" },
+    { "key": "uiRefusesFromNowOn", "en": "refuses from now on", "ja": "今後は拒否します" },
+    { "key": "uiElsewhere", "en": "elsewhere", "ja": "ほかの場所で" },
+    { "key": "uiOnAnotherPhone", "en": "on another phone", "ja": "別の端末で" },
+    { "key": "messageIn", "en": "in {p0}", "ja": "{p0}で", "placeholders": { "p0": "String" } },
+    { "key": "messageAnsweredIn", "en": "Answered {p0}", "ja": "{p0}で回答済み", "placeholders": { "p0": "String" } },
+    { "key": "messageDeclinedIn", "en": "Declined {p0}", "ja": "{p0}で辞退", "placeholders": { "p0": "String" } },
+    { "key": "messageCancelledIn", "en": "Cancelled {p0}", "ja": "{p0}でキャンセル", "placeholders": { "p0": "String" } },
+    { "key": "messageAllowedOnceIn", "en": "Allowed once {p0}", "ja": "{p0}で1回だけ許可", "placeholders": { "p0": "String" } },
+    { "key": "messageAlwaysAllowedIn", "en": "Always allowed {p0}", "ja": "{p0}で常に許可", "placeholders": { "p0": "String" } },
+    { "key": "messageRefusedIn", "en": "Refused {p0}", "ja": "{p0}で拒否", "placeholders": { "p0": "String" } },
+    { "key": "messageAlwaysRefusedIn", "en": "Always refused {p0}", "ja": "{p0}で常に拒否", "placeholders": { "p0": "String" } },
+    {
+      "key": "messageAnsweredInWith",
+      "en": "Answered {p0} · {p1}",
+      "ja": "{p0}で回答済み · {p1}",
+      "placeholders": { "p0": "String", "p1": "String" }
+    },
+    { "key": "uiPermissionRequest", "en": "Permission request", "ja": "許可リクエスト" },
+    { "key": "messageBlankLines", "en": "↵ {p0} blank lines", "ja": "↵ 空行{p0}行", "placeholders": { "p0": "String" } },
+    { "key": "messageMoreCharacters", "en": "… {p0} more characters", "ja": "… 残り{p0}文字", "placeholders": { "p0": "String" } },
+    { "key": "uiGallery", "en": "Gallery", "ja": "ギャラリー" },
+    { "key": "uiPhotosOnThisPhone", "en": "Photos on this phone", "ja": "この端末の写真" },
+    { "key": "uiFilesOnThisPhone", "en": "Files on this phone", "ja": "この端末のファイル" },
+    { "key": "uiFilesOnTheMachine", "en": "Files on the machine", "ja": "マシン上のファイル" },
+    { "key": "uiAlreadyOnTheMachine", "en": "Already on the machine", "ja": "すでにマシン上にあります" },
+    { "key": "uiChooseItAgain", "en": "Choose it again", "ja": "もう一度選択" },
+    { "key": "uiLargeUploadingMayTakeAWhile", "en": "Large · uploading may take a while", "ja": "大きいため、アップロードに時間がかかる場合があります" },
+    { "key": "uiSentAsAFile", "en": "Sent as a file", "ja": "ファイルとして送信" },
+    {
+      "key": "messageThatCopyIsGoneFromTheMachineChooseTheFileAgain",
+      "en": "That copy is gone from the machine. Choose the file again.",
+      "ja": "そのコピーはマシンから削除されました。ファイルを選び直してください。"
+    }
+  ]
+}

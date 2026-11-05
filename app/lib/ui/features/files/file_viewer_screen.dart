@@ -78,7 +78,13 @@ class FileViewerScreen extends StatelessWidget {
         ),
       ),
       ChangeNotifierProvider(
-        create: (_) => FileViewerViewModel(files: machine.files, stat: stat, line: line, forceText: asText)..load(),
+        create: (_) => FileViewerViewModel(
+          files: machine.files,
+          stat: stat,
+          line: line,
+          forceText: asText,
+          words: context.l10n,
+        )..load(),
       ),
     ],
     child: const _ViewerPage(),
@@ -141,8 +147,10 @@ class _ViewerPageState extends State<_ViewerPage> {
     copyText(
       context,
       text,
-      what: 'Contents copied',
-      caveat: complete ? null : 'Only the first ${formatBytes(text.length)} was copied',
+      what: context.l10n.uiContentsCopied,
+      caveat: complete
+          ? null
+          : context.l10n.messageOnlyTheFirstWasCopied(formatBytes(text.length, context.l10n)),
     );
   }
 
@@ -159,7 +167,7 @@ class _ViewerPageState extends State<_ViewerPage> {
     if (result.problem case final problem?) {
       showToast(context, problem, kind: ToastKind.failed);
     } else if (result.done) {
-      showToast(context, 'Saved to Pictures/herdr', kind: ToastKind.success);
+      showToast(context, context.l10n.uiSavedToPicturesHerdr, kind: ToastKind.success);
     }
   }
 
@@ -330,8 +338,8 @@ class _Tools extends StatelessWidget {
   String _meta(BuildContext context) {
     final s = vm.stat;
     final parts = <String>[];
-    parts.add(formatBytes(s.size, l10n: context.l10n));
-    final when = s.modified == null ? '' : formatAgo(s.modified!, DateTime.now(), l10n: context.l10n);
+    parts.add(formatBytes(s.size, context.l10n));
+    final when = s.modified == null ? '' : formatAgo(s.modified!, DateTime.now());
     if (when.isNotEmpty) parts.add(when);
     return parts.join(' · ');
   }
@@ -484,8 +492,8 @@ class _TextBody extends StatelessWidget {
     }
     final footer = vm.hasMore || vm.loadingMore || vm.truncatedAtLimit || vm.loadMoreError != null;
     final size = vm.stat.size;
-    final loaded = formatBytes(doc.bytes);
-    final of = size == null || size == 0 ? '' : ' of ${formatBytes(size)}';
+    final loaded = formatBytes(doc.bytes, context.l10n);
+    final of = size == null || size == 0 ? '' : formatBytes(size, context.l10n);
     final body = rendered
         ? MarkdownView(
             document: doc,
@@ -522,9 +530,13 @@ class _TextBody extends StatelessWidget {
                     child: Text(
                       vm.loadMoreError != null
                           ? context.l10n.messageCouldnTLoadMore(vm.loadMoreError!.message)
-                          : vm.truncatedAtLimit
-                          ? context.l10n.messageShowingTheFirstThatIsAsMuchAs(loaded, of)
-                          : context.l10n.messageShowing(loaded, of),
+                          : of.isEmpty
+                          ? (vm.truncatedAtLimit
+                                ? context.l10n.messageShowingTheFirstThatIsAsMuchAs(loaded, '')
+                                : context.l10n.messageShowing(loaded, ''))
+                          : (vm.truncatedAtLimit
+                                ? context.l10n.messageShowingTheFirstOfSize(loaded, of)
+                                : context.l10n.messageShowingOfSize(loaded, of)),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Type.caption.copyWith(color: vm.loadMoreError != null ? ds.dangerText : ds.textMuted),
@@ -655,8 +667,11 @@ class _CopySlot extends StatelessWidget {
         size: FloatingPillSize.compact,
         leading: const BusySpinner(size: IconSize.inline),
         label: copy.total > 0
-            ? context.l10n.messageCopyingOf(formatBytes(copy.written), formatBytes(copy.total))
-            : context.l10n.messageCopying(formatBytes(copy.written)),
+            ? context.l10n.messageCopyingOf(
+                formatBytes(copy.written, context.l10n),
+                formatBytes(copy.total, context.l10n),
+              )
+            : context.l10n.messageCopying(formatBytes(copy.written, context.l10n)),
         trailing: Text(context.l10n.uiCancel, style: Type.labelStrong.copyWith(color: ds.accentText)),
         onTap: copy.cancel,
       ),
@@ -678,7 +693,7 @@ class _RefreshStrip extends StatelessWidget {
       child: StatusStrip(
         color: ds.danger,
         title: context.l10n.uiCouldnTRefresh,
-        detail: 'Showing the earlier version',
+        detail: context.l10n.uiShowingTheEarlierVersion,
         leading: Icon(LucideIcons.circleAlert, size: IconSize.row, color: ds.dangerText),
         action: AppButton(
           label: context.l10n.uiRetry,

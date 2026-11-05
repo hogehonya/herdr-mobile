@@ -1,0 +1,221 @@
+{
+  "entries": [
+    {
+      "key": "uiCouldnTOpenThisPage",
+      "en": "Couldn’t open this page",
+      "ja": "このページを開けませんでした"
+    },
+    {
+      "key": "messageIsnTOnTheMachineAnyMore",
+      "en": "{p0} isn’t on the machine any more.",
+      "ja": "{p0}はもうマシン上にありません。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiSomethingWentWrongOnThePhoneRetryTriesAgain",
+      "en": "Something went wrong on the phone. Retry tries again.",
+      "ja": "スマートフォン側で問題が起きました。再試行すると再度試します。"
+    },
+    {
+      "key": "uiFilesAreNotAvailableOnThisMachine",
+      "en": "Files are not available on this machine",
+      "ja": "このマシンではファイルを利用できません。"
+    },
+    {
+      "key": "uiCouldnTLoadThisPage",
+      "en": "Couldn’t load this page",
+      "ja": "このページを読み込めませんでした"
+    },
+    {
+      "key": "uiHerdrStoppedServingItOnThisPhone",
+      "en": "herdr stopped serving it on this phone (after 10 minutes unused, or a new connection). Retry opens it again.",
+      "ja": "herdrがこのスマートフォンへの配信を停止しました（10分間未使用、または新しい接続時）。再試行すると再度開きます。"
+    },
+    {
+      "key": "messageTookTooLongToAnswer",
+      "en": "{p0} took too long to answer. Retry asks again.",
+      "ja": "{p0}の応答に時間がかかりすぎました。再試行すると再度問い合わせます。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageTheConnectionToBrokeWhileThePageLoaded",
+      "en": "The connection to {p0} broke while the page loaded. Retry asks again.",
+      "ja": "{p0}への接続がページの読み込み中に切れました。再試行すると再度問い合わせます。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiThePageSendsItselfRoundInALoop",
+      "en": "The page sends itself round in a loop. Retry asks again.",
+      "ja": "ページが自身をループで繰り返し開こうとしています。再試行すると再度問い合わせます。"
+    },
+    {
+      "key": "uiThePageStoppedItsViewRanOutOfMemory",
+      "en": "The page stopped: its view ran out of memory or crashed. Retry opens it again.",
+      "ja": "ページが停止しました。表示処理がメモリ不足になったかクラッシュしました。再試行すると再度開きます。"
+    },
+    {
+      "key": "messageTheServerOnClosedTheConnectionWithoutAnAnswer",
+      "en": "The server on {p0} closed the connection without an answer. Is it still running? Retry asks again.",
+      "ja": "{p0}のサーバーが応答せずに接続を閉じました。まだ動作していますか？ 再試行すると再度問い合わせます。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiItDidnTLoad",
+      "en": "It didn’t load. Retry asks again.",
+      "ja": "読み込めませんでした。再試行すると再度問い合わせます。"
+    },
+    {
+      "key": "uiThePageIsStillOpening",
+      "en": "The page is still opening.",
+      "ja": "ページを開いているところです。"
+    },
+    {
+      "key": "uiDiagram",
+      "en": "Diagram",
+      "ja": "図"
+    },
+    {
+      "key": "uiFrom",
+      "en": "From",
+      "ja": "送信元"
+    },
+    {
+      "key": "uiFormat",
+      "en": "Format",
+      "ja": "形式"
+    },
+    {
+      "key": "uiDimensions",
+      "en": "Dimensions",
+      "ja": "縦横"
+    },
+    {
+      "key": "uiTaken",
+      "en": "Taken",
+      "ja": "撮影日時"
+    },
+    {
+      "key": "uiLens",
+      "en": "Lens",
+      "ja": "レンズ"
+    },
+    {
+      "key": "uiExposure",
+      "en": "Exposure",
+      "ja": "露出"
+    },
+    {
+      "key": "uiOrientation",
+      "en": "Orientation",
+      "ja": "向き"
+    },
+    {
+      "key": "messageTurnedUprightExif",
+      "en": "Turned upright (EXIF {p0})",
+      "ja": "正立に回転（EXIF {p0}）",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiShowing",
+      "en": "Showing",
+      "ja": "表示"
+    },
+    {
+      "key": "uiScreenSizePreviewItSharpensAsYouZoomIn",
+      "en": "Screen-size preview; it sharpens as you zoom in",
+      "ja": "画面サイズのプレビュー。ズームすると鮮明になります"
+    },
+    {
+      "key": "uiPreparing",
+      "en": "Preparing…",
+      "ja": "準備中…"
+    },
+    {
+      "key": "uiAvailableOnceThePictureHasLoaded",
+      "en": "Available once the picture has loaded",
+      "ja": "写真の読み込み後に使えます"
+    },
+    {
+      "key": "uiPhoto",
+      "en": "Photo",
+      "ja": "写真"
+    },
+    {
+      "key": "messagePhotoOf",
+      "en": "Photo {p0} of {p1}",
+      "ja": "{p1}枚中{p0}枚目",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "uiTooLargeToOpenHere",
+      "en": "Too large to open here",
+      "ja": "ここで開くには大きすぎます"
+    },
+    {
+      "key": "uiCanTShowThisAsAPicture",
+      "en": "Can’t show this as a picture",
+      "ja": "画像として表示できません"
+    },
+    {
+      "key": "uiConnectionLost",
+      "en": "Connection lost",
+      "ja": "接続が切れました"
+    },
+    {
+      "key": "uiCouldnTOpenThisPhoto",
+      "en": "Couldn’t open this photo",
+      "ja": "この写真を開けませんでした"
+    },
+    {
+      "key": "uiThisFileCanTBeShownAsAPicture",
+      "en": "This file can’t be shown as a picture. It may be damaged, or in a format Android doesn’t read.",
+      "ja": "このファイルは画像として表示できません。破損しているか、Androidが読めない形式の可能性があります。"
+    },
+    {
+      "key": "uiThisPhoto",
+      "en": "this photo",
+      "ja": "この写真"
+    },
+    {
+      "key": "uiThisPhotoIsNoLongerThere",
+      "en": "This photo is no longer there. It may have been moved or deleted.",
+      "ja": "この写真はもうありません。移動または削除された可能性があります。"
+    },
+    {
+      "key": "uiThePictureIsnTLoadedYet",
+      "en": "The picture isn’t loaded yet.",
+      "ja": "写真がまだ読み込まれていません。"
+    },
+    {
+      "key": "uiSavedToPicturesHerdr",
+      "en": "Saved to Pictures/herdr",
+      "ja": "Pictures/herdrに保存しました"
+    },
+    {
+      "key": "messageCopied",
+      "en": "{p0} copied",
+      "ja": "{p0}をコピーしました",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiThisPictureCanTBeSharedFromHere",
+      "en": "This picture can’t be shared from here.",
+      "ja": "この写真はここから共有できません。"
+    }
+  ]
+}

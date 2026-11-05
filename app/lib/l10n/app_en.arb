@@ -2355,157 +2355,1595 @@
   "@batchFailureTimeout": {
     "description": "An app-owned batch failure when the machine did not answer in time."
   },
-  "messageFileCountItems": "{shown, plural, =1{{shownGrouped} item} other{{shownGrouped} items}}",
-  "@messageFileCountItems": {
+  "uiAttachedToYourMessageWhatIsSent": "Attached to your message (what is sent)",
+  "messageUploadingPercent": "Uploading {p0}%",
+  "@messageUploadingPercent": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageUploadingPercentWithSize": "Uploading {p0}% · {p1}",
+  "@messageUploadingPercentWithSize": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "uiUploadFailed": "Upload failed",
+  "uiTextIncluded": "Text included",
+  "uiSentAsAPath": "Sent as a path",
+  "messageCouldnTReadThatPicturePickItAgain": "Couldn’t read that picture. Pick it again.",
+  "messageUploadingLabel": "Uploading {p0}…",
+  "@messageUploadingLabel": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageUploadingFiles": "Uploading {p0} files…",
+  "@messageUploadingFiles": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messagePreparingYourAttachments": "Preparing your attachments…",
+  "uiAnUploadFailedRetryItOrRemoveIt": "An upload failed: retry it or remove it",
+  "messageOneAttachmentDidnTFitBackAndWasRemoved": "One attachment didn’t fit back and was removed.",
+  "messageAttachmentsDidnTFitBackAndWereRemoved": "{p0} attachments didn’t fit back and were removed.",
+  "@messageAttachmentsDidnTFitBackAndWereRemoved": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiSentAsAFileThisAgentTakesNoImages": "Sent as a file · this agent takes no images",
+  "messageNameIsSizeFilesUpToCanBeAttached": "{p0} is {p1}. Files up to {p2} can be attached.",
+  "@messageNameIsSizeFilesUpToCanBeAttached": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      },
+      "p2": {
+        "type": "String"
+      }
+    }
+  },
+  "messageNameIsLargeUploadingItMayTakeAWhile": "{p0} is large; uploading it may take a while.",
+  "@messageNameIsLargeUploadingItMayTakeAWhile": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCountLargeFilesUploadingThemMayTakeAWhile": "{p0} large files; uploading them may take a while.",
+  "@messageCountLargeFilesUploadingThemMayTakeAWhile": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCouldnTPrepareThatPicture": "Couldn’t prepare that picture.",
+  "messageCouldnTStartTheUploadAttachItAgain": "Couldn’t start the upload · attach it again",
+  "messageUploadedSize": "Uploaded · {p0}",
+  "@messageUploadedSize": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiTheUploadFailed": "The upload failed",
+  "uiFirst12LinesOfThePlan": "First 12 lines of the plan",
+  "messageCharactersOfThisFileNotCompared": "… {p0} characters of this file are not compared",
+  "@messageCharactersOfThisFileNotCompared": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageMoreFilesNotShown": "{p0, plural, =1{1 more file not shown} other{{p0} more files not shown}}",
+  "@messageMoreFilesNotShown": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "messageUpToCounts": "up to {p0}",
+  "@messageUpToCounts": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageNewFileCounts": "new file {p0}",
+  "@messageNewFileCounts": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageLinesAdded": "{p0, plural, =1{1 line added} other{{p0} lines added}}",
+  "@messageLinesAdded": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "messageLinesRemoved": "{p0, plural, =1{1 line removed} other{{p0} lines removed}}",
+  "@messageLinesRemoved": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "uiAdded": "added",
+  "uiRemoved": "removed",
+  "uiThePictureDataIsDamaged": "The picture data is damaged.",
+  "uiThisPictureIsInAFormatThePhoneCanTShow": "This picture is in a format the phone can’t show.",
+  "uiThePictureIsEmpty": "The picture is empty (0 × 0).",
+  "uiThePictureCouldnTBeShown": "The picture couldn’t be shown.",
+  "messageTooLargeToShowHere": "Too large to show here ({p0}).",
+  "@messageTooLargeToShowHere": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiNotAvailableHere": "Not available here",
+  "uiTapToLoad": "Tap to load",
+  "uiTheAgentSentNoPictureData": "The agent sent no picture data.",
+  "messageTapToRetry": "{p0} Tap to retry.",
+  "@messageTapToRetry": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiYouAttachedIt": "You attached it",
+  "messageSentByAgent": "Sent by {p0}",
+  "@messageSentByAgent": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAgentThinking": "{p0} thinking",
+  "@messageAgentThinking": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageToolResult": "Tool result · {p0}",
+  "@messageToolResult": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiSentInTheConversation": "Sent in the conversation",
+  "uiTheAttachmentIsEmpty": "The attachment is empty.",
+  "uiMessageCopied": "Message copied",
+  "uiMarkdownCopied": "Markdown copied",
+  "uiLongCommandReadItAll": "long command, read it all",
+  "uiRefusesFromNowOn": "refuses from now on",
+  "uiElsewhere": "elsewhere",
+  "uiOnAnotherPhone": "on another phone",
+  "messageIn": "in {p0}",
+  "@messageIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAnsweredIn": "Answered {p0}",
+  "@messageAnsweredIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDeclinedIn": "Declined {p0}",
+  "@messageDeclinedIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCancelledIn": "Cancelled {p0}",
+  "@messageCancelledIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAllowedOnceIn": "Allowed once {p0}",
+  "@messageAllowedOnceIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAlwaysAllowedIn": "Always allowed {p0}",
+  "@messageAlwaysAllowedIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageRefusedIn": "Refused {p0}",
+  "@messageRefusedIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAlwaysRefusedIn": "Always refused {p0}",
+  "@messageAlwaysRefusedIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAnsweredInWith": "Answered {p0} · {p1}",
+  "@messageAnsweredInWith": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "uiPermissionRequest": "Permission request",
+  "messageBlankLines": "↵ {p0} blank lines",
+  "@messageBlankLines": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageMoreCharacters": "… {p0} more characters",
+  "@messageMoreCharacters": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiTheAgent": "The agent",
+  "messageWaitingForJobs": "Waiting for jobs",
+  "messageWaitingFor": "Waiting for {p0}",
+  "@messageWaitingFor": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageContinuesByItselfWhenOneFinishes": "{p0} continues by itself when one finishes",
+  "@messageContinuesByItselfWhenOneFinishes": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageContinuesByItselfWhenItFinishes": "{p0} continues by itself when it finishes",
+  "@messageContinuesByItselfWhenItFinishes": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageContinuesByItselfWhenAJobFinishes": "{p0} continues by itself when a job finishes.",
+  "@messageContinuesByItselfWhenAJobFinishes": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageBackgroundWorkDetailsUnavailable": "Background work · details unavailable",
+  "messageRunningInBackground": "{p0} running in background",
+  "@messageRunningInBackground": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCountRunning": "{p0} running",
+  "@messageCountRunning": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageJobCount": "{p0, plural, =1{1 job} other{{p0} jobs}}",
+  "@messageJobCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "messageSubagentCount": "{p0, plural, =1{1 subagent} other{{p0} subagents}}",
+  "@messageSubagentCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "uiJobs": "Jobs",
+  "uiDetailsUnavailable": "details unavailable",
+  "uiDoubleTapToOpen": "double tap to open",
+  "messageTurnStoppedJobsStillRunning": "Turn stopped · jobs still running",
+  "messageTurnStoppedStillRunning": "Turn stopped · {p0} still running",
+  "@messageTurnStoppedStillRunning": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiAskToStop": "Ask to stop",
+  "messageAskToStop": "Ask {p0} to stop",
+  "@messageAskToStop": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageConfirmActivateAgainToConfirm": "Confirm: {p0} {p1}, activate again to confirm",
+  "@messageConfirmActivateAgainToConfirm": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageHoldToConfirm": "{p0} {p1}, hold to confirm",
+  "@messageHoldToConfirm": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAskedToStop": "Asked to stop {p0}",
+  "@messageAskedToStop": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageStoppedCount": "Stopped {p0}",
+  "@messageStoppedCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageHasNoStopControl": "{p0, plural, =1{1 has no stop control} other{{p0} have no stop control}}",
+  "@messageHasNoStopControl": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "uiAlreadyDone": "Already done",
+  "uiNothingHereHasAStopControl": "Nothing here has a stop control",
+  "uiCouldnTConfirm": "Couldn’t confirm",
+  "uiHoldToStop": "Hold to stop",
+  "uiHoldToStopAll": "Hold to stop all",
+  "messageStopping": "Stopping {p0}",
+  "@messageStopping": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageHasNoStopKey": "{p0} has no stop key for this. The phone sends {p0} a message asking it to.",
+  "@messageHasNoStopKey": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiRunning": "Running",
+  "messageDetailsAreUnavailable": "Details are unavailable: the agent waits on something its log doesn’t list.",
+  "uiNotConnectedLastKnown": "Not connected. This is the last known list.",
+  "uiStopOnTheMessageBarEndsTheTurnOnly": "Stop on the message bar ends the turn only. Work listed here keeps running until you stop it.",
+  "uiNothingIsRunningInTheBackground": "Nothing is running in the background.",
+  "uiEnded": "ended?",
+  "uiPaused": "paused",
+  "uiStopped": "stopped",
+  "uiWasRunning": "Was running",
+  "uiWaiting": "Waiting",
+  "uiFailedHeader": "Failed",
+  "uiNoneStartedYet": "None started yet.",
+  "uiStopOnTheMessageBarEndsTheTurnOnlySubagents": "Stop on the message bar ends the turn only. Subagents keep running until you stop them.",
+  "messageWorkingSince": "Working · {p0}",
+  "@messageWorkingSince": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageToolCount": "{p0, plural, =1{1 tool} other{{p0} tools}}",
+  "@messageToolCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "uiRunningWord": "running",
+  "uiDoneWord": "done",
+  "uiStartingWord": "starting",
+  "uiCancelled": "cancelled",
+  "messageRunningFor": "running {p0}",
+  "@messageRunningFor": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiRetrying": "retrying",
+  "messageRetryingAttempt": "retrying {p0} of {p1}",
+  "@messageRetryingAttempt": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "uiWasRunningWord": "was running",
+  "uiNotUpdating": "not updating",
+  "messageStartingCount": "{p0} starting",
+  "@messageStartingCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageNotUpdatingCount": "{p0} not updating",
+  "@messageNotUpdatingCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageFailedCount": "{p0} failed",
+  "@messageFailedCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCancelledCount": "{p0} cancelled",
+  "@messageCancelledCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageNeedYouCount": "{p0, plural, =1{1 needs you} other{{p0} need you}}",
+  "@messageNeedYouCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "uiAllDone": "all done",
+  "messageRunningOfTotal": "{p0} of {p1} running",
+  "@messageRunningOfTotal": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageFailedOfTotal": "{p0} of {p1} failed",
+  "@messageFailedOfTotal": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messagePlusSubagents": "{p0}+ subagents",
+  "@messagePlusSubagents": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messagePlusSubagent": "{p0}+ subagent",
+  "@messagePlusSubagent": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageFromLogOnTheMachine": "From {p0}’s log on the machine",
+  "@messageFromLogOnTheMachine": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiEarlierPartNotShown": "Earlier part not shown",
+  "messageOversizedLinesLeftOut": "{p0, plural, =1{1 oversized line left out} other{{p0} oversized lines left out}}",
+  "@messageOversizedLinesLeftOut": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "uiModel": "Model",
+  "uiCost": "Cost",
+  "uiProgress": "Progress",
+  "uiRetryingHeading": "Retrying",
+  "messageRetryingAttemptOf": "Retrying, attempt {p0} of {p1}",
+  "@messageRetryingAttemptOf": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageInDelay": "in {p0}",
+  "@messageInDelay": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiDoingNow": "Doing now",
+  "uiLatestTools": "Latest tools",
+  "uiRecentOutput": "Recent output",
+  "uiWhyItStopped": "Why it stopped",
+  "uiResult": "Result",
+  "messageSubagentsConversationIsReadOnly": "A subagent’s conversation is read-only.",
+  "uiRead": "Read",
+  "uiMove": "Move",
+  "uiRun": "Run",
+  "uiThink": "Think",
+  "uiFetch": "Fetch",
+  "uiSwitchMode": "Switch mode",
+  "uiToolCall": "Tool call",
+  "uiPending": "pending",
+  "messageNoMatches": "no matches",
+  "messageMatchCount": "{p0, plural, =1{1 match} other{{p0} matches}}",
+  "@messageMatchCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "messageLineCount": "{p0, plural, =1{1 line} other{{p0} lines}}",
+  "@messageLineCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "messageCharactersNotShown": "{p0, plural, =1{1 character not shown} other{{p0} characters not shown}}",
+  "@messageCharactersNotShown": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "uiCommand": "Command",
+  "uiOutput": "Output",
+  "uiInput": "Input",
+  "uiOutputTrimmed": "Output trimmed",
+  "uiTheOutputIsInATerminalOnTheMachine": "The output is in a terminal on the machine.",
+  "uiCopy": "Copy",
+  "uiCopyOutput": "Copy output",
+  "uiOutputCopied": "Output copied",
+  "uiCommandCopied": "Command copied",
+  "uiCopyDiff": "Copy diff",
+  "uiDiffCopied": "Diff copied",
+  "messageStoppedBySignal": "Stopped by signal {p0}.",
+  "@messageStoppedBySignal": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageExitedWithCode": "Exited with code {p0}.",
+  "@messageExitedWithCode": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageSignalWord": "signal {p0}",
+  "@messageSignalWord": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageExitCodeWord": "exit {p0}",
+  "@messageExitCodeWord": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiShowAll": "Show all",
+  "messageEarlierLineCount": "{p0, plural, =1{1 earlier line} other{{p0} earlier lines}}",
+  "@messageEarlierLineCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "messageMoreLineCount": "{p0, plural, =1{1 more line} other{{p0} more lines}}",
+  "@messageMoreLineCount": {
+    "placeholders": {
+      "p0": {
+        "type": "int"
+      }
+    }
+  },
+  "messagePlusCharacters": "+{p0} characters",
+  "@messagePlusCharacters": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiFilesAreNotAvailableOnThisMachine": "Files are not available on this machine",
+  "messageFilesAreNotAvailableOnThisMachine": "Files are not available on this machine.",
+  "uiReadingEarlierHistory": "Reading earlier history…",
+  "uiPages": "Pages",
+  "uiPictures": "Pictures",
+  "uiDocs": "Docs",
+  "uiApps": "Apps",
+  "messageThatIsAServicePort": "That is a {p0} port. Open the link from the chat if you mean to.",
+  "@messageThatIsAServicePort": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageStillOpening": "Still opening {p0}…",
+  "@messageStillOpening": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiNotAWebPage": "not a web page",
+  "uiStatusUnknown": "Status unknown",
+  "messageStatusUnknownMentioned": "Status unknown · mentioned {p0}",
+  "@messageStatusUnknownMentioned": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageWaysToSignIn": "Ways to sign in: {p0}.",
+  "@messageWaysToSignIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageInATerminalRun": "1. In a terminal, run {p0} and sign in.",
+  "@messageInATerminalRun": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAddExportToZshEnv": "2. Add export {p0}=<the token> to ~/.zshenv.",
+  "@messageAddExportToZshEnv": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiStartANewSession": "3. Start a new session.",
+  "uiBlocked": "blocked",
+  "uiSwitchAgent": "Switch agent",
+  "uiNoPreviousAgent": "No previous agent",
+  "uiAllCaughtUp": "All caught up",
+  "messageAllCaughtUpWorking": "All caught up · {p0} working",
+  "@messageAllCaughtUpWorking": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiThatSessionIsNoLongerAvailable": "That session is no longer available.",
+  "uiAQuestionForYou": "A question for you",
+  "uiPermissionNeeded": "Permission needed",
+  "messageIdleJobs": "idle · jobs {p0}",
+  "@messageIdleJobs": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiLinkConnecting": "connecting",
+  "uiLinkReconnecting": "reconnecting",
+  "uiLinkEnded": "ended",
+  "uiPickAnAnswerAbove": "Pick an answer above",
+  "messageCouldnTSend": "Couldn’t send: {p0}",
+  "@messageCouldnTSend": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiUnknownError": "unknown error",
+  "messageSent": "Sent: {p0}",
+  "@messageSent": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiAnswerOneByOne": "Answer one by one",
+  "messageQuiet": "quiet {p0}",
+  "@messageQuiet": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiQueue": "Queue",
+  "uiSendToTheRunningTurn": "Send to the running turn",
+  "uiOfflineReconnecting": "Offline · reconnecting",
+  "uiSessionEndedReadOnly": "Session ended · read only",
+  "uiWillBeQueuedUntilTheTurnEnds": "Will be queued until the turn ends",
+  "uiGoesIntoTheTurnHoldSendToSend": "Goes into the turn. Hold Send to send it after.",
+  "uiHeldResumeToSend": "Held. Resume to send.",
+  "uiAlreadySentItCanNoLongerBeChanged": "Already sent. It can no longer be changed.",
+  "messageShowingTheCopySaved": "Showing the copy saved {p0}. Nothing here can be answered.",
+  "@messageShowingTheCopySaved": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiNotConnectedTryAgainWhenItIsBack": "Not connected. Try again when it is back",
+  "uiTheAgentIsWorkingSendItOnceItIsIdle": "The agent is working. Send it once it is idle",
+  "uiItsAttachmentsWereNotKeptAttachThemAgain": "Its attachments were not kept: attach them again.",
+  "uiNotSentYourMessageIsBackInTheDraft": "Not sent. Your message is back in the draft.",
+  "uiNotSent": "Not sent.",
+  "uiItsRequestShowsHereOnceConnected": "Its request shows here once connected.",
+  "uiItAsksSomethingTheChatCanTShow": "It asks something the chat can’t show.",
+  "uiTheAgentReportedAnError": "The agent reported an error",
+  "uiTakeOver": "Take over",
+  "uiUpdating": "Updating…",
+  "uiTheAgentKeepsRunningInItsTerminal": "The agent keeps running in its terminal.",
+  "uiTheAgentKeepsRunningOnTheMachine": "The agent keeps running on the machine.",
+  "uiTakenOver": "Taken over",
+  "uiSessionEnded": "Session ended",
+  "uiCanTReadTheSessionLog": "Can’t read the session log",
+  "uiTheAgentKeptTheConversation": "The agent kept the conversation.",
+  "messageRunningTool": "Running {p0}",
+  "@messageRunningTool": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageReadingTool": "Reading {p0}",
+  "@messageReadingTool": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageEditingTool": "Editing {p0}",
+  "@messageEditingTool": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageSearchingTool": "Searching {p0}",
+  "@messageSearchingTool": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageFetchingTool": "Fetching {p0}",
+  "@messageFetchingTool": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageDeletingTool": "Deleting {p0}",
+  "@messageDeletingTool": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageMovingTool": "Moving {p0}",
+  "@messageMovingTool": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageQuietFor": "Quiet for {p0}",
+  "@messageQuietFor": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageContextPercent": "Context {p0}%",
+  "@messageContextPercent": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiSessionLinkCopied": "Session link copied",
+  "uiNothingHasComeUpYet": "Nothing has come up yet",
+  "messageIsOffline": "{p0} is offline",
+  "@messageIsOffline": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiNothingMatches": "Nothing matches.",
+  "messageHoldToSwitchTo": "Hold to switch to {p0}",
+  "@messageHoldToSwitchTo": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiContextAndCost": "Context and cost",
+  "uiLastTurn": "Last turn",
+  "uiAQuestion": "A question",
+  "messageRunningCount": "{p0} running",
+  "@messageRunningCount": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageTokens": "{p0} tokens",
+  "@messageTokens": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageInOut": "{p0} in · {p1} out",
+  "@messageInOut": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messagePlanDone": "Plan {p0} of {p1} done",
+  "@messagePlanDone": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "uiPlanPending": "pending",
+  "uiPlanInProgress": "in progress",
+  "uiPlanDone": "done",
+  "uiPlanCancelled": "cancelled",
+  "uiTheAgentHasAQuestion": "The agent has a question",
+  "uiOptional": "(optional)",
+  "uiNoChoicesOffered": "No choices offered.",
+  "uiTheAgentStoppedItRefusedToContinue": "The agent stopped: it refused to continue.",
+  "uiTheAgentStoppedItHitTheLengthLimit": "The agent stopped: it hit the length limit.",
+  "uiTheAgentStoppedItReachedItsLimitOfStepsForOneTurn": "The agent stopped: it reached its limit of steps for one turn.",
+  "uiTheAgentStopped": "The agent stopped.",
+  "uiLoadingEarlierMessages": "Loading earlier messages…",
+  "uiDeleted": "deleted",
+  "uiNewFile": "new",
+  "itemCount": "{count, plural, =1{1 item} other{{count} items}}",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderCount": "{count, plural, =1{1 folder} other{{count} folders}}",
+  "@folderCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photoCount": "{count, plural, =1{1 photo} other{{count} photos}}",
+  "@photoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "messageFoldersInList": "{count, plural, =1{1 folder in list} other{{count} folders in list}}",
+  "@messageFoldersInList": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "messageHiddenCount": "{count, plural, =1{1 hidden} other{{count} hidden}}",
+  "@messageHiddenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "messageShownOfItems": "{shown} of {count, plural, =1{1 item} other{{count} items}}",
+  "@messageShownOfItems": {
     "placeholders": {
       "shown": {
         "type": "int"
       },
-      "shownGrouped": {
-        "type": "String"
+      "count": {
+        "type": "int"
       }
     }
   },
-  "messageFileCountFolders": "{shown, plural, =1{{shownGrouped} folder} other{{shownGrouped} folders}}",
-  "@messageFileCountFolders": {
+  "messageShownOfFolders": "{shown} of {count, plural, =1{1 folder} other{{count} folders}}",
+  "@messageShownOfFolders": {
     "placeholders": {
       "shown": {
         "type": "int"
       },
-      "shownGrouped": {
-        "type": "String"
-      }
-    }
-  },
-  "messageFileCountItemsOf": "{shownGrouped} of {base, plural, =1{{baseGrouped} item} other{{baseGrouped} items}}",
-  "@messageFileCountItemsOf": {
-    "placeholders": {
-      "shownGrouped": {
-        "type": "String"
-      },
-      "base": {
+      "count": {
         "type": "int"
-      },
-      "baseGrouped": {
-        "type": "String"
-      }
-    }
-  },
-  "messageFileCountFoldersOf": "{shownGrouped} of {base, plural, =1{{baseGrouped} folder} other{{baseGrouped} folders}}",
-  "@messageFileCountFoldersOf": {
-    "placeholders": {
-      "shownGrouped": {
-        "type": "String"
-      },
-      "base": {
-        "type": "int"
-      },
-      "baseGrouped": {
-        "type": "String"
-      }
-    }
-  },
-  "messageFileCountItemsHidden": "{shown, plural, =1{{shownGrouped} item} other{{shownGrouped} items}} · {hidden} hidden",
-  "@messageFileCountItemsHidden": {
-    "placeholders": {
-      "shown": {
-        "type": "int"
-      },
-      "shownGrouped": {
-        "type": "String"
-      },
-      "hidden": {
-        "type": "int"
-      }
-    }
-  },
-  "messageFileCountFoldersHidden": "{shown, plural, =1{{shownGrouped} folder} other{{shownGrouped} folders}} · {hidden} hidden",
-  "@messageFileCountFoldersHidden": {
-    "placeholders": {
-      "shown": {
-        "type": "int"
-      },
-      "shownGrouped": {
-        "type": "String"
-      },
-      "hidden": {
-        "type": "int"
-      }
-    }
-  },
-  "messagePhotoCount": "{photos, plural, =1{{photosGrouped} photo} other{{photosGrouped} photos}}",
-  "@messagePhotoCount": {
-    "placeholders": {
-      "photos": {
-        "type": "int"
-      },
-      "photosGrouped": {
-        "type": "String"
-      }
-    }
-  },
-  "messagePhotoCountFoldersInList": "{folders, plural, =1{{foldersGrouped} folder in list} other{{foldersGrouped} folders in list}}",
-  "@messagePhotoCountFoldersInList": {
-    "placeholders": {
-      "folders": {
-        "type": "int"
-      },
-      "foldersGrouped": {
-        "type": "String"
       }
     }
   },
   "uiChooseAFile": "choose a file",
-  "uiOpenParent": "Open parent",
   "uiGoUp": "Go up",
-  "uiJustNow": "Just now",
-  "uiYesterday": "Yesterday",
-  "messageAgo": "{ago} ago",
-  "@messageAgo": {"placeholders": {"ago": {"type": "String"}}},
-  "month1": "Jan",
-  "month2": "Feb",
-  "month3": "Mar",
-  "month4": "Apr",
-  "month5": "May",
-  "month6": "Jun",
-  "month7": "Jul",
-  "month8": "Aug",
-  "month9": "Sep",
-  "month10": "Oct",
-  "month11": "Nov",
-  "month12": "Dec",
-  "messageDateDayMonth": "{day} {month}",
-  "@messageDateDayMonth": {"placeholders": {"day": {"type": "int"}, "month": {"type": "String"}}},
-  "messageDateDayMonthYear": "{day} {month} {year}",
-  "@messageDateDayMonthYear": {"placeholders": {"day": {"type": "int"}, "month": {"type": "String"}, "year": {"type": "int"}}},
+  "uiOpenParent": "Open parent",
   "uiBrokenLink": "Broken link",
-  "uiUnknownSize": "Unknown size",
-  "uiSessionEndedReadOnly": "Session ended · read only",
-  "uiNotConnected": "Not connected",
-  "uiPaneClosed": "Pane closed",
-  "uiWaitingForSignInApproval": "Waiting for sign-in approval",
-  "uiOfflineReconnecting": "Offline · reconnecting",
-  "uiNeedsAttentionSeeAbove": "Needs attention · see above",
-  "uiMachineDisabled": "Machine disabled",
-  "messageMessageAgent": "Message {agent}…",
-  "@messageMessageAgent": {
+  "uiLookingInOtherCheckouts": "Looking in other checkouts…",
+  "messageSearchingFor": "Searching {p0} for {p1}…",
+  "@messageSearchingFor": {
     "placeholders": {
-      "agent": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
         "type": "String"
       }
     }
   },
-  "uiTypeACommand": "Type a command…",
+  "messageFromWorktree": "From worktree {p0}",
+  "@messageFromWorktree": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageFoundIn": "Found in {p0}",
+  "@messageFoundIn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiContentsCopied": "Contents copied",
+  "messageOnlyTheFirstWasCopied": "Only the first {p0} was copied",
+  "@messageOnlyTheFirstWasCopied": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiSavedToPicturesHerdr": "Saved to Pictures/herdr",
+  "uiShowingTheEarlierVersion": "Showing the earlier version",
+  "messageShowingOfSize": "Showing {p0} of {p1}",
+  "@messageShowingOfSize": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageShowingTheFirstOfSize": "Showing the first {p0} of {p1}. That is as much as the viewer opens.",
+  "@messageShowingTheFirstOfSize": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageSpecialFilesCanTBeOpened": "Special files (sockets, devices, pipes) can’t be opened",
+  "messageIsAFolder": "{p0} is a folder",
+  "@messageIsAFolder": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageIsNotAFileAnyMore": "{p0} isn’t a file any more",
+  "@messageIsNotAFileAnyMore": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageThisFileIsTooLargeToFormat": "This file is too large to format ({p0} limit).",
+  "@messageThisFileIsTooLargeToFormat": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageThisIsnTValidJsonShownAsWritten": "This isn’t valid JSON, so it is shown as written.",
+  "messageImageType": "{p0} image",
+  "@messageImageType": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageVideoType": "{p0} video",
+  "@messageVideoType": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageFileType": "{p0} file",
+  "@messageFileType": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageArchiveType": "{p0} archive",
+  "@messageArchiveType": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiPdfDocument": "PDF document",
+  "uiMarkdown": "Markdown",
+  "uiJSON": "JSON",
+  "uiBinaryData": "Binary data",
+  "uiExecutableElf": "Executable (ELF)",
+  "uiSqliteDatabase": "SQLite database",
+  "uiWebAssembly": "WebAssembly",
+  "uiUnknownSize": "Unknown size",
+  "uiCouldnTCreateTheWorktree": "Couldn’t create the worktree",
+  "uiCouldnTStartTheSession": "Couldn’t start the session",
+  "uiCheckTheForm": "Check the form",
+  "uiChooseAFolder": "Choose a folder",
+  "uiFolderNotFound": "Folder not found",
+  "uiItHasUncommittedChangesNothingWasRemoved": "It has uncommitted changes. Nothing was removed.",
+  "uiItMayHaveUncommittedChangesNothingWasRemoved": "It may have uncommitted changes. Nothing was removed.",
+  "uiItWasAlreadyClosedOnTheMachine": "It was already closed on the machine.",
+  "uiKeptTheSavedKey": "Kept the saved key",
+  "uiNoMachineOnline": "No machine online",
+  "uiNoPrivateKeyIsSavedForThisMachine": "No private key is saved for this machine.",
+  "uiNoLineBreaksOrControlCharacters": "No line breaks or control characters",
+  "uiNoSpacesOrControlCharacters": "No spaces or control characters",
+  "uiNotSupportedByThisHerdr": "Not supported by this herdr",
+  "uiPickAMachineThatIsOnline": "Pick a machine that is online.",
+  "uiPublicKeyCopied": "Public key copied",
+  "uiStartWithOr": "Start with / or ~",
+  "uiThatPassphraseDoesnTOpenTheSavedKey": "That passphrase doesn’t open the saved key.",
+  "uiTheMachineDidnTAnswerInTime": "The machine didn’t answer in time.",
+  "uiTheMachineDidnTAnswerInTimeCheck": "The machine didn’t answer in time. Check that it is on and reachable from this phone, then test again.",
+  "uiTheSavedKeyCouldnTBeRead": "The saved key couldn’t be read.",
+  "uiTheWorktreeWasCreated": "The worktree was created",
+  "uiThisKeyHasAPassphrase": "This key has a passphrase. Enter it in the field below.",
+  "uiWorkboxLocalOr": "workbox.local or 100.64.0.5",
+  "uiWorktreesAreOpenCloseThemFirst": "Worktrees are open · close them first",
+  "uiWorktreesArenTSupported": "Worktrees aren’t supported",
+  "uiAnAbsolutePathOnTheMachine": "An absolute path on the machine",
+  "uiAnAbsolutePathStartingWith": "An absolute path, starting with /",
+  "uiCanTStartWith": "Can’t start with -",
+  "uiChangeItOrClearItToLetHerdrName": "Change it, or clear it to let herdr name it",
+  "uiTailscaleNeedsYouToConfirmThisConnection": "Tailscale needs you to confirm this connection in a browser. Open the page, approve it, then come back: the test continues by itself.",
+  "messageDoesnTExistOn": "{p0} doesn’t exist on {p1}. Pick a folder that does.",
+  "@messageDoesnTExistOn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageExistsButTheMachineAnsweredLate": "{p0} exists, but the machine answered late. Start again to use it.",
+  "@messageExistsButTheMachineAnsweredLate": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageHerdrOnCanTCreateWorktrees": "herdr{p0} on {p1} can’t create worktrees. Update herdr on that machine, or choose This folder.",
+  "@messageHerdrOnCanTCreateWorktrees": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageHerdrOnCanTCreateWorkspaces": "herdr{p0} on {p1} can’t create workspaces from here. Update herdr on that machine to start sessions from your phone.",
+  "@messageHerdrOnCanTCreateWorkspaces": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageHerdrOnCanTDoThis": "herdr{p0} on {p1} can’t do this. Update herdr on that machine.",
+  "@messageHerdrOnCanTDoThis": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "messageItMayStillHaveBeenCreated": "{p0} It may still have been created: check Checkout before trying again.",
+  "@messageItMayStillHaveBeenCreated": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageNotInstalledOn": "Not installed on {p0}",
+  "@messageNotInstalledOn": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageTheSavedSecretsCouldnTBeRead": "The saved secrets couldn’t be read from this phone’s keystore ({p0}). Test again; if it keeps failing, restart the app.",
+  "@messageTheSavedSecretsCouldnTBeRead": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageTheTestStopped": "The test stopped: {p0}. Check the host and port, then test again.",
+  "@messageTheTestStopped": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageTheWorktreeWasCreatedStartAgain": "The worktree {p0} was created; Start again to use it.",
+  "@messageTheWorktreeWasCreatedStartAgain": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageThisPhoneSStorageRefusedIt": "This phone’s storage refused it ({p0}). Everything you entered is still here: save again. If it keeps failing, restart the app.",
+  "@messageThisPhoneSStorageRefusedIt": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiThatMachineWasRemoved": "That machine was removed",
+  "uiThePaneIsGone": "The pane is gone",
   "uiTitleCopied": "Title copied",
   "uiPaneIdCopied": "Pane id copied",
-  "uiThatMachineWasRemoved": "That machine was removed",
-  "messageMachineIsOffline": "{machine} is offline",
-  "@messageMachineIsOffline": {
+  "uiThisPaneNoLongerRunsAnAgent": "This pane no longer runs an agent. Remove the attachments to send the line.",
+  "uiPaneClosed": "Pane closed",
+  "uiWaitingForSignInApproval": "Waiting for sign-in approval",
+  "uiNeedsAttentionSeeAbove": "Needs attention · see above",
+  "uiMachineDisabled": "Machine disabled",
+  "messageThisAddressIsOnOpenPage": "This address is on {p0}. Open page shows it in herdr, over your SSH connection.",
+  "@messageThisAddressIsOnOpenPage": {
     "placeholders": {
-      "machine": {
+      "p0": {
         "type": "String"
       }
     }
   },
-  "uiThePaneIsGone": "The pane is gone"
+  "uiHTTPSOnTheMachineCanTBeOpened": "HTTPS on the machine can’t be opened on the phone yet.",
+  "uiThisAddressIsOnTheMachineNotYourPhone": "This address is on the machine, not your phone.",
+  "uiThisLinkIsnTEncrypted": "This link isn’t encrypted.",
+  "uiTypeACommand": "Type a command…",
+  "messageMessage": "Message {p0}…",
+  "@messageMessage": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiItsSettings": "its settings",
+  "uiProject": "project",
+  "uiUser": "user",
+  "uiLeft": "Left",
+  "uiRight": "Right",
+  "uiSpace": "Space",
+  "uiNewLine": "New line",
+  "messageStale": "stale · {p0}",
+  "@messageStale": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiCode": "Code",
+  "uiCodeCopied": "Code copied",
+  "uiTableCopied": "Table copied",
+  "uiTableCopiedAsTSV": "Table copied as TSV",
+  "uiDiagramSourceCopied": "Diagram source copied",
+  "uiColumn": "column",
+  "messageColumns": "{p0} columns",
+  "@messageColumns": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiNote": "Note",
+  "uiTip": "Tip",
+  "uiImportant": "Important",
+  "uiWarning": "Warning",
+  "uiCaution": "Caution",
+  "uiFlowchart": "Flowchart",
+  "uiSequenceDiagram": "Sequence diagram",
+  "uiStateDiagram": "State diagram",
+  "uiERDiagram": "ER diagram",
+  "uiClassDiagram": "Class diagram",
+  "messageNewLine": "1 new line",
+  "messageNewLines": "{p0} new lines",
+  "@messageNewLines": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "message99New": "99+ new",
+  "uiNothingToDraw": "Nothing to draw",
+  "messageTooLargeToDrawHere": "Too large to draw here · showing the source",
+  "messageCouldnTTellTheDiagramKind": "Couldn’t tell which kind of diagram this is · showing the source",
+  "messageCanTDrawDiagramsYet": "Can’t draw {p0} diagrams yet · showing the source",
+  "@messageCanTDrawDiagramsYet": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCouldnTDrawThisDiagram": "Couldn’t draw this diagram · showing the source",
+  "messageCouldnTDrawThisDiagramLine": "Couldn’t draw this diagram · line {p0} · showing the source",
+  "@messageCouldnTDrawThisDiagramLine": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiLoadingEarlierOutput": "Loading earlier output…",
+  "uiEarlierOutputIsnTAvailable": "Earlier output isn’t available.",
+  "uiHerdrServesTheLast1000Rows": "herdr serves the last 1000 rows of a pane.",
+  "uiEarlierOutputIsnTKept": "Earlier output isn’t kept.",
+  "uiThePhoneHoldsTheMostRecentRowsOnly": "The phone holds the most recent rows only.",
+  "messageUpToCharactersOneLine": "Up to {p0} characters, one line.",
+  "@messageUpToCharactersOneLine": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiReadyToInstall": "Ready to install",
+  "uiUpdateFailedOpenToSeeWhy": "Update failed, open to see why",
+  "uiAskingGithubCom": "Asking github.com…",
+  "messageVersionIsAvailableAtTheTopOfThisPage": "Version {p0} is available, at the top of this page.",
+  "@messageVersionIsAvailableAtTheTopOfThisPage": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiYouHaveTheLatestVersion": "You have the latest version.",
+  "uiAsksGithubComForTheNewestRelease": "Asks github.com for the newest release.",
+  "uiCopyrightNotice": "Copyright © 2026 Tuan Nguyen. herdr mobile is free software under the GNU General Public License v3.0, and comes with no warranty. Its source is at github.com/tuan3w/herdr-mobile.",
+  "uiUntitledSession": "Untitled session",
+  "uiNoMessages": "No messages",
+  "message1Message": "1 message",
+  "messageMessages": "{p0} messages",
+  "@messageMessages": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAskingWhichAgentsItHas": "Asking {p0} which agents it has…",
+  "@messageAskingWhichAgentsItHas": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageReadingWhatRemembers": "Reading what {p0} remembers…",
+  "@messageReadingWhatRemembers": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiCouldnTOpenThisPage": "Couldn’t open this page",
+  "messageIsnTOnTheMachineAnyMore": "{p0} isn’t on the machine any more.",
+  "@messageIsnTOnTheMachineAnyMore": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiSomethingWentWrongOnThePhoneRetryTriesAgain": "Something went wrong on the phone. Retry tries again.",
+  "uiCouldnTLoadThisPage": "Couldn’t load this page",
+  "uiHerdrStoppedServingItOnThisPhone": "herdr stopped serving it on this phone (after 10 minutes unused, or a new connection). Retry opens it again.",
+  "messageTookTooLongToAnswer": "{p0} took too long to answer. Retry asks again.",
+  "@messageTookTooLongToAnswer": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "messageTheConnectionToBrokeWhileThePageLoaded": "The connection to {p0} broke while the page loaded. Retry asks again.",
+  "@messageTheConnectionToBrokeWhileThePageLoaded": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiThePageSendsItselfRoundInALoop": "The page sends itself round in a loop. Retry asks again.",
+  "uiThePageStoppedItsViewRanOutOfMemory": "The page stopped: its view ran out of memory or crashed. Retry opens it again.",
+  "messageTheServerOnClosedTheConnectionWithoutAnAnswer": "The server on {p0} closed the connection without an answer. Is it still running? Retry asks again.",
+  "@messageTheServerOnClosedTheConnectionWithoutAnAnswer": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiItDidnTLoad": "It didn’t load. Retry asks again.",
+  "uiThePageIsStillOpening": "The page is still opening.",
+  "uiDiagram": "Diagram",
+  "uiFrom": "From",
+  "uiFormat": "Format",
+  "uiDimensions": "Dimensions",
+  "uiTaken": "Taken",
+  "uiLens": "Lens",
+  "uiExposure": "Exposure",
+  "uiOrientation": "Orientation",
+  "messageTurnedUprightExif": "Turned upright (EXIF {p0})",
+  "@messageTurnedUprightExif": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiShowing": "Showing",
+  "uiScreenSizePreviewItSharpensAsYouZoomIn": "Screen-size preview; it sharpens as you zoom in",
+  "uiPreparing": "Preparing…",
+  "uiAvailableOnceThePictureHasLoaded": "Available once the picture has loaded",
+  "uiPhoto": "Photo",
+  "messagePhotoOf": "Photo {p0} of {p1}",
+  "@messagePhotoOf": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      },
+      "p1": {
+        "type": "String"
+      }
+    }
+  },
+  "uiTooLargeToOpenHere": "Too large to open here",
+  "uiCanTShowThisAsAPicture": "Can’t show this as a picture",
+  "uiConnectionLost": "Connection lost",
+  "uiCouldnTOpenThisPhoto": "Couldn’t open this photo",
+  "uiThisFileCanTBeShownAsAPicture": "This file can’t be shown as a picture. It may be damaged, or in a format Android doesn’t read.",
+  "uiThisPhoto": "this photo",
+  "uiThisPhotoIsNoLongerThere": "This photo is no longer there. It may have been moved or deleted.",
+  "uiThePictureIsnTLoadedYet": "The picture isn’t loaded yet.",
+  "messageCopied": "{p0} copied",
+  "@messageCopied": {
+    "placeholders": {
+      "p0": {
+        "type": "String"
+      }
+    }
+  },
+  "uiThisPictureCanTBeSharedFromHere": "This picture can’t be shared from here.",
+  "uiGallery": "Gallery",
+  "uiPhotosOnThisPhone": "Photos on this phone",
+  "uiFilesOnThisPhone": "Files on this phone",
+  "uiFilesOnTheMachine": "Files on the machine",
+  "uiAlreadyOnTheMachine": "Already on the machine",
+  "uiChooseItAgain": "Choose it again",
+  "uiLargeUploadingMayTakeAWhile": "Large · uploading may take a while",
+  "uiSentAsAFile": "Sent as a file",
+  "messageThatCopyIsGoneFromTheMachineChooseTheFileAgain": "That copy is gone from the machine. Choose the file again."
 }

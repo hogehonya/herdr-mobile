@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -7,10 +8,12 @@ import '../../../data/models/herdr_models.dart';
 import 'package:herdr_mobile/ui/core/kit.dart';
 
 /// What the pill says about output that arrived while the reader was away:
-/// `1 new line`, `3 new lines`, and past 99 just `99+ new`.
-String newLinesLabel(int lines) {
-  if (lines > 99) return '99+ new';
-  return lines == 1 ? '1 new line' : '$lines new lines';
+/// `1 new line`, `3 new lines`, and past 99 just `99+ new`. [words] is null
+/// outside the widget tree, and the pill's words are English then.
+String newLinesLabel(int lines, {AppLocalizations? words}) {
+  if (lines > 99) return words?.message99New ?? '99+ new';
+  if (lines == 1) return words?.messageNewLine ?? '1 new line';
+  return words?.messageNewLines('$lines') ?? '$lines new lines';
 }
 
 /// The way back to the newest line of a terminal, shown while the reader is
@@ -46,7 +49,8 @@ class TerminalJumpPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = needsYou ? 'Needs you' : (unseen > 0 ? newLinesLabel(unseen) : null);
+    final words = context.l10n;
+    final label = needsYou ? words.uiNeedsYou : (unseen > 0 ? newLinesLabel(unseen, words: words) : null);
     return FloatingPill(
       icon: label == null ? LucideIcons.chevronsDown : null,
       leading: needsYou ? const StatusGlyph(status: AgentStatus.blocked, size: IconSize.row) : null,

@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/app_localizations_en.dart';
 
 import '../../../data/models/herdr_models.dart';
 import '../../../data/repositories/machine_connection.dart';
@@ -15,11 +17,12 @@ final _control = RegExp(r'[\x00-\x1f\x7f]');
 
 /// Null when [folder] is something herdr can open: an absolute path, `~`, or
 /// `~/...`. No control characters: `~` paths are typed into a shell.
-String? folderError(String? folder) {
+String? folderError(String? folder, {AppLocalizations? l10n}) {
+  final words = l10n ?? AppLocalizationsEn();
   final v = folder?.trim() ?? '';
-  if (v.isEmpty) return 'Choose a folder';
-  if (_control.hasMatch(v)) return 'No line breaks or control characters';
-  if (!v.startsWith('/') && !isHomeFolder(v)) return 'Start with / or ~';
+  if (v.isEmpty) return words.uiChooseAFolder;
+  if (_control.hasMatch(v)) return words.uiNoLineBreaksOrControlCharacters;
+  if (!v.startsWith('/') && !isHomeFolder(v)) return words.uiStartWithOr;
   return null;
 }
 
@@ -51,24 +54,31 @@ class NewSessionError {
 }
 
 /// Where a launch went wrong, in words for the person.
-NewSessionError describeLaunchFailure(Object error, MachineConnection machine, String folder) {
+NewSessionError describeLaunchFailure(
+  Object error,
+  MachineConnection machine,
+  String folder, {
+  AppLocalizations? l10n,
+}) {
+  final words = l10n ?? AppLocalizationsEn();
   final name = machine.profile.label;
+  final version = machine.snapshot.version;
   return switch (error) {
     HerdrUnsupportedException() => NewSessionError(
-      'Not supported by this herdr',
-      'herdr${machine.snapshot.version.isEmpty ? '' : ' ${machine.snapshot.version}'} on $name '
-          'can’t create workspaces from here. Update herdr on that machine to start sessions from your phone.',
+      words.uiNotSupportedByThisHerdr,
+      words.messageHerdrOnCanTCreateWorkspaces(version.isEmpty ? '' : ' $version', name),
     ),
-    FolderNotFoundException() => NewSessionError(
-      'Folder not found',
-      '$folder doesn’t exist on $name. Pick a folder that does.',
-    ),
-    _ => NewSessionError('Couldn’t start the session', describeError(error, machine: name)),
+    FolderNotFoundException() => NewSessionError(words.uiFolderNotFound, words.messageDoesnTExistOn(folder, name)),
+    _ => NewSessionError(words.uiCouldnTStartTheSession, describeError(error, machine: name)),
   };
 }
 
 /// What a start that stays on the board says: what started, where, with a way
 /// to open it. It replaces a toast still showing from the start before, so
 /// launching several in a row never queues them.
-void showStartedToast(Toaster toaster, {required String message, required VoidCallback onOpen}) =>
-    toaster.show(message, kind: ToastKind.success, action: ToastAction('Open', onOpen));
+void showStartedToast(
+  Toaster toaster, {
+  required String message,
+  required String openLabel,
+  required VoidCallback onOpen,
+}) => toaster.show(message, kind: ToastKind.success, action: ToastAction(openLabel, onOpen));

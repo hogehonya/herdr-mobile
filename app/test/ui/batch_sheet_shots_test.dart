@@ -64,7 +64,11 @@ Future<void> _pickAll(WidgetTester tester) async {
 
 void main() {
   if (Platform.environment['BATCH_SHEET_SHOTS'] != '1') {
-    test('batch sheet shots are off (set BATCH_SHEET_SHOTS=1)', () {}, skip: 'set BATCH_SHEET_SHOTS=1 to render PNGs');
+    test(
+      'batch sheet shots are off (set BATCH_SHEET_SHOTS=1)',
+      () {},
+      skip: 'set BATCH_SHEET_SHOTS=1 to render PNGs',
+    );
     return;
   }
   final out = Platform.environment['BATCH_SHEET_SHOTS_DIR'] ?? '/tmp/batch_sheet_shots';

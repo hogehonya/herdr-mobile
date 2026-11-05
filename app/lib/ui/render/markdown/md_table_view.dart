@@ -136,12 +136,12 @@ class _MdTableViewState extends State<MdTableView> {
           SheetAction(
             label: context.l10n.uiCopyAsMarkdown,
             icon: LucideIcons.copy,
-            onTap: () => copyText(context, mdTableMarkdown(t), what: 'Table copied'),
+            onTap: () => copyText(context, mdTableMarkdown(t), what: context.l10n.uiTableCopied),
           ),
           SheetAction(
             label: context.l10n.uiCopyAsTSV,
             icon: LucideIcons.table,
-            onTap: () => copyText(context, t.plainText, what: 'Table copied as TSV'),
+            onTap: () => copyText(context, t.plainText, what: context.l10n.uiTableCopiedAsTSV),
           ),
         ],
       ),
@@ -204,12 +204,13 @@ class _MdTableViewState extends State<MdTableView> {
             label: widget.expanded
                 ? context.l10n.messageRows('${t.rows.length}')
                 : context.l10n.messageMoreRows('$hidden'),
-            action: widget.expanded ? 'Show less' : 'Show all',
+            action: widget.expanded ? context.l10n.uiShowLess : context.l10n.uiShowAll,
             onTap: widget.onToggleExpanded ?? () {},
           )
         : null;
 
-    final label = 'Table, ${t.columns} ${t.columns == 1 ? 'column' : 'columns'}, ${t.rows.length + 1} rows';
+    final columns = t.columns == 1 ? context.l10n.uiColumn : context.l10n.messageColumns('${t.columns}');
+    final label = '${context.l10n.uiTable}, $columns, ${context.l10n.messageRows('${t.rows.length + 1}')}';
     final body = LayoutBuilder(
       builder: (context, box) {
         final avail = box.maxWidth;

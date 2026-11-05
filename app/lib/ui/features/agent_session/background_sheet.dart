@@ -41,7 +41,7 @@ Future<void> showBackgroundWork(BuildContext context, AgentSessionView session) 
 /// 1 job still running`), with `Open` to open the sheet. Replaces a toast that
 /// is showing.
 void showBackgroundToast(BuildContext context, String text, {required VoidCallback onView}) =>
-    showToast(context, text, action: ToastAction('Open', onView), duration: Dwell.toastAction);
+    showToast(context, text, action: ToastAction(context.l10n.uiOpen, onView), duration: Dwell.toastAction);
 
 sealed class _Item {
   const _Item();
@@ -83,7 +83,7 @@ class BackgroundSheet extends StatefulWidget {
 }
 
 class _BackgroundSheetState extends State<BackgroundSheet> {
-  late final BackgroundStopper _stopper = BackgroundStopper(widget.session)..addListener(_changed);
+  late final BackgroundStopper _stopper = BackgroundStopper(widget.session, context.l10n)..addListener(_changed);
   final Set<String> _open = {};
   final Set<String> _readAll = {};
   bool _moreFinished = false;
@@ -135,15 +135,16 @@ class _BackgroundSheetState extends State<BackgroundSheet> {
   });
 
   List<_Item> _items(BackgroundWork work) {
+    final l10n = context.l10n;
     final running = work.running;
     final finished = finishedOrder(work.finished);
     final shown = _moreFinished ? finished : finished.take(finishedShown).toList();
     return [
-      if (running.isNotEmpty) _Head('Running', running.length),
+      if (running.isNotEmpty) _Head(l10n.uiRunning, running.length),
       for (final t in running) _TaskItem(t),
       if (running.isEmpty && work.unknownRunning)
-        const _Note('Details are unavailable: the agent waits on something its log doesn’t list.'),
-      if (finished.isNotEmpty) _Head('Done', finished.length),
+        _Note(l10n.messageDetailsAreUnavailable),
+      if (finished.isNotEmpty) _Head(l10n.uiDone, finished.length),
       for (final t in shown) _TaskItem(t),
       if (finished.length > finishedShown) _More(finished.length - finishedShown, _moreFinished),
     ];
@@ -158,7 +159,7 @@ class _BackgroundSheetState extends State<BackgroundSheet> {
       final (work, live) = snap;
       final ds = context.ds;
       final items = _items(work);
-      final sentence = work.running.isEmpty ? null : wakeSentence(work);
+      final sentence = work.running.isEmpty ? null : wakeSentence(work, context.l10n);
       final stopAll =
           live &&
           work.stoppable.length >= 2 &&
@@ -193,12 +194,12 @@ class _BackgroundSheetState extends State<BackgroundSheet> {
       ];
       final post = [
         if (!live)
-          const SheetFooter(lines: ['Not connected. This is the last known list.'])
+          SheetFooter(lines: [context.l10n.uiNotConnectedLastKnown])
         else if (work.hasRunning)
           SheetFooter(
             lines: [
-              'Stop on the message bar ends the turn only. Work listed here keeps running until you stop it.',
-              if (routeMessage) messageRouteNote(agent),
+              context.l10n.uiStopOnTheMessageBarEndsTheTurnOnly,
+              if (routeMessage) messageRouteNote(agent, context.l10n),
             ],
           ),
       ];
@@ -242,9 +243,9 @@ class _BackgroundSheetState extends State<BackgroundSheet> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ...pre,
-                  const EmptyState.inline(
-                    'Nothing is running in the background.',
-                    padding: EdgeInsets.fromLTRB(Gap.md, Gap.sm, Gap.md, Gap.lg),
+                  EmptyState.inline(
+                    context.l10n.uiNothingIsRunningInTheBackground,
+                    padding: const EdgeInsets.fromLTRB(Gap.md, Gap.sm, Gap.md, Gap.lg),
                   ),
                   ...post,
                 ],
@@ -326,24 +327,26 @@ class _TaskRow extends StatelessWidget {
       case BackgroundStatus.running:
         final start = task.startedAt;
         if (now != null && task.pastDeadline(now)) {
-          word = 'ended?';
+          word = context.l10n.uiEnded;
           tone = ds.textMuted;
         } else if (start != null && now != null) {
           parts.add(Elapsed.compact(now.difference(start)));
         }
       case BackgroundStatus.paused:
-        word = 'paused';
+        word = context.l10n.uiPaused;
         tone = ds.textMuted;
       case BackgroundStatus.finished:
         final start = task.startedAt;
         final end = task.endedAt;
-        word = start != null && end != null ? 'done · ${Elapsed.compact(end.difference(start))}' : 'done';
+        word = start != null && end != null
+            ? '${context.l10n.uiDoneWord} · ${Elapsed.compact(end.difference(start))}'
+            : context.l10n.uiDoneWord;
         tone = ds.done;
       case BackgroundStatus.failed:
-        word = 'failed';
+        word = context.l10n.uiFailed;
         tone = ds.dangerText;
       case BackgroundStatus.stopped:
-        word = 'stopped';
+        word = context.l10n.uiStopped;
         tone = ds.dangerText;
     }
     return Text.rich(

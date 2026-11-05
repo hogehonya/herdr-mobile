@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../data/acp/prompt_queue.dart' show SendDelivery;
+import '../../../l10n/app_localizations.dart';
 
+import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:herdr_mobile/ui/core/kit.dart';
 
 /// What happens to the message in the field if it is sent now, said before it
@@ -10,10 +12,10 @@ import 'package:herdr_mobile/ui/core/kit.dart';
 /// it goes into the running turn (an agent that takes input there: `Claude
 /// Code`, `Codex`, `omp` with steering), where a hold on Send sends it after
 /// the turn instead. Nothing when it would go out at once.
-String? deliveryHint(SendDelivery delivery) => switch (delivery) {
+String? deliveryHint(AppLocalizations words, SendDelivery delivery) => switch (delivery) {
   SendDelivery.now => null,
-  SendDelivery.queued => 'Will be queued until the turn ends',
-  SendDelivery.steered => 'Goes into the turn. Hold Send to send it after.',
+  SendDelivery.queued => words.uiWillBeQueuedUntilTheTurnEnds,
+  SendDelivery.steered => words.uiGoesIntoTheTurnHoldSendToSend,
 };
 
 /// One quiet line above the field with [deliveryHint]; takes no room when
@@ -28,7 +30,7 @@ class DeliveryHint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ds = context.ds;
-    final text = delivery == null ? null : deliveryHint(delivery!);
+    final text = delivery == null ? null : deliveryHint(context.l10n, delivery!);
     return AnimatedSize(
       duration: Motion.of(context, Motion.expand),
       curve: Motion.easeOut,

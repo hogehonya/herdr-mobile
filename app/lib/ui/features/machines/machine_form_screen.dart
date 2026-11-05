@@ -51,6 +51,7 @@ class MachineFormScreen extends StatelessWidget {
       repo: ctx.read<MachineRepository>(),
       existing: existing,
       transportFactory: transportFactory ?? ctx.read<TransportFactory>(),
+      l10n: ctx.l10n,
     ),
     child: _Form(existing: existing),
   );
@@ -298,7 +299,7 @@ class _FormState extends State<_Form> with RestorationMixin {
           _keyDraftR.value = false;
           vm.invalidateTest();
           setState(() {});
-          showToast(context, 'Kept the saved key');
+          showToast(context, context.l10n.uiKeptTheSavedKey);
           return;
         }
       }
@@ -416,7 +417,7 @@ class _FormState extends State<_Form> with RestorationMixin {
     final host = LabeledField(
       label: context.l10n.uiHost,
       controller: _host,
-      hint: 'workbox.local or 100.64.0.5',
+      hint: context.l10n.uiWorkboxLocalOr,
       validator: _required,
       keyboardType: TextInputType.url,
       textInputAction: TextInputAction.next,
@@ -564,9 +565,11 @@ class _FormState extends State<_Form> with RestorationMixin {
                                       replacesSaved: vm.publicKeyGenerated && vm.hasSavedKey,
                                       publicKey: vm.publicKey,
                                       error: vm.publicKeyError,
-                                      onCopyKey: () => _copy(vm.publicKey!, 'Public key copied'),
-                                      onCopyCommand: () =>
-                                          _copy(KeyGenerator.authorizedKeysCommand(vm.publicKey!), 'Command copied'),
+                                      onCopyKey: () => _copy(vm.publicKey!, context.l10n.uiPublicKeyCopied),
+                                      onCopyCommand: () => _copy(
+                                        KeyGenerator.authorizedKeysCommand(vm.publicKey!),
+                                        context.l10n.uiCommandCopied,
+                                      ),
                                     ),
                                   LabeledField(
                                     label: context.l10n.uiKeyPassphraseIfAny,
@@ -731,9 +734,8 @@ class _TestResult extends StatelessWidget {
         ? (
             ds.blocked,
             LucideIcons.shieldCheck,
-            'Approve this sign-in',
-            'Tailscale needs you to confirm this connection in a browser. '
-                'Open the page, approve it, then come back: the test continues by itself.',
+            context.l10n.uiApproveThisSignIn,
+            context.l10n.uiTailscaleNeedsYouToConfirmThisConnection,
           )
         : switch (vm.testState) {
             TestState.ok => (

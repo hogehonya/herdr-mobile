@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../data/models/remote_file.dart';
 import '../../../data/services/remote_files.dart';
+import '../../../l10n/app_localizations.dart';
 import 'file_format.dart';
 import 'file_kind.dart';
 import 'text_document.dart';
@@ -50,6 +51,7 @@ class FileViewerViewModel extends ChangeNotifier {
     this.firstChunk = viewerFirstChunk,
     this.textLimit = viewerTextLimit,
     this._forceText = false,
+    this.words,
   });
 
   final RemoteFiles _files;
@@ -62,6 +64,10 @@ class FileViewerViewModel extends ChangeNotifier {
   final JsonFormatter _formatJson;
   final int firstChunk;
   final int textLimit;
+
+  /// The app's words for what this read reports; English when a caller has no
+  /// [BuildContext] to take them from.
+  final AppLocalizations? words;
 
   ViewerPhase _phase = ViewerPhase.loading;
   RemoteFileException? _error;
@@ -153,12 +159,16 @@ class FileViewerViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       if (stat.kind == RemoteEntryKind.dir) {
-        throw RemoteFileException(RemoteFileErrorKind.notAFile, '${stat.name} is a folder', path: stat.path);
+        throw RemoteFileException(
+          RemoteFileErrorKind.notAFile,
+          words?.messageIsAFolder(stat.name) ?? '${stat.name} is a folder',
+          path: stat.path,
+        );
       }
       if (stat.kind == RemoteEntryKind.other) {
         throw RemoteFileException(
           RemoteFileErrorKind.notAFile,
-          'Special files (sockets, devices, pipes) can’t be opened',
+          words?.messageSpecialFilesCanTBeOpened ?? 'Special files (sockets, devices, pipes) can’t be opened',
           path: stat.path,
         );
       }
@@ -264,7 +274,7 @@ class FileViewerViewModel extends ChangeNotifier {
       if (!fresh.isFile) {
         throw RemoteFileException(
           RemoteFileErrorKind.notAFile,
-          '${fresh.name} isn’t a file any more',
+          words?.messageIsNotAFileAnyMore(fresh.name) ?? '${fresh.name} isn’t a file any more',
           path: fresh.path,
         );
       }
@@ -408,11 +418,12 @@ class FileViewerViewModel extends ChangeNotifier {
     }
     if (!_current(epoch)) return null;
     if (truncatedAtLimit) {
-      return 'This file is too large to format (${formatBytes(textLimit)} limit).';
+      return words?.messageThisFileIsTooLargeToFormat(formatBytes(textLimit, words)) ??
+          'This file is too large to format (${formatBytes(textLimit)} limit).';
     }
     final formatted = await _formatJson(doc.text);
     if (!_current(epoch)) return null;
-    if (formatted == null) return 'This isn’t valid JSON, so it is shown as written.';
+    if (formatted == null) return words?.messageThisIsnTValidJsonShownAsWritten ?? 'This isn’t valid JSON, so it is shown as written.';
     _prettyDoc = TextDocument()..append(utf8.encode(formatted), last: true);
     _pretty = true;
     notifyListeners();

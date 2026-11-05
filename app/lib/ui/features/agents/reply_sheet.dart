@@ -290,7 +290,7 @@ class _SessionAsk extends StatelessWidget {
               style: Type.secondary.copyWith(color: ds.textSecondary),
             ),
           ),
-        if (blockedSummary(session) case final summary?) ...[
+        if (blockedSummary(session, words: context.l10n) case final summary?) ...[
           const SizedBox(height: Gap.md),
           QuestionWash(question: summary, size: QuestionWashSize.full),
         ],
@@ -452,7 +452,7 @@ class _AgentReplyState extends State<AgentReply> with TapGuardState<AgentReply>,
       if (!settled) return;
       if (_asking) {
         Haptics.failed();
-        showToast(context, 'Pick an answer above');
+        showToast(context, context.l10n.uiPickAnAnswerAbove);
         return;
       }
     }
@@ -550,7 +550,6 @@ class _AgentReplyState extends State<AgentReply> with TapGuardState<AgentReply>,
             hint: composerHint(
               agentName(a.machine.paneById(a.paneId)?.agent),
               linkWord: live ? null : context.l10n.uiOfflineState,
-              l10n: context.l10n,
             ),
             onSubmit: _submit,
             // A line for the agent's prompt, in the terminal's font.
@@ -637,8 +636,8 @@ class _AgentReplyState extends State<AgentReply> with TapGuardState<AgentReply>,
             final text = !own
                 ? null
                 : switch (_reply.phase) {
-                    ReplyPhase.failed => 'Couldn’t send: ${_reply.error ?? 'unknown error'}',
-                    ReplyPhase.sent => 'Sent: ${_reply.sentLabel}',
+                    ReplyPhase.failed => context.l10n.messageCouldnTSend(_reply.error ?? context.l10n.uiUnknownError),
+                    ReplyPhase.sent => context.l10n.messageSent(_reply.sentLabel),
                     _ => null,
                   };
             final failed = _reply.phase == ReplyPhase.failed;

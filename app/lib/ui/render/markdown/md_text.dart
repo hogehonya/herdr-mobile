@@ -1,3 +1,5 @@
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
@@ -370,7 +372,7 @@ class _MdInlineTextState extends State<MdInlineText> {
     final (kind, path) = classifyLink(image.src);
     final host = kind == MdLinkKind.web ? Uri.tryParse(image.src.trim())?.host ?? '' : '';
     final alt = proseText(image.alt).trim();
-    final label = StringBuffer('\u00A0Image');
+    final label = StringBuffer('\u00A0${context.l10n.uiImage}');
     if (alt.isNotEmpty) label.write(': $alt');
     if (host.isNotEmpty) label.write(' · $host');
     label.write('\u00A0');

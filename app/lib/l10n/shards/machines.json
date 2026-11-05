@@ -1,0 +1,256 @@
+{
+  "entries": [
+    {
+      "key": "uiCouldnTCreateTheWorktree",
+      "en": "Couldn’t create the worktree",
+      "ja": "ワークツリーを作成できませんでした"
+    },
+    {
+      "key": "uiCouldnTStartTheSession",
+      "en": "Couldn’t start the session",
+      "ja": "セッションを開始できませんでした"
+    },
+    {
+      "key": "uiCheckTheForm",
+      "en": "Check the form",
+      "ja": "入力内容を確認してください"
+    },
+    {
+      "key": "uiChooseAFolder",
+      "en": "Choose a folder",
+      "ja": "フォルダーを選んでください"
+    },
+    {
+      "key": "uiCommandCopied",
+      "en": "Command copied",
+      "ja": "コマンドをコピーしました"
+    },
+    {
+      "key": "uiFolderNotFound",
+      "en": "Folder not found",
+      "ja": "フォルダーが見つかりません"
+    },
+    {
+      "key": "uiItHasUncommittedChangesNothingWasRemoved",
+      "en": "It has uncommitted changes. Nothing was removed.",
+      "ja": "未コミットの変更があります。何も削除していません。"
+    },
+    {
+      "key": "uiItMayHaveUncommittedChangesNothingWasRemoved",
+      "en": "It may have uncommitted changes. Nothing was removed.",
+      "ja": "未コミットの変更がある可能性があります。何も削除していません。"
+    },
+    {
+      "key": "uiItWasAlreadyClosedOnTheMachine",
+      "en": "It was already closed on the machine.",
+      "ja": "マシン上ではすでに閉じられています。"
+    },
+    {
+      "key": "uiKeptTheSavedKey",
+      "en": "Kept the saved key",
+      "ja": "保存した鍵を使います"
+    },
+    {
+      "key": "uiNoMachineOnline",
+      "en": "No machine online",
+      "ja": "オンラインのマシンがありません"
+    },
+    {
+      "key": "uiNoPrivateKeyIsSavedForThisMachine",
+      "en": "No private key is saved for this machine.",
+      "ja": "このマシンには秘密鍵が保存されていません。"
+    },
+    {
+      "key": "uiNoLineBreaksOrControlCharacters",
+      "en": "No line breaks or control characters",
+      "ja": "改行と制御文字は使えません"
+    },
+    {
+      "key": "uiNoSpacesOrControlCharacters",
+      "en": "No spaces or control characters",
+      "ja": "空白と制御文字は使えません"
+    },
+    {
+      "key": "uiNotSupportedByThisHerdr",
+      "en": "Not supported by this herdr",
+      "ja": "この herdr では使えません"
+    },
+    {
+      "key": "uiPickAMachineThatIsOnline",
+      "en": "Pick a machine that is online.",
+      "ja": "オンラインのマシンを選んでください。"
+    },
+    {
+      "key": "uiPublicKeyCopied",
+      "en": "Public key copied",
+      "ja": "公開鍵をコピーしました"
+    },
+    {
+      "key": "uiStartWithOr",
+      "en": "Start with / or ~",
+      "ja": "/ または ~ で始めてください"
+    },
+    {
+      "key": "uiThatPassphraseDoesnTOpenTheSavedKey",
+      "en": "That passphrase doesn’t open the saved key.",
+      "ja": "そのパスフレーズでは保存した鍵を開けません。"
+    },
+    {
+      "key": "uiTheMachineDidnTAnswerInTime",
+      "en": "The machine didn’t answer in time.",
+      "ja": "マシンから時間内に応答がありませんでした。"
+    },
+    {
+      "key": "uiTheMachineDidnTAnswerInTimeCheck",
+      "en": "The machine didn’t answer in time. Check that it is on and reachable from this phone, then test again.",
+      "ja": "マシンから時間内に応答がありませんでした。電源が入っていて、この端末から到達できるか確認して、もう一度テストしてください。"
+    },
+    {
+      "key": "uiTheSavedKeyCouldnTBeRead",
+      "en": "The saved key couldn’t be read.",
+      "ja": "保存した鍵を読み取れませんでした。"
+    },
+    {
+      "key": "uiTheWorktreeWasCreated",
+      "en": "The worktree was created",
+      "ja": "ワークツリーを作成しました"
+    },
+    {
+      "key": "uiThisKeyHasAPassphrase",
+      "en": "This key has a passphrase. Enter it in the field below.",
+      "ja": "この鍵にはパスフレーズがあります。下の欄に入力してください。"
+    },
+    {
+      "key": "uiWorkboxLocalOr",
+      "en": "workbox.local or 100.64.0.5",
+      "ja": "workbox.local または 100.64.0.5"
+    },
+    {
+      "key": "uiWorktreesAreOpenCloseThemFirst",
+      "en": "Worktrees are open · close them first",
+      "ja": "ワークツリーが開いています · 先に閉じてください"
+    },
+    {
+      "key": "uiWorktreesArenTSupported",
+      "en": "Worktrees aren’t supported",
+      "ja": "ワークツリーは使えません"
+    },
+    {
+      "key": "uiAnAbsolutePathOnTheMachine",
+      "en": "An absolute path on the machine",
+      "ja": "マシン上の絶対パス"
+    },
+    {
+      "key": "uiAnAbsolutePathStartingWith",
+      "en": "An absolute path, starting with /",
+      "ja": "/ で始まる絶対パス"
+    },
+    {
+      "key": "uiCanTStartWith",
+      "en": "Can’t start with -",
+      "ja": "- で始めることはできません"
+    },
+    {
+      "key": "uiChangeItOrClearItToLetHerdrName",
+      "en": "Change it, or clear it to let herdr name it",
+      "ja": "変更するか、空にすると herdr が名前を付けます"
+    },
+    {
+      "key": "uiTailscaleNeedsYouToConfirmThisConnection",
+      "en": "Tailscale needs you to confirm this connection in a browser. Open the page, approve it, then come back: the test continues by itself.",
+      "ja": "Tailscale でこの接続をブラウザーで確認する必要があります。ページを開いて承認してから戻ってください。テストはそのまま続きます。"
+    },
+    {
+      "key": "messageDoesnTExistOn",
+      "en": "{p0} doesn’t exist on {p1}. Pick a folder that does.",
+      "ja": "{p0} は {p1} にありません。存在するフォルダーを選んでください。",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "messageExistsButTheMachineAnsweredLate",
+      "en": "{p0} exists, but the machine answered late. Start again to use it.",
+      "ja": "{p0} は存在しますが、マシンの応答が遅れました。もう一度開始すると使えます。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageHerdrOnCanTCreateWorktrees",
+      "en": "herdr{p0} on {p1} can’t create worktrees. Update herdr on that machine, or choose This folder.",
+      "ja": "{p1} の herdr{p0} ではワークツリーを作成できません。そのマシンの herdr を更新するか、「このフォルダー」を選んでください。",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "messageHerdrOnCanTCreateWorkspaces",
+      "en": "herdr{p0} on {p1} can’t create workspaces from here. Update herdr on that machine to start sessions from your phone.",
+      "ja": "{p1} の herdr{p0} ではここからワークスペースを作成できません。そのマシンの herdr を更新すると、端末からセッションを開始できます。",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "messageHerdrOnCanTDoThis",
+      "en": "herdr{p0} on {p1} can’t do this. Update herdr on that machine.",
+      "ja": "{p1} の herdr{p0} ではこの操作ができません。そのマシンの herdr を更新してください。",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "messageItMayStillHaveBeenCreated",
+      "en": "{p0} It may still have been created: check Checkout before trying again.",
+      "ja": "{p0} 作成されている可能性があります。再試行する前に「チェックアウト」を確認してください。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageNotInstalledOn",
+      "en": "Not installed on {p0}",
+      "ja": "{p0} に未インストール",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageTheSavedSecretsCouldnTBeRead",
+      "en": "The saved secrets couldn’t be read from this phone’s keystore ({p0}). Test again; if it keeps failing, restart the app.",
+      "ja": "この端末のキーストアから保存した秘密情報を読み取れませんでした（{p0}）。もう一度テストしてください。繰り返す場合はアプリを再起動してください。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageTheTestStopped",
+      "en": "The test stopped: {p0}. Check the host and port, then test again.",
+      "ja": "テストが止まりました: {p0}。ホストとポートを確認して、もう一度テストしてください。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageTheWorktreeWasCreatedStartAgain",
+      "en": "The worktree {p0} was created; Start again to use it.",
+      "ja": "ワークツリー {p0} を作成しました。もう一度「開始」を押すと使えます。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageThisPhoneSStorageRefusedIt",
+      "en": "This phone’s storage refused it ({p0}). Everything you entered is still here: save again. If it keeps failing, restart the app.",
+      "ja": "この端末のストレージに保存できませんでした（{p0}）。入力した内容は残っています。もう一度保存してください。繰り返す場合はアプリを再起動してください。",
+      "placeholders": {
+        "p0": "String"
+      }
+    }
+  ]
+}

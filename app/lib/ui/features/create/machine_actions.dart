@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/app_localizations_en.dart';
 import 'package:herdr_mobile/ui/core/kit.dart' show Dwell;
 
 import '../../../data/models/herdr_models.dart';
@@ -11,9 +13,15 @@ import '../../../data/services/herdr_transport.dart';
 /// worked and a sentence for the person when it did not, and refreshes the
 /// machine either way so the lists show what is really there.
 class MachineActions {
-  MachineActions(this.machine);
+  MachineActions(this.machine, {AppLocalizations? l10n}) : _l10n = l10n;
 
   final MachineConnection machine;
+
+  /// Null only in tests and other callers outside the widget tree: English
+  /// then, as the sheets' own fallback.
+  final AppLocalizations? _l10n;
+
+  AppLocalizations get words => _l10n ?? AppLocalizationsEn();
 
   Future<String?> renameWorkspace(String workspaceId, String label) =>
       _run(() => machine.api.renameWorkspace(workspaceId, label));
@@ -37,13 +45,13 @@ class MachineActions {
         await machine.api.removeWorktree(workspace.id);
       } on HerdrApiException catch (e) {
         if (e.code == 'dirty_worktree_requires_force') {
-          throw HerdrApiException(e.code, 'It has uncommitted changes. Nothing was removed.');
+          throw HerdrApiException(e.code, words.uiItHasUncommittedChangesNothingWasRemoved);
         }
         rethrow;
       }
     });
     if (error == null) return null;
-    return error.trim().isEmpty ? 'It may have uncommitted changes. Nothing was removed.' : error;
+    return error.trim().isEmpty ? words.uiItMayHaveUncommittedChangesNothingWasRemoved : error;
   }
 
   /// Adds a tab to [workspace], in the folder its first pane is in.
@@ -73,19 +81,17 @@ class MachineActions {
       await call();
     } on HerdrUnsupportedException {
       final v = machine.snapshot.version;
-      problem =
-          'herdr${v.isEmpty ? '' : ' $v'} on ${machine.profile.label} can’t do this. '
-          'Update herdr on that machine.';
+      problem = words.messageHerdrOnCanTDoThis(v.isEmpty ? '' : ' $v', machine.profile.label);
     } on HerdrApiException catch (e) {
       if (e.isNotFound) {
-        problem = goneIsFine ? null : 'It was already closed on the machine.';
+        problem = goneIsFine ? null : words.uiItWasAlreadyClosedOnTheMachine;
       } else {
         problem = e.message;
       }
     } on HerdrTransportException catch (e) {
       problem = e.message;
     } on TimeoutException {
-      problem = 'The machine didn’t answer in time.';
+      problem = words.uiTheMachineDidnTAnswerInTime;
     }
     try {
       await machine.refresh().timeout(Dwell.refreshTimeout);

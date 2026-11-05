@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'dart:ui' show Size;
 
 import 'package:flutter/foundation.dart';
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 
 import '../../../data/models/remote_file.dart';
 import '../../../data/services/exif.dart';
@@ -148,6 +149,7 @@ class PhotoActionResult {
 /// longer neighbours and frees their bitmaps.
 class PhotoViewerViewModel extends ChangeNotifier {
   PhotoViewerViewModel({
+    this.words,
     required List<PhotoItem> items,
     int initialIndex = 0,
     this._decoder = decodeImageFit,
@@ -160,6 +162,10 @@ class PhotoViewerViewModel extends ChangeNotifier {
        _index = items.isEmpty ? 0 : initialIndex.clamp(0, items.length - 1) {
     if (_items.isNotEmpty) _ensure(_index);
   }
+
+  /// The app's words, when the viewer is built inside it: null in a test, which
+  /// then reads the English here.
+  final AppLocalizations? words;
 
   final FitDecoder _decoder;
   final ExifInfo? Function(Uint8List) _exifReader;
@@ -333,9 +339,10 @@ class PhotoViewerViewModel extends ChangeNotifier {
       if (entry._disposed || cancel.cancelled) return;
       entry._decoding = false;
       entry._bytes = null;
-      entry._failure = const PhotoFailure(
+      entry._failure = PhotoFailure(
         PhotoFailureKind.notAnImage,
-        'This file can’t be shown as a picture. It may be damaged, or in a format Android doesn’t read.',
+        words?.uiThisFileCanTBeShownAsAPicture ??
+            'This file can’t be shown as a picture. It may be damaged, or in a format Android doesn’t read.',
       );
     }
     entry._changed();
@@ -343,20 +350,25 @@ class PhotoViewerViewModel extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  PhotoFailure _describe(RemoteFileException e) => switch (e.kind) {
-    RemoteFileErrorKind.tooLarge => PhotoFailure(PhotoFailureKind.tooLarge, e.message),
-    RemoteFileErrorKind.network => PhotoFailure(PhotoFailureKind.network, e.message, retryable: true),
-    RemoteFileErrorKind.failed => PhotoFailure(PhotoFailureKind.unreadable, e.message, retryable: !e.fatal),
-    RemoteFileErrorKind.notFound => PhotoFailure(
-      PhotoFailureKind.unreadable,
-      'This photo is no longer there. It may have been moved or deleted.',
-    ),
-    RemoteFileErrorKind.permission => PhotoFailure(
-      PhotoFailureKind.unreadable,
-      'Your login on this machine isn’t allowed to read this photo.',
-    ),
-    _ => PhotoFailure(PhotoFailureKind.unreadable, e.message),
-  };
+  PhotoFailure _describe(RemoteFileException e) {
+    final w = words;
+    return switch (e.kind) {
+      RemoteFileErrorKind.tooLarge => PhotoFailure(PhotoFailureKind.tooLarge, e.message),
+      RemoteFileErrorKind.network => PhotoFailure(PhotoFailureKind.network, e.message, retryable: true),
+      RemoteFileErrorKind.failed => PhotoFailure(PhotoFailureKind.unreadable, e.message, retryable: !e.fatal),
+      RemoteFileErrorKind.notFound => PhotoFailure(
+        PhotoFailureKind.unreadable,
+        w?.uiThisPhotoIsNoLongerThere ?? 'This photo is no longer there. It may have been moved or deleted.',
+      ),
+      RemoteFileErrorKind.permission => PhotoFailure(
+        PhotoFailureKind.unreadable,
+        w == null
+            ? 'Your login on this machine isn’t allowed to read this photo.'
+            : w.messageYourLoginOnThisMachineIsntAllowedToRead(w.uiThisPhoto),
+      ),
+      _ => PhotoFailure(PhotoFailureKind.unreadable, e.message),
+    };
+  }
 
   /// Makes a sharper bitmap of the open picture, for a person zoomed in past
   /// what the screen-sized one holds. Does nothing when the first bitmap
@@ -399,10 +411,11 @@ class PhotoViewerViewModel extends ChangeNotifier {
   Future<PhotoActionResult> save() async {
     final entry = currentEntry;
     final bytes = entry._bytes;
-    if (bytes == null) return const PhotoActionResult.failed('The picture isn’t loaded yet.');
+    if (bytes == null)
+      return PhotoActionResult.failed(words?.uiThePictureIsnTLoadedYet ?? 'The picture isn’t loaded yet.');
     try {
       await export.saveToGallery(bytes, name: entry.item.name);
-      return const PhotoActionResult.ok('Saved to Pictures/herdr');
+      return PhotoActionResult.ok(words?.uiSavedToPicturesHerdr ?? 'Saved to Pictures/herdr');
     } on PhotoExportException catch (e) {
       return PhotoActionResult.failed(e.message);
     }
@@ -412,7 +425,8 @@ class PhotoViewerViewModel extends ChangeNotifier {
   Future<PhotoActionResult> share() async {
     final entry = currentEntry;
     final bytes = entry._bytes;
-    if (bytes == null) return const PhotoActionResult.failed('The picture isn’t loaded yet.');
+    if (bytes == null)
+      return PhotoActionResult.failed(words?.uiThePictureIsnTLoadedYet ?? 'The picture isn’t loaded yet.');
     try {
       await export.share(bytes, name: entry.item.name);
       return const PhotoActionResult.ok('');
@@ -432,7 +446,9 @@ class PhotoViewerViewModel extends ChangeNotifier {
     final source = entry.item.source;
     final size = entry.item.size;
     if (source is! RangedPhotoSource || size == null) {
-      return const PhotoActionResult.failed('This picture can’t be shared from here.');
+      return PhotoActionResult.failed(
+        words?.uiThisPictureCanTBeSharedFromHere ?? 'This picture can’t be shared from here.',
+      );
     }
     if (entry._exporting != null) return const PhotoActionResult.ok('');
     entry._exporting = (done: 0, total: size);
@@ -461,7 +477,9 @@ class PhotoViewerViewModel extends ChangeNotifier {
   }
 
   /// "Photo 3 of 12".
-  String get positionLabel => count > 1 ? 'Photo ${_index + 1} of $count' : 'Photo';
+  String get positionLabel => count > 1
+      ? (words?.messagePhotoOf('${_index + 1}', '$count') ?? 'Photo ${_index + 1} of $count')
+      : (words?.uiPhoto ?? 'Photo');
 
   /// How many entries hold a bitmap or a read right now (a test's window on
   /// the memory bound).

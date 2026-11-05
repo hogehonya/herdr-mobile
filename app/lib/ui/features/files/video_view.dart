@@ -202,7 +202,7 @@ class _Card extends StatelessWidget {
         ),
         const SizedBox(height: Gap.xs),
         Text(
-          [type.label, if (size != null) formatBytes(size)].join(' · '),
+          [typeLabel(type, context.l10n), if (size != null) formatBytes(size, context.l10n)].join(' · '),
           textAlign: TextAlign.center,
           style: Type.secondary.copyWith(color: ds.textSecondary),
         ),
@@ -233,7 +233,9 @@ class _Copying extends StatelessWidget {
   Widget build(BuildContext context) {
     final ds = context.ds;
     final total = copy.total;
-    final line = total > 0 ? '${formatBytes(copy.written)} of ${formatBytes(total)}' : formatBytes(copy.written);
+    final line = total > 0
+        ? context.l10n.messageOf88(formatBytes(copy.written, context.l10n), formatBytes(total, context.l10n))
+        : formatBytes(copy.written, context.l10n);
     return _Frame(
       children: [
         Semantics(

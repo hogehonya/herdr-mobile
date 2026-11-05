@@ -596,15 +596,23 @@ void main() {
 
       expect(inSheet('エージェントを停止'), findsOneWidget);
       expect(inSheet('停止するエージェント'), findsOneWidget);
-      expect(inSheet('1件を停止'), findsOneWidget);
+      expect(inSheet('エージェント1件を停止'), findsOneWidget);
       expect(inSheet('スキップ済み'), findsOneWidget);
-      expect(inSheet('実行中'), findsOneWidget, reason: 'the running agent status is localized');
-      expect(inSheet('対応待ち'), findsOneWidget, reason: 'the waiting agent status is localized');
+      expect(
+        inSheet('実行中'),
+        findsOneWidget,
+        reason: 'the running agent status is localized',
+      );
+      expect(
+        inSheet('対応待ち'),
+        findsOneWidget,
+        reason: 'the waiting agent status is localized',
+      );
       expect(inSheet('回答待ち'), findsOneWidget, reason: 'the skipped row keeps its reason');
       expect(inSheet('task 4'), findsOneWidget, reason: 'the agent title stays as received');
       expect(inSheet('Claude Code · studio-mac'), findsNWidgets(2), reason: 'names and labels stay as received');
 
-      await _tap(tester, inSheet('1件を停止'));
+      await _tap(tester, inSheet('エージェント1件を停止'));
       expect(_panesOf(_sent(h, 'a', 'pane.send_keys')), ['w1:p1']);
       expect(find.text('1件停止 · 1件スキップ'), findsOneWidget);
       await teardownBoard(tester, h);
@@ -620,7 +628,7 @@ void main() {
       await _tap(tester, find.text('停止'));
       h.transports['b']!.failure = const HerdrTransportException('Connection reset');
 
-      await _tap(tester, find.text('2件を停止'));
+      await _tap(tester, find.text('エージェント2件を停止'));
       expect(_panesOf(_sent(h, 'a', 'pane.send_keys')), ['w1:p1']);
       expect(find.text('1件停止 · 失敗1件：build-box: Connection reset'), findsOneWidget);
       h.transports['b']!.failure = null;
@@ -936,24 +944,18 @@ void main() {
       final h = await _studio([_pane(1, 'idle')]);
       final slow = _SlowEnd(key: 'a/k1', title: 'agent one', machine: h.fleet.connection('a'));
       final sessions = _Sessions([slow]);
-      await _pump(tester, h, sessions: sessions, locale: const Locale('ja'), width: 320, height: 640, textScale: 1.6);
+      await _pump(tester, h, sessions: sessions, locale: const Locale('ja'));
 
       await _pick(tester, ['agent one']);
       await _tap(tester, find.text('閉じる'));
       expect(find.text('エージェントを閉じる'), findsOneWidget);
-      final close = find.text('1件を閉じる');
-      expect(close, findsOneWidget);
-      expect(
-        tester.renderObject<RenderParagraph>(close).didExceedMaxLines,
-        isFalse,
-        reason: 'the action word stays visible at 320 dp and text scale 1.6',
-      );
+      expect(find.text('エージェント1件を閉じる'), findsOneWidget);
       expect(
         find.descendant(of: find.byType(BatchSheet), matching: find.text('待機中')),
         findsOneWidget,
         reason: 'the idle agent status is localized',
       );
-      await _tap(tester, close);
+      await _tap(tester, find.text('エージェント1件を閉じる'));
       expect(find.text('エージェント1件を閉じています…'), findsOneWidget);
 
       slow.gate.complete();

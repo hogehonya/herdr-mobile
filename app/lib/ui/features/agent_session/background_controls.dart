@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 
 import 'dart:async';
@@ -32,9 +33,13 @@ class TaskStop {
 /// primes, the second stops). Accepted, it stays `Stopping…` until the task
 /// leaves the running set; unconfirmed after [Dwell.stopConfirm].
 class BackgroundStopper extends ChangeNotifier {
-  BackgroundStopper(this.session);
+  BackgroundStopper(this.session, [this.l10n]);
 
   final AgentSessionView session;
+
+  /// The words of the one summary line; null keeps them English (a caller
+  /// outside the widget tree, a test).
+  final AppLocalizations? l10n;
 
   /// Per task key: what its stop is doing.
   final Map<String, TaskStop> stops = {};
@@ -131,19 +136,19 @@ class BackgroundStopper extends ChangeNotifier {
     switch (result) {
       case BackgroundStopped(:final asked):
         Haptics.sent();
-        summary = stopAllSummary(stopped: targets.length, skipped: skipped, asked: asked);
+        summary = stopAllSummary(stopped: targets.length, skipped: skipped, asked: asked, l10n: l10n);
         _notify();
       case BackgroundAlreadyDone():
         for (final t in targets) {
           _setStop(t.key, const TaskStop(StopPhase.finished));
         }
-        summary = 'Already done';
+        summary = l10n?.uiAlreadyDone ?? 'Already done';
         _notify();
       case BackgroundNotStoppable():
         for (final t in targets) {
           _setStop(t.key, null);
         }
-        summary = 'Nothing here has a stop control';
+        summary = l10n?.uiNothingHereHasAStopControl ?? 'Nothing here has a stop control';
         _notify();
       case BackgroundStopFailed(:final reason):
         Haptics.failed();
@@ -179,7 +184,10 @@ Widget? stopControl(
   required VoidCallback onHold,
   required VoidCallback onRetry,
 }) => switch (stop?.phase) {
-  StopPhase.stopping => _StopStatus(label: context.l10n.uiStopping, semantic: 'Stopping ${visibleText(task.id)}'),
+  StopPhase.stopping => _StopStatus(
+    label: context.l10n.uiStopping,
+    semantic: context.l10n.messageStopping(visibleText(task.id)),
+  ),
   StopPhase.unconfirmed => AppChip(
     label: context.l10n.uiRetry,
     semanticLabel: context.l10n.messageRetryStopping(visibleText(task.id)),
@@ -187,12 +195,12 @@ Widget? stopControl(
   ),
   StopPhase.finished => null,
   null => AnswerChip(
-    label: stopLabel(task.stop, agentLabel),
+    label: stopLabel(task.stop, agentLabel, context.l10n),
     wide: false,
     hold: true,
-    holdVerb: 'Hold to stop',
+    holdVerb: context.l10n.uiHoldToStop,
     state: primed ? AnswerChipState.primed : AnswerChipState.rest,
-    semanticLabel: stopSemantics(task, agentLabel, primed: primed),
+    semanticLabel: stopSemantics(task, agentLabel, primed: primed, l10n: context.l10n),
     onTap: onActivate,
     onHeld: onHold,
   ),
@@ -203,8 +211,8 @@ Widget? stopControl(
 Widget? stopNote(BuildContext context, TaskStop? stop) {
   final ds = context.ds;
   final note = switch (stop?.phase) {
-    StopPhase.unconfirmed => ('Couldn’t confirm', ds.dangerText, stop?.reason),
-    StopPhase.finished => ('Already done', ds.done, null),
+    StopPhase.unconfirmed => (context.l10n.uiCouldnTConfirm, ds.dangerText, stop?.reason),
+    StopPhase.finished => (context.l10n.uiAlreadyDone, ds.done, null),
     _ => null,
   };
   if (note == null) return null;
@@ -231,7 +239,7 @@ class StopAllChip extends StatelessWidget {
     label: context.l10n.uiStopAll,
     tone: AnswerChipTone.danger,
     hold: true,
-    holdVerb: 'Hold to stop all',
+    holdVerb: context.l10n.uiHoldToStopAll,
     state: primed ? AnswerChipState.primed : AnswerChipState.rest,
     maxLines: 1,
     semanticLabel: primed
@@ -307,7 +315,8 @@ class SheetFooter extends StatelessWidget {
 }
 
 /// Why the phone asks instead of stopping: omp has no key that stops one job.
-String messageRouteNote(String agentLabel) =>
+String messageRouteNote(String agentLabel, [AppLocalizations? l10n]) =>
+    l10n?.messageHasNoStopKey(agentLabel) ??
     '$agentLabel has no stop key for this. The phone sends $agentLabel a message asking it to.';
 
 const _chipHeight = 36.0;

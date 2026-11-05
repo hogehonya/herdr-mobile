@@ -1,3 +1,5 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,12 +30,15 @@ bool sessionReviewable(AgentSessionView s) => AttentionSet.sessionToReview(s) &&
 /// What the oldest waiting request of [s] is about, on one line: the command
 /// of a permission (else the tool's title), the message of a question. Null
 /// when nothing waits. The board only tells; the answer is given in the
-/// session.
-String? blockedSummary(AgentSessionView s) {
+/// session. [words] names the placeholders a request left empty; without it
+/// they stay in English.
+String? blockedSummary(AgentSessionView s, {AppLocalizations? words}) {
   final line = switch (s.state.pending.firstOrNull) {
-    PendingPermission(:final request) => _permissionLine(request),
+    PendingPermission(:final request) => _permissionLine(request, words),
     PendingQuestion(:final request) =>
-      request.message.isNotEmpty ? request.message : (request.schema?.title ?? 'A question for you'),
+      request.message.isNotEmpty
+          ? request.message
+          : (request.schema?.title ?? words?.uiAQuestionForYou ?? 'A question for you'),
     null => null,
   };
   if (line == null) return null;
@@ -41,14 +46,14 @@ String? blockedSummary(AgentSessionView s) {
   return one.isEmpty ? null : one;
 }
 
-String _permissionLine(PermissionRequest r) {
+String _permissionLine(PermissionRequest r, AppLocalizations? words) {
   final command = r.command;
   if (command != null && command.trim().isNotEmpty) return command;
   final input = r.toolCall.rawInput;
   if (input is Map && input['command'] is String && (input['command'] as String).trim().isNotEmpty) {
     return input['command'] as String;
   }
-  return r.toolCall.title ?? r.title ?? 'Permission needed';
+  return r.toolCall.title ?? r.title ?? words?.uiPermissionNeeded ?? 'Permission needed';
 }
 
 /// `Claude Code · studio-mac · herdr-mobile`.
@@ -62,22 +67,26 @@ String sessionMeta(AgentSessionView s) => whereLine(
 /// "3m", "12m", "idle · jobs 14m" (the turn is over and the agent waits on
 /// background work), "reconnecting": the time in the phase while the link is
 /// up (the glyph says the phase), the link's own word while it is not.
-String sessionStateLabel(AgentSessionView s, DateTime now) {
+/// Without [words] the words stay in English.
+String sessionStateLabel(AgentSessionView s, DateTime now, {AppLocalizations? words}) {
   switch (s.link) {
     case AgentLink.connecting:
-      return 'connecting';
+      return words?.uiLinkConnecting ?? 'connecting';
     case AgentLink.reconnecting:
-      return 'reconnecting';
+      return words?.uiLinkReconnecting ?? 'reconnecting';
     case AgentLink.ended:
-      return 'ended';
+      return words?.uiLinkEnded ?? 'ended';
     case AgentLink.failed:
-      return 'failed';
+      return words?.uiFailed ?? 'failed';
     case AgentLink.live:
       final since = s.phaseSince;
       if (since == null) return '';
       final elapsed = now.difference(since);
-      if (_onJobs(s)) return 'idle · jobs ${Elapsed.compact(elapsed, seconds: false)}';
-      return timeInState(boardStatus(s), elapsed);
+      if (_onJobs(s)) {
+        final jobs = Elapsed.compact(elapsed, seconds: false, l10n: words);
+        return words?.messageIdleJobs(jobs) ?? 'idle · jobs $jobs';
+      }
+      return timeInState(boardStatus(s), elapsed, words: words);
   }
 }
 
@@ -85,9 +94,9 @@ bool _onJobs(AgentSessionView s) => boardStatus(s) == AgentStatus.idle && s.wait
 
 /// [sessionStateLabel] for screen readers: the state in words ("needs you,
 /// 3 minutes", "idle, jobs running, 14 minutes").
-String sessionStateWords(AgentSessionView s, DateTime now) {
+String sessionStateWords(AgentSessionView s, DateTime now, {AppLocalizations? words}) {
   final since = s.phaseSince;
-  if (s.link != AgentLink.live || since == null) return sessionStateLabel(s, now);
+  if (s.link != AgentLink.live || since == null) return sessionStateLabel(s, now, words: words);
   final elapsed = now.difference(since);
   if (_onJobs(s)) return 'idle, jobs running, ${Elapsed.words(elapsed)}';
   return timeInStateWords(boardStatus(s), elapsed);
@@ -111,7 +120,8 @@ class AgentSessionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = boardStatus(session);
-    final summary = status == AgentStatus.blocked ? blockedSummary(session) : null;
+    final words = context.l10n;
+    final summary = status == AgentStatus.blocked ? blockedSummary(session, words: words) : null;
     final meta = where ?? sessionMeta(session);
     final live = session.link == AgentLink.live;
     final ref = sessionRef(session.key);
@@ -162,7 +172,7 @@ class AgentSessionRow extends StatelessWidget {
                       session.title,
                       ?summary,
                       if (meta.isNotEmpty) meta,
-                      sessionStateWords(session, DateTime.now()),
+                      sessionStateWords(session, DateTime.now(), words: words),
                     ].join(', '),
               onTap: sel.active
                   ? pick
@@ -205,12 +215,12 @@ class SessionStateTime extends StatelessWidget {
       fontFeatures: Type.tabular,
     );
     Widget label(DateTime now) {
-      final text = sessionStateLabel(session, now);
+      final text = sessionStateLabel(session, now, words: context.l10n);
       if (text.isEmpty) return const SizedBox.shrink();
       return Padding(
         padding: const EdgeInsets.only(top: Gap.hair),
         child: Semantics(
-          label: sessionStateWords(session, now),
+          label: sessionStateWords(session, now, words: context.l10n),
           excludeSemantics: true,
           child: Text(text, maxLines: 1, softWrap: false, style: style),
         ),

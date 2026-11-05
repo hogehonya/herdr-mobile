@@ -108,8 +108,8 @@ class _Row extends StatelessWidget {
     final ds = context.ds;
     final hint = command.hint;
     final tag = switch (command.source) {
-      SlashSource.project => 'project',
-      SlashSource.user => 'user',
+      SlashSource.project => context.l10n.uiProject,
+      SlashSource.user => context.l10n.uiUser,
       SlashSource.builtIn => null,
     };
     return PressRow(

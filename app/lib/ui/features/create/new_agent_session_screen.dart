@@ -57,6 +57,7 @@ class NewAgentSessionScreen extends StatelessWidget {
       settings: ctx.read<AgentSessionSettings>(),
       machineId: machineId,
       prefill: prefill,
+      l10n: ctx.l10n,
     ),
     child: const _Form(),
   );
@@ -192,6 +193,7 @@ class _FormState extends State<_Form> {
       if (mounted) nav.pop();
       showStartedToast(
         toaster,
+        openLabel: words.uiOpen,
         message: words.messageStartedIn(
           session.agentLabel,
           placeName(session.machine.places, session.cwd),
@@ -267,14 +269,14 @@ class _FormState extends State<_Form> {
                                   controller: _folder,
                                   mono: true,
                                   hint: '/home/you/code/my-project',
-                                  helper: 'An absolute path on the machine',
+                                  helper: context.l10n.uiAnAbsolutePathOnTheMachine,
                                   keyboardType: TextInputType.url,
                                   textInputAction: TextInputAction.done,
                                   // Done on the keyboard is Start, as the button says.
                                   onSubmitted: (_) {
                                     if (_vm.canStart) unawaited(_start(open: false));
                                   },
-                                  validator: agentFolderError,
+                                  validator: (v) => agentFolderError(v, l10n: context.l10n),
                                   suffix: machine == null || !machineSupportsFiles(machine)
                                       ? null
                                       : Align(
@@ -315,7 +317,7 @@ class _FormState extends State<_Form> {
                                               controller: _branch,
                                               mono: true,
                                               hint: context.l10n.uiNamedByHerdr,
-                                              helper: 'Change it, or clear it to let herdr name it',
+                                              helper: context.l10n.uiChangeItOrClearItToLetHerdrName,
                                               validator: vm.branchError,
                                             ),
                                           ),

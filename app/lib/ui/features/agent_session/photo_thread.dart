@@ -2,6 +2,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import '../../../data/acp/acp_models.dart';
 import '../../../data/acp/session_state.dart';
 import '../../../data/observed/log_picture.dart';
@@ -31,16 +34,17 @@ class ThreadPhoto {
 /// Only blocks that carry data are listed (a bare uri is a link, not a
 /// picture), and a picture of a terminal-log chat only once the phone holds it
 /// ([DiskCache.knows]): paging through the thread never downloads one. [agentLabel] names the sender of the agent's own.
-List<ThreadPhoto> threadPhotos(AgentSessionState state, {required String agentLabel}) {
+List<ThreadPhoto> threadPhotos(AgentSessionState state, {required String agentLabel, AppLocalizations? l10n}) {
   final out = <ThreadPhoto>[];
   for (final item in state.items) {
     switch (item) {
       case TranscriptMessage(:final role, :final blocks, :final at):
         final when = at == null ? '' : ' · ${formatWhen(at, DateTime.now())}';
         final from = switch (role) {
-          MessageRole.user => 'You attached it$when',
-          MessageRole.agent => 'Sent by ${visibleText(agentLabel)}$when',
-          MessageRole.thought => '${visibleText(agentLabel)} thinking$when',
+          MessageRole.user => '${l10n?.uiYouAttachedIt ?? 'You attached it'}$when',
+          MessageRole.agent => '${l10n?.messageSentByAgent(visibleText(agentLabel)) ?? 'Sent by ${visibleText(agentLabel)}'}$when',
+          MessageRole.thought =>
+            '${l10n?.messageAgentThinking(visibleText(agentLabel)) ?? '${visibleText(agentLabel)} thinking'}$when',
         };
         for (final block in blocks) {
           if (block is ImageBlock && _listable(block)) out.add(ThreadPhoto(block: block, origin: from));
@@ -51,7 +55,7 @@ List<ThreadPhoto> threadPhotos(AgentSessionState state, {required String agentLa
           if (part is ToolContentBlock) {
             final block = part.block;
             if (block is ImageBlock && block.data.isNotEmpty) {
-              out.add(ThreadPhoto(block: block, origin: 'Tool result · $title'));
+              out.add(ThreadPhoto(block: block, origin: l10n?.messageToolResult(title) ?? 'Tool result · $title'));
             }
           }
         }
@@ -92,7 +96,13 @@ String imageExtension(String mime) => switch (mime.toLowerCase().split(';').firs
 /// 1-based place among the thread's pictures, for a name when the agent gave
 /// none. A picture of a terminal-log chat is read through [session] (a store
 /// hit when it is listed).
-PhotoItem chatPhotoItem(ThreadPhoto photo, int number, {ImagePreviewCache? cache, AgentSessionView? session}) {
+PhotoItem chatPhotoItem(
+  ThreadPhoto photo,
+  int number, {
+  ImagePreviewCache? cache,
+  AgentSessionView? session,
+  AppLocalizations? l10n,
+}) {
   final block = photo.block;
   final uri = block.uri?.trim() ?? '';
   final given = uri.isEmpty ? '' : visibleText(contentBaseName(uri));
@@ -103,20 +113,23 @@ PhotoItem chatPhotoItem(ThreadPhoto photo, int number, {ImagePreviewCache? cache
     mime: block.mimeType.isEmpty ? null : block.mimeType,
     origin: photo.origin,
     source: block is LogImageBlock
-        ? MemoryPhotoSource(() => _logPicture(session, block), size: block.ref.bytes)
-        : MemoryPhotoSource(() => decodeImageDataFor(block), size: base64DecodedLength(block.data)),
+        ? MemoryPhotoSource(() => _logPicture(session, block, l10n), size: block.ref.bytes)
+        : MemoryPhotoSource(() => decodeImageDataFor(block, words: l10n), size: base64DecodedLength(block.data)),
     placeholder: () => previews.cloneOf(block),
   );
 }
 
 /// The bytes of a log picture for the viewer; a picture that cannot be had says
 /// why as a [PhotoSourceException].
-Future<Uint8List> _logPicture(AgentSessionView? session, LogImageBlock block) async {
-  if (session == null) throw const PhotoSourceException('Not available here');
+Future<Uint8List> _logPicture(AgentSessionView? session, LogImageBlock block, AppLocalizations? l10n) async {
+  if (session == null) throw PhotoSourceException(l10n?.uiNotAvailableHere ?? 'Not available here');
   try {
     return await session.loadLogPicture(block.ref);
   } on LogPictureTooLarge catch (e) {
-    throw PhotoSourceException('Too large to show here (${formatBytes(e.bytes)}).', tooLarge: true);
+    throw PhotoSourceException(
+      l10n?.messageTooLargeToShowHere(formatBytes(e.bytes)) ?? 'Too large to show here (${formatBytes(e.bytes)}).',
+      tooLarge: true,
+    );
   } on LogPictureException catch (e) {
     throw PhotoSourceException(e.message);
   }
@@ -131,18 +144,21 @@ Future<void> showContentImage(BuildContext context, ImageBlock block, {String? o
   final scope = ThreadPhotos.maybeOf(context);
   var photos = <ThreadPhoto>[];
   if (scope != null) {
-    photos = threadPhotos(scope.session.state, agentLabel: scope.session.agentLabel);
+    photos = threadPhotos(scope.session.state, agentLabel: scope.session.agentLabel, l10n: context.l10n);
   }
   var at = photos.indexWhere((p) => identical(p.block, block));
   if (at < 0) {
     // Not part of the transcript the scope sees (a sub-agent's, a live copy):
     // the picture alone.
-    photos = [ThreadPhoto(block: block, origin: origin ?? 'Sent in the conversation')];
+    photos = [ThreadPhoto(block: block, origin: origin ?? context.l10n.uiSentInTheConversation)];
     at = 0;
   }
   return openPhotoViewer(
     context,
-    items: [for (final (i, p) in photos.indexed) chatPhotoItem(p, i + 1, session: scope?.session)],
+    items: [
+      for (final (i, p) in photos.indexed)
+        chatPhotoItem(p, i + 1, session: scope?.session, l10n: context.l10n),
+    ],
     initialIndex: at,
   );
 }

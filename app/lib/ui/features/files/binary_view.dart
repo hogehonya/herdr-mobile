@@ -72,7 +72,7 @@ class BinaryView extends StatelessWidget {
                     style: Type.row.copyWith(color: ds.text),
                   ),
                   Text(
-                    model.type.label,
+                    typeLabel(model.type, context.l10n),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Type.secondary.copyWith(color: ds.textSecondary),
@@ -89,8 +89,8 @@ class BinaryView extends StatelessWidget {
           value: stat.size == null
               ? 'Unknown'
               : stat.size! < 1024
-              ? formatBytes(stat.size, l10n: context.l10n)
-              : '${formatBytes(stat.size, l10n: context.l10n)} (${groupDigits(stat.size!)} bytes)',
+              ? formatBytes(stat.size, context.l10n)
+              : '${formatBytes(stat.size, context.l10n)} (${groupDigits(stat.size!)} bytes)',
         ),
         if (stat.modified case final at?)
           InfoRow(label: context.l10n.uiModified, value: formatWhen(at, DateTime.now())),

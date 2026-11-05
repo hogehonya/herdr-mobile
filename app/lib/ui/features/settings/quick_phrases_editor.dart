@@ -206,7 +206,10 @@ class _QuickPhraseEditorState extends State<QuickPhraseEditor> {
     unawaited(phrases.remove(phrase));
     Navigator.of(context).pop();
     // Undo appends: the list has no way to put a phrase back at its place.
-    toaster.show(context.l10n.uiPhraseDeleted, action: ToastAction('Undo', () => unawaited(phrases.add(phrase))));
+    toaster.show(
+      context.l10n.uiPhraseDeleted,
+      action: ToastAction(context.l10n.uiUndo, () => unawaited(phrases.add(phrase))),
+    );
   }
 
   @override
@@ -236,7 +239,7 @@ class _QuickPhraseEditorState extends State<QuickPhraseEditor> {
           hint: context.l10n.uiEGRunTheTests,
           controller: _controller,
           autofocus: true,
-          helper: shown?.message ?? 'Up to ${QuickPhrases.maxLength} characters, one line.',
+          helper: shown?.message ?? context.l10n.messageUpToCharactersOneLine('${QuickPhrases.maxLength}'),
           inputFormatters: [LengthLimitingTextInputFormatter(QuickPhrases.maxLength)],
           textInputAction: TextInputAction.done,
           onSubmitted: (_) => _save(),

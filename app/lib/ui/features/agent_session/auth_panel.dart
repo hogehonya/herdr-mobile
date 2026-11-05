@@ -80,7 +80,7 @@ class _AuthPanelState extends State<AuthPanel> {
     }
   }
 
-  void _copy(String command) => copyText(context, command, what: 'Command copied');
+  void _copy(String command) => copyText(context, command, what: context.l10n.uiCommandCopied);
 
   @override
   Widget build(BuildContext context) {
@@ -108,11 +108,11 @@ class _AuthPanelState extends State<AuthPanel> {
         // Signing in again stores the login in the Keychain again, so the
         // ways the agent lists would lead back here.
         if (need.keychain) ...[
-          '1. In a terminal, run $_setupToken and sign in.',
-          '2. Add export $_tokenVariable=<the token> to ~/.zshenv.',
-          '3. Start a new session.',
+          context.l10n.messageInATerminalRun(_setupToken),
+          context.l10n.messageAddExportToZshEnv(_tokenVariable),
+          context.l10n.uiStartANewSession,
         ] else if (names.isNotEmpty)
-          'Ways to sign in: ${names.join(' \u00b7 ')}.',
+          context.l10n.messageWaysToSignIn(names.join(' \u00b7 ')),
         if (large) context.l10n.messageTerminalOn(machine),
       ].join('\n'),
       messageMaxLines: need.keychain ? 12 : 7,

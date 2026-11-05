@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 
 import 'dart:async';
@@ -106,7 +107,7 @@ class ObservedRoster extends StatefulWidget {
 }
 
 class _ObservedRosterState extends State<ObservedRoster> {
-  late final BackgroundStopper _stopper = BackgroundStopper(widget.session)..addListener(_changed);
+  late final BackgroundStopper _stopper = BackgroundStopper(widget.session, context.l10n)..addListener(_changed);
   bool _moreDone = false;
 
   AgentSessionView get _session => widget.session;
@@ -173,11 +174,12 @@ class _ObservedRosterState extends State<ObservedRoster> {
       final items = <_Item>[
         // Running first: omp names every subagent of a `task` call pending at once,
         // so a swarm of 24 would put the few that run now below two dozen waiting.
-        if (sections.running.isNotEmpty) _Head(live ? 'Running' : 'Was running', sections.running.length),
+        if (sections.running.isNotEmpty)
+          _Head(live ? context.l10n.uiRunning : context.l10n.uiWasRunning, sections.running.length),
         for (final e in sections.running) _Row(e),
-        if (sections.waiting.isNotEmpty) _Head('Waiting', sections.waiting.length),
+        if (sections.waiting.isNotEmpty) _Head(context.l10n.uiWaiting, sections.waiting.length),
         for (final e in sections.waiting) _Row(e),
-        if (done.isNotEmpty) _Head('Done', done.length),
+        if (done.isNotEmpty) _Head(context.l10n.uiDone, done.length),
         for (final e in shown) _Row(e),
         if (done.length > rosterDoneShown) _More(done.length - rosterDoneShown, _moreDone),
         if (earlier != EarlierHistory.none) const _Earlier(),
@@ -213,12 +215,13 @@ class _ObservedRosterState extends State<ObservedRoster> {
       ];
       final post = [
         if (!live)
-          const SheetFooter(lines: ['Not connected. This is the last known list.'])
+          SheetFooter(lines: [context.l10n.uiNotConnectedLastKnown])
         else if (agents.isNotEmpty)
           SheetFooter(
             lines: [
-              'Stop on the message bar ends the turn only. Subagents keep running until you stop them.',
-              if (targets.any((t) => t.stop == StopRoute.message)) messageRouteNote(_session.agentLabel),
+              context.l10n.uiStopOnTheMessageBarEndsTheTurnOnlySubagents,
+              if (targets.any((t) => t.stop == StopRoute.message))
+                messageRouteNote(_session.agentLabel, context.l10n),
             ],
           ),
       ];
@@ -265,7 +268,10 @@ class _ObservedRosterState extends State<ObservedRoster> {
         kind: SheetKind.list,
         scrolls: items.isNotEmpty,
         child: items.isEmpty
-            ? const EmptyState.inline('None started yet.', padding: EdgeInsets.fromLTRB(Gap.lg, Gap.xs, Gap.lg, Gap.md))
+            ? EmptyState.inline(
+                context.l10n.uiNoneStartedYet,
+                padding: const EdgeInsets.fromLTRB(Gap.lg, Gap.xs, Gap.lg, Gap.md),
+              )
             : ListView.builder(
                 shrinkWrap: items.length <= _shrinkWrapUntil,
                 padding: const EdgeInsets.only(bottom: Gap.xs),
@@ -308,17 +314,18 @@ class _RosterRow extends StatelessWidget {
   final VoidCallback onTap;
   final BackgroundStopper onStopper;
 
-  String _word() => switch (entry.state) {
-    SubagentState.waiting => 'Waiting',
-    SubagentState.running => live ? 'Running' : 'Was running',
-    SubagentState.finished => 'Done',
-    SubagentState.failed => 'Failed',
+  String _word(AppLocalizations l10n) => switch (entry.state) {
+    SubagentState.waiting => l10n.uiWaiting,
+    SubagentState.running => live ? l10n.uiRunning : l10n.uiWasRunning,
+    SubagentState.finished => l10n.uiDone,
+    SubagentState.failed => l10n.uiFailedHeader,
   };
 
   @override
   Widget build(BuildContext context) {
     final ds = context.ds;
     final info = entry.info;
+    final l10n = context.l10n;
     final color = switch (entry.state) {
       SubagentState.running => live ? ds.working : ds.textMuted,
       SubagentState.failed => ds.dangerText,
@@ -329,9 +336,9 @@ class _RosterRow extends StatelessWidget {
     final started = entry.state == SubagentState.running ? task?.startedAt : null;
     Widget detail(DateTime? now) => Text(
       [
-        _word(),
+        _word(l10n),
         if (started != null && now != null) Elapsed.compact(now.difference(started)),
-        if (info.toolCount > 0) countOf(info.toolCount, 'tool'),
+        if (info.toolCount > 0) l10n.messageToolCount(info.toolCount),
       ].join(' · '),
       style: Type.captionStrong.copyWith(color: color, fontFeatures: Type.tabular),
     );

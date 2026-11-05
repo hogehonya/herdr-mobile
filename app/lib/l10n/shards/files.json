@@ -1,0 +1,269 @@
+{
+  "entries": [
+    {
+      "key": "itemCount",
+      "en": "{count, plural, =1{1 item} other{{count} items}}",
+      "ja": "{count}件",
+      "placeholders": {
+        "count": "int"
+      }
+    },
+    {
+      "key": "folderCount",
+      "en": "{count, plural, =1{1 folder} other{{count} folders}}",
+      "ja": "{count}件",
+      "placeholders": {
+        "count": "int"
+      }
+    },
+    {
+      "key": "photoCount",
+      "en": "{count, plural, =1{1 photo} other{{count} photos}}",
+      "ja": "写真{count}枚",
+      "placeholders": {
+        "count": "int"
+      }
+    },
+    {
+      "key": "messageFoldersInList",
+      "en": "{count, plural, =1{1 folder in list} other{{count} folders in list}}",
+      "ja": "フォルダ{count}件はリスト表示",
+      "placeholders": {
+        "count": "int"
+      }
+    },
+    {
+      "key": "messageHiddenCount",
+      "en": "{count, plural, =1{1 hidden} other{{count} hidden}}",
+      "ja": "非表示{count}件",
+      "placeholders": {
+        "count": "int"
+      }
+    },
+    {
+      "key": "messageShownOfItems",
+      "en": "{shown} of {count, plural, =1{1 item} other{{count} items}}",
+      "ja": "{count}件中{shown}件",
+      "placeholders": {
+        "shown": "int",
+        "count": "int"
+      }
+    },
+    {
+      "key": "messageShownOfFolders",
+      "en": "{shown} of {count, plural, =1{1 folder} other{{count} folders}}",
+      "ja": "{count}件中{shown}件",
+      "placeholders": {
+        "shown": "int",
+        "count": "int"
+      }
+    },
+    {
+      "key": "uiChooseAFile",
+      "en": "choose a file",
+      "ja": "ファイルを選ぶ"
+    },
+    {
+      "key": "uiGoUp",
+      "en": "Go up",
+      "ja": "上へ"
+    },
+    {
+      "key": "uiOpenParent",
+      "en": "Open parent",
+      "ja": "親フォルダを開く"
+    },
+    {
+      "key": "uiBrokenLink",
+      "en": "Broken link",
+      "ja": "リンク切れ"
+    },
+    {
+      "key": "uiLink",
+      "en": "Link",
+      "ja": "リンク"
+    },
+    {
+      "key": "uiLookingInOtherCheckouts",
+      "en": "Looking in other checkouts…",
+      "ja": "他のチェックアウトを確認中…"
+    },
+    {
+      "key": "messageSearchingFor",
+      "en": "Searching {p0} for {p1}…",
+      "ja": "{p0}で{p1}を検索中…",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "messageFromWorktree",
+      "en": "From worktree {p0}",
+      "ja": "ワークツリー{p0}から",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageFoundIn",
+      "en": "Found in {p0}",
+      "ja": "{p0}で見つかりました",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiFilesAreNotAvailableOnThisMachine",
+      "en": "Files are not available on this machine",
+      "ja": "このマシンではファイルを利用できません。"
+    },
+    {
+      "key": "uiContentsCopied",
+      "en": "Contents copied",
+      "ja": "内容をコピーしました"
+    },
+    {
+      "key": "messageOnlyTheFirstWasCopied",
+      "en": "Only the first {p0} was copied",
+      "ja": "先頭の{p0}だけをコピーしました",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiSavedToPicturesHerdr",
+      "en": "Saved to Pictures/herdr",
+      "ja": "Pictures/herdrに保存しました"
+    },
+    {
+      "key": "uiShowingTheEarlierVersion",
+      "en": "Showing the earlier version",
+      "ja": "以前のバージョンを表示中"
+    },
+    {
+      "key": "messageShowingOfSize",
+      "en": "Showing {p0} of {p1}",
+      "ja": "{p1}中{p0}を表示中",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "messageShowingTheFirstOfSize",
+      "en": "Showing the first {p0} of {p1}. That is as much as the viewer opens.",
+      "ja": "{p1}中先頭の{p0}を表示中。ビューアが開く上限です。",
+      "placeholders": {
+        "p0": "String",
+        "p1": "String"
+      }
+    },
+    {
+      "key": "messageSpecialFilesCanTBeOpened",
+      "en": "Special files (sockets, devices, pipes) can’t be opened",
+      "ja": "特殊ファイル（ソケット、デバイス、パイプ）は開けません"
+    },
+    {
+      "key": "messageIsAFolder",
+      "en": "{p0} is a folder",
+      "ja": "{p0}はフォルダです",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageIsNotAFileAnyMore",
+      "en": "{p0} isn’t a file any more",
+      "ja": "{p0}はもうファイルではありません",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageThisFileIsTooLargeToFormat",
+      "en": "This file is too large to format ({p0} limit).",
+      "ja": "このファイルは大きすぎて整形できません（上限{p0}）。",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageThisIsnTValidJsonShownAsWritten",
+      "en": "This isn’t valid JSON, so it is shown as written.",
+      "ja": "有効なJSONではないため、そのまま表示します。"
+    },
+    {
+      "key": "messageImageType",
+      "en": "{p0} image",
+      "ja": "{p0}画像",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageVideoType",
+      "en": "{p0} video",
+      "ja": "{p0}動画",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageFileType",
+      "en": "{p0} file",
+      "ja": "{p0}ファイル",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "messageArchiveType",
+      "en": "{p0} archive",
+      "ja": "{p0}アーカイブ",
+      "placeholders": {
+        "p0": "String"
+      }
+    },
+    {
+      "key": "uiPdfDocument",
+      "en": "PDF document",
+      "ja": "PDF文書"
+    },
+    {
+      "key": "uiMarkdown",
+      "en": "Markdown",
+      "ja": "Markdown"
+    },
+    {
+      "key": "uiJSON",
+      "en": "JSON",
+      "ja": "JSON"
+    },
+    {
+      "key": "uiBinaryData",
+      "en": "Binary data",
+      "ja": "バイナリデータ"
+    },
+    {
+      "key": "uiExecutableElf",
+      "en": "Executable (ELF)",
+      "ja": "実行ファイル（ELF）"
+    },
+    {
+      "key": "uiSqliteDatabase",
+      "en": "SQLite database",
+      "ja": "SQLiteデータベース"
+    },
+    {
+      "key": "uiWebAssembly",
+      "en": "WebAssembly",
+      "ja": "WebAssembly"
+    },
+    {
+      "key": "uiUnknownSize",
+      "en": "Unknown size",
+      "ja": "サイズ不明"
+    }
+  ]
+}

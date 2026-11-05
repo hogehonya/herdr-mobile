@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -129,7 +130,9 @@ String? peekLine(BuildContext context, BoardItem item) {
   final line = switch (item) {
     PaneItem(:final row) => _paneLine(context.read<PanePreviews?>()?.known(row.machine.profile.id, row.paneId)),
     SessionItem(:final session) =>
-      boardStatus(session) == AgentStatus.blocked ? blockedSummary(session) : lastAgentSentence(session.state.items),
+      boardStatus(session) == AgentStatus.blocked
+          ? blockedSummary(session, words: context.l10n)
+          : lastAgentSentence(session.state.items),
   };
   final one = line?.replaceAll(_space, ' ').trim();
   return one == null || one.isEmpty ? null : one;
@@ -187,7 +190,7 @@ class AgentPeekEnd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-    peekEndWords(next: next, working: working),
+    peekEndWords(next: next, working: working, words: context.l10n),
     maxLines: 1,
     style: Type.label.copyWith(color: context.ds.textMuted),
   );
@@ -195,12 +198,13 @@ class AgentPeekEnd extends StatelessWidget {
 
 /// What the end card says; the `Next agent` / `Previous agent` actions
 /// announce the same at either end. Past the last stop nothing else wants the
-/// person: it says so, and what is still going on without them.
-String peekEndWords({required bool next, int working = 0}) => !next
-    ? 'No previous agent'
-    : working == 0
-    ? 'All caught up'
-    : 'All caught up · $working working';
+/// person: it says so, and what is still going on without them. Without
+/// [words] it says it in English.
+String peekEndWords({required bool next, int working = 0, AppLocalizations? words}) {
+  if (!next) return words?.uiNoPreviousAgent ?? 'No previous agent';
+  if (working == 0) return words?.uiAllCaughtUp ?? 'All caught up';
+  return words?.messageAllCaughtUpWorking('$working') ?? 'All caught up · $working working';
+}
 
 /// Whether letting go now goes where the peek shows (the finger is past the
 /// commit distance): [PeekFrame] says it to the card it holds.

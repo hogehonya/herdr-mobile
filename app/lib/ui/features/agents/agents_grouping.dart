@@ -38,6 +38,20 @@ String sectionLabel(AgentStatus status, {AppLocalizations? words}) {
   };
 }
 
+/// A status as the lowercase word a label carries inside a sentence ("22 more
+/// idle"): the section's word in the case such a label needs. Japanese has no
+/// case, so its word comes through unchanged.
+String statusWord(AgentStatus status, AppLocalizations words) {
+  final word = switch (status) {
+    AgentStatus.blocked => words.uiBlocked,
+    AgentStatus.working => words.uiWorking,
+    AgentStatus.done => words.uiDone,
+    AgentStatus.idle => words.uiIdle,
+    AgentStatus.unknown => words.uiUnknown,
+  };
+  return word.toLowerCase();
+}
+
 /// The state a row is in, as a word for screen readers: the visible label
 /// says it with the glyph and the time's colour. Empty for "unknown".
 String stateWord(AgentStatus status) => switch (status) {
@@ -52,11 +66,11 @@ String stateWord(AgentStatus status) => switch (status) {
 /// is not known) "≤ 25m": at most that long. The time only: the row's glyph
 /// already says the state (DESIGN.md Hierarchy 5). Empty for an agent whose
 /// state has no useful word ("unknown").
-String timeInState(AgentStatus status, Duration d, {bool exact = true}) {
+String timeInState(AgentStatus status, Duration d, {bool exact = true, AppLocalizations? words}) {
   if (status == AgentStatus.unknown) return '';
-  if (exact) return Elapsed.compact(d, seconds: false);
+  if (exact) return Elapsed.compact(d, seconds: false, l10n: words);
   // A bound is a gap of at least a minute; never "<1m" for one.
-  return '≤ ${Elapsed.compact(d < _minute ? _minute : d, seconds: false)}';
+  return '≤ ${Elapsed.compact(d < _minute ? _minute : d, seconds: false, l10n: words)}';
 }
 
 /// What [timeInState] says, in words: "needs you, 4 minutes", "done, at most

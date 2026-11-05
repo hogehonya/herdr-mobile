@@ -18,8 +18,10 @@ class AgentMoreRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ds = context.ds;
+    final words = context.l10n;
     final open = more.open;
-    final title = open ? 'Show less' : '${more.hidden} more ${more.status.name}';
+    final status = statusWord(more.status, words);
+    final title = open ? words.uiShowLess : words.messageMore89('${more.hidden}', status);
     final detail = open ? null : more.names.map((n) => n.trim()).where((n) => n.isNotEmpty).join(' \u00B7 ');
     return PressRow(
       onTap: () {
@@ -28,8 +30,8 @@ class AgentMoreRow extends StatelessWidget {
       },
       minHeight: kMinTap,
       semanticLabel: open
-          ? context.l10n.messageShowLessAgents(more.status.name)
-          : context.l10n.messageAgentsFolded(title, detail == null || detail.isEmpty ? '' : '. $detail'),
+          ? words.messageShowLessAgents(status)
+          : words.messageAgentsFolded(title, detail == null || detail.isEmpty ? '' : '. $detail'),
       padding: const EdgeInsets.symmetric(horizontal: Gap.gutter - PressRow.inset, vertical: Gap.sm),
       child: Row(
         children: [

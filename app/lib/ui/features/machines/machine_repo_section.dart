@@ -115,7 +115,7 @@ class _CheckoutBlockView extends StatelessWidget {
     // main one). A name the person gave it, from ⋯ Rename, is shown as typed.
     final label = block.workspace.label.trim();
     final given = label.isNotEmpty && label != place.checkoutName && label != place.repoName;
-    final title = given ? label : (place.isLinked ? place.checkoutName : 'Main checkout');
+    final title = given ? label : (place.isLinked ? place.checkoutName : context.l10n.uiMainCheckout);
     final branch = machine.branchOf(place.checkoutPath);
     final rows = machinePaneRows(
       machine: machine,

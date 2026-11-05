@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 
 import 'dart:async';
@@ -8,7 +9,10 @@ import 'package:herdr_mobile/data/words/elapsed.dart';
 import 'package:herdr_mobile/ui/core/kit.dart';
 
 /// How long the output has been stale, as the label says it. `stale · 12s`.
-String staleLabel(Duration since) => 'stale · ${Elapsed.compact(since)}';
+String staleLabel(Duration since, [AppLocalizations? l10n]) {
+  final elapsed = Elapsed.compact(since);
+  return l10n?.messageStale(elapsed) ?? 'stale · $elapsed';
+}
 
 /// The bottom edge of the terminal: a 2 px rule that says whether what is
 /// shown is live.
@@ -133,7 +137,7 @@ class _LiveEdgeState extends State<LiveEdge> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Gap.sm, vertical: Gap.hair),
                     child: Text(
-                      staleLabel(widget.now().difference(read)),
+                      staleLabel(widget.now().difference(read), context.l10n),
                       maxLines: 1,
                       style: Type.caption.copyWith(
                         color: widget.failed ? ds.dangerText : ds.textSecondary,

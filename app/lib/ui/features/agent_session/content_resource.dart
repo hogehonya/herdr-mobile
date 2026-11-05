@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../data/acp/acp_models.dart';
@@ -31,11 +34,11 @@ IconData contentIcon({String? mime, required String name, bool web = false}) {
 
 /// The name of a link as a person reads it: its title, else its name, else the
 /// last part of its address.
-String resourceLinkName(ResourceLinkBlock block) {
+String resourceLinkName(ResourceLinkBlock block, {AppLocalizations? l10n}) {
   for (final s in [block.title, block.name]) {
     if (s != null && s.trim().isNotEmpty) return s.trim();
   }
-  return block.uri.trim().isEmpty ? 'Link' : contentBaseName(block.uri);
+  return block.uri.trim().isEmpty ? (l10n?.uiLink ?? 'Link') : contentBaseName(block.uri);
 }
 
 String _hint(ContentTarget? target, String uri) => switch (target) {
@@ -57,7 +60,7 @@ class ResourceLinkRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final target = resolveContentUri(block.uri);
-    final name = resourceLinkName(block);
+    final name = resourceLinkName(block, l10n: context.l10n);
     final hint = _hint(target, block.uri);
     final size = block.size;
     final description = block.description?.trim() ?? '';
@@ -91,7 +94,7 @@ class EmbeddedResourceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final target = resolveContentUri(block.uri);
-    final name = block.uri.trim().isEmpty ? 'Attachment' : contentBaseName(block.uri);
+    final name = block.uri.trim().isEmpty ? context.l10n.uiAttachment : contentBaseName(block.uri);
     final mime = block.mimeType ?? '';
     final text = block.text;
     final blob = block.blob;
@@ -103,7 +106,7 @@ class EmbeddedResourceView extends StatelessWidget {
         if (target is PathTarget && hint != name) hint else if (mime.isNotEmpty) mime,
         if (blob != null && blob.isNotEmpty) formatBytes(base64DecodedLength(blob)),
       ].join(' · '),
-      note: text == null && (blob == null || blob.isEmpty) ? 'The attachment is empty.' : null,
+      note: text == null && (blob == null || blob.isEmpty) ? context.l10n.uiTheAttachmentIsEmpty : null,
       muted: target == null,
       onTap: contentTapFor(context, target),
     );
@@ -123,7 +126,7 @@ class EmbeddedResourceView extends StatelessWidget {
           all: expanded,
           cap: embeddedResourceLines,
           onToggleAll: onToggle,
-          onCopy: () => copyText(context, text, what: 'Output copied'),
+          onCopy: () => copyText(context, text, what: context.l10n.uiOutputCopied),
         ),
       ],
     );

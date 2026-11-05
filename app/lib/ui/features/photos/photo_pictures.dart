@@ -176,13 +176,13 @@ class _Loading extends StatelessWidget {
     final fraction = total == null || total <= 0 ? null : (received / total).clamp(0.0, 1.0);
     final String line;
     if (entry.decoding) {
-      line = 'Preparing…';
+      line = context.l10n.uiPreparing;
     } else if (total != null && total > 0 && received > 0) {
-      line = '${formatBytes(received)} of ${formatBytes(total)}';
+      line = context.l10n.messageOf88(formatBytes(received), formatBytes(total));
     } else if (total != null && total > 0) {
       line = formatBytes(total);
     } else {
-      line = 'Loading…';
+      line = context.l10n.uiLoading24;
     }
     return Stack(
       fit: StackFit.expand,

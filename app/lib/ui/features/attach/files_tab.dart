@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 
 import 'dart:async';
@@ -51,8 +52,6 @@ class _FilesTabState extends State<FilesTab> {
   /// Recent files whose host copy is being checked: a second tap meanwhile
   /// must not toggle twice.
   final _checking = <RecentPhoneFile>{};
-
-  static const goneMessage = 'That copy is gone from the machine. Choose the file again.';
 
   @override
   void initState() {
@@ -149,13 +148,14 @@ class _FilesTabState extends State<FilesTab> {
   }
 
   void _gone(RecentPhoneFile r) {
-    widget.onProblem(goneMessage);
+    widget.onProblem(context.l10n.messageThatCopyIsGoneFromTheMachineChooseTheFileAgain);
     unawaited(widget.kit.recents.remove(r));
   }
 
   @override
   Widget build(BuildContext context) {
     final ds = context.ds;
+    final l10n = context.l10n;
     final tray = widget.tray;
     final recents = widget.kit.recents.files;
     final picked = [
@@ -187,39 +187,40 @@ class _FilesTabState extends State<FilesTab> {
               _FileRow(
                 key: ValueKey('picked:${item.key}'),
                 name: item.name,
-                detail: _pickedDetail(item, imagesAsFiles),
+                detail: _pickedDetail(l10n, item, imagesAsFiles),
                 number: tray.numberOf(item.key),
                 onTap: () => tray.remove(item.key),
               ),
           ],
           if (recents.isNotEmpty) ...[
             SectionLabel(label: context.l10n.uiRecent, count: recents.length),
-            for (final r in recents) _recentRow(r),
+            for (final r in recents) _recentRow(l10n, r),
           ],
         ],
       ),
     );
   }
 
-  Widget _recentRow(RecentPhoneFile r) {
+  Widget _recentRow(AppLocalizations l10n, RecentPhoneFile r) {
     final onHost = _onHost(r);
     final pick = onHost ? HostPick(path: r.hostPath!, name: r.name, size: r.size, fromPhone: true) : null;
     return _FileRow(
       key: ValueKey('recent:${r.name}:${r.size}:${r.hostPath}'),
       name: r.name,
-      detail: '${formatBytes(r.size)} · ${onHost ? 'already on the machine' : 'choose it again'}',
+      detail:
+          '${formatBytes(r.size)} · ${onHost ? l10n.uiAlreadyOnTheMachine : l10n.uiChooseItAgain}',
       number: pick == null ? null : widget.tray.numberOf(pick.key),
       onTap: () => unawaited(_openRecent(r)),
       onForget: () => unawaited(widget.kit.recents.remove(r)),
     );
   }
 
-  static String _pickedDetail(TrayItem item, bool imagesAsFiles) {
+  static String _pickedDetail(AppLocalizations l10n, TrayItem item, bool imagesAsFiles) {
     final size = item.size;
     final parts = [
       formatBytes(size),
-      if (size != null && sizeVerdict(size) == SizeVerdict.large) 'large, uploading may take a while',
-      if (imagesAsFiles && typeForName(item.name).kind == FileKind.image) 'sent as a file',
+      if (size != null && sizeVerdict(size) == SizeVerdict.large) l10n.uiLargeUploadingMayTakeAWhile,
+      if (imagesAsFiles && typeForName(item.name).kind == FileKind.image) l10n.uiSentAsAFile,
     ];
     return parts.join(' · ');
   }

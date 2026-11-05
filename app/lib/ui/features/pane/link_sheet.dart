@@ -38,13 +38,13 @@ Future<void> showLinkSheet(BuildContext context, String url, {MachineConnection?
       final ds = ctx.ds;
       void copy() {
         Navigator.of(ctx).pop();
-        copyText(context, url, what: 'Link copied');
+        copyText(context, url, what: context.l10n.uiLinkCopied);
       }
 
       Future<void> open() async {
         Navigator.of(ctx).pop();
         if (!await openTappedLink(url)) {
-          toast('Couldn’t open on this phone: no browser could open it.', kind: ToastKind.failed);
+          toast(context.l10n.uiCouldnTOpenOnThisPhoneNoBrowserCould, kind: ToastKind.failed);
         }
       }
 
@@ -107,16 +107,13 @@ Future<void> showLinkSheet(BuildContext context, String url, {MachineConnection?
               child: SelectableText(url, style: Mono.input.copyWith(color: ds.text)),
             ),
             if (previewable)
-              note(
-                HerdrIcons.machines,
-                'This address is on ${machine.profile.label}. Open page shows it in herdr, over your SSH connection.',
-              )
+              note(HerdrIcons.machines, context.l10n.messageThisAddressIsOnOpenPage(machine.profile.label))
             else if (local && https)
-              note(HerdrIcons.machines, 'HTTPS on the machine can’t be opened on the phone yet.')
+              note(HerdrIcons.machines, context.l10n.uiHTTPSOnTheMachineCanTBeOpened)
             else if (local)
-              note(HerdrIcons.machines, 'This address is on the machine, not your phone.')
+              note(HerdrIcons.machines, context.l10n.uiThisAddressIsOnTheMachineNotYourPhone)
             else if (plain)
-              note(LucideIcons.triangleAlert, 'This link isn’t encrypted.'),
+              note(LucideIcons.triangleAlert, context.l10n.uiThisLinkIsnTEncrypted),
           ],
         ),
       );

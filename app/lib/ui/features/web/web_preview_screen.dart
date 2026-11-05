@@ -298,18 +298,18 @@ class _WebPreviewScreenState extends State<WebPreviewScreen> {
       _carry = 0;
       await _view.loadRequest(entry);
     } on WebPreviewException catch (e) {
-      _fail('Couldn’t open this page', e.reason, at ?? _url);
+      _fail(context.l10n.uiCouldnTOpenThisPage, e.reason, at ?? _url);
     } on RemoteFileException catch (e) {
       _fail(
-        'Couldn’t open this page',
+        context.l10n.uiCouldnTOpenThisPage,
         e.kind == RemoteFileErrorKind.notFound
-            ? '${visibleText(widget.page.label)} isn’t on the machine any more.'
+            ? context.l10n.messageIsnTOnTheMachineAnyMore(visibleText(widget.page.label))
             : visibleText(e.message),
         at,
       );
     } on Object catch (e) {
       debugPrint('herdr: page not opened: $e');
-      _fail('Couldn’t open this page', 'Something went wrong on the phone. Retry tries again.', at);
+      _fail(context.l10n.uiCouldnTOpenThisPage, context.l10n.uiSomethingWentWrongOnThePhoneRetryTriesAgain, at);
     }
   }
 
@@ -322,7 +322,7 @@ class _WebPreviewScreenState extends State<WebPreviewScreen> {
         return _web.staticUrl(stat);
       case FilePage(:final path, :final cwd):
         final files = widget.machine.files;
-        if (!files.supported) throw const WebPreviewException('Files are not available on this machine.');
+        if (!files.supported) throw WebPreviewException(context.l10n.uiFilesAreNotAvailableOnThisMachine);
         return _web.staticUrl(await files.stat(await files.resolve(path, cwd: cwd)));
     }
   }
@@ -603,25 +603,25 @@ class _WebPreviewScreenState extends State<WebPreviewScreen> {
   void _onError(WebResourceError error) {
     if (error.isForMainFrame == false) return;
     final url = error.url == null ? _url : Uri.tryParse(error.url!);
-    _fail('Couldn’t load this page', _why(error), url);
+    _fail(context.l10n.uiCouldnTLoadThisPage, _why(error), url);
   }
 
   /// What a failed load means here, and what Retry does about it.
   String _why(WebResourceError error) {
+    final l10n = context.l10n;
     final machine = widget.machine.profile.label;
     return switch (error.errorType) {
-      WebResourceErrorType.connect =>
-        'herdr stopped serving it on this phone (after 10 minutes unused, or a new connection). Retry opens it again.',
-      WebResourceErrorType.timeout => '$machine took too long to answer. Retry asks again.',
-      WebResourceErrorType.io => 'The connection to $machine broke while the page loaded. Retry asks again.',
-      WebResourceErrorType.redirectLoop => 'The page sends itself round in a loop. Retry asks again.',
-      WebResourceErrorType.webContentProcessTerminated =>
-        'The page stopped: its view ran out of memory or crashed. Retry opens it again.',
+      WebResourceErrorType.connect => l10n.uiHerdrStoppedServingItOnThisPhone,
+      WebResourceErrorType.timeout => l10n.messageTookTooLongToAnswer(machine),
+      WebResourceErrorType.io => l10n.messageTheConnectionToBrokeWhileThePageLoaded(machine),
+      WebResourceErrorType.redirectLoop => l10n.uiThePageSendsItselfRoundInALoop,
+      WebResourceErrorType.webContentProcessTerminated => l10n.uiThePageStoppedItsViewRanOutOfMemory,
       _ when error.description.contains('EMPTY_RESPONSE') || error.description.contains('CONNECTION_CLOSED') =>
-        'The server on $machine closed the connection without an answer. Is it still running? Retry asks again.',
-      _ when error.description.contains('CONNECTION_RESET') =>
-        'The connection to $machine broke while the page loaded. Retry asks again.',
-      _ => 'It didn’t load. Retry asks again.',
+        l10n.messageTheServerOnClosedTheConnectionWithoutAnAnswer(machine),
+      _ when error.description.contains('CONNECTION_RESET') => l10n.messageTheConnectionToBrokeWhileThePageLoaded(
+        machine,
+      ),
+      _ => l10n.uiItDidnTLoad,
     };
   }
 
@@ -752,7 +752,7 @@ class _WebPreviewScreenState extends State<WebPreviewScreen> {
             unavailable: _failure != null
                 ? context.l10n.uiRetryUnderTheMessageOpensItAgain
                 : _phase == _Phase.opening
-                ? 'The page is still opening.'
+                ? context.l10n.uiThePageIsStillOpening
                 : null,
             onTap: () => unawaited(_view.reload()),
           ),

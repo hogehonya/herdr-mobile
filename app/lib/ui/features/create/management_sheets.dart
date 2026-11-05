@@ -24,7 +24,7 @@ import 'session_prefill.dart';
 /// can be removed (held, never forced).
 Future<void> showWorkspaceActions(BuildContext context, MachineConnection machine, Workspace workspace) {
   final name = workspace.label.isEmpty ? workspace.id : workspace.label;
-  final actions = MachineActions(machine);
+  final actions = MachineActions(machine, l10n: context.l10n);
   final toaster = Toaster.of(context);
   final navigator = Navigator.of(context);
 
@@ -139,7 +139,7 @@ Future<void> showWorkspaceActions(BuildContext context, MachineConnection machin
         icon: LucideIcons.trash2,
         destructive: true,
         onTap: close,
-        unavailable: worktreesOpen ? 'Worktrees are open · close them first' : null,
+        unavailable: worktreesOpen ? context.l10n.uiWorktreesAreOpenCloseThemFirst : null,
       ),
     ],
   );
@@ -178,7 +178,7 @@ Future<void> showWorkspaceActions(BuildContext context, MachineConnection machin
 
 /// What can be done to a pane: a new name, closing it.
 Future<void> showPaneActions(BuildContext context, MachineConnection machine, Pane pane, {required String title}) {
-  final actions = MachineActions(machine);
+  final actions = MachineActions(machine, l10n: context.l10n);
   final toaster = Toaster.of(context);
   final navigator = Navigator.of(context);
 

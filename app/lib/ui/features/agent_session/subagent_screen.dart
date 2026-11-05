@@ -137,7 +137,7 @@ class _RunBar extends StatelessWidget {
     session: session,
     select: (s) {
       final run = s.subagentRun(runId);
-      return (run == null ? 'Subagent' : runTitle(run), run?.agentType);
+      return (run == null ? context.l10n.uiSubagent : runTitle(run, context.l10n), run?.agentType);
     },
     builder: (context, v) {
       final (title, type) = v;
@@ -196,7 +196,7 @@ class RunStateStrip extends StatelessWidget {
             run: run,
             tone: tone,
             builder: (context, now) {
-              final line = runLine(run, tone, now: now, withType: false);
+              final line = runLine(run, tone, now: now, withType: false, l10n: context.l10n);
               return Row(
                 children: [
                   RunGlyph(tone: tone),
@@ -305,10 +305,11 @@ class LogOriginNote extends StatelessWidget {
       select: (s) => s.subagentRun(runId)?.log,
       builder: (context, log) {
         if (log == null) return const SizedBox.shrink();
+        final l10n = context.l10n;
         final text = [
-          'From ${agentName(session.agent)}’s log on the machine',
-          if (log.earlierNotShown) 'Earlier part not shown',
-          if (log.skippedLines > 0) '${countOf(log.skippedLines, 'oversized line')} left out',
+          l10n.messageFromLogOnTheMachine(agentName(session.agent)),
+          if (log.earlierNotShown) l10n.uiEarlierPartNotShown,
+          if (log.skippedLines > 0) l10n.messageOversizedLinesLeftOut(log.skippedLines),
         ].join(' · ');
         return Container(
           width: double.infinity,
@@ -364,7 +365,7 @@ class LogStatusLine extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(color: ds.hairline)),
                 ),
-                child: const LoadingRow('Loading…', padding: EdgeInsets.symmetric(horizontal: Gap.lg)),
+                child: LoadingRow(context.l10n.uiLoading24, padding: const EdgeInsets.symmetric(horizontal: Gap.lg)),
               ),
             ),
           );
@@ -478,11 +479,12 @@ class _SubagentSummaryBodyState extends State<SubagentSummaryBody> {
 
   List<WidgetBuilder> _rows(BuildContext context, SubagentRun run) {
     final ds = context.ds;
+    final l10n = context.l10n;
     final facts = <(String, String)>[
-      if (run.model != null && run.model!.trim().isNotEmpty) ('Model', visibleText(run.model!.trim())),
-      if (run.tokens != null) ('Tokens', formatTokens(run.tokens!)),
-      if (run.cost != null) ('Cost', formatCost(run.cost!, 'USD')),
-      if (run.percent != null) ('Progress', '${run.percent}%'),
+      if (run.model != null && run.model!.trim().isNotEmpty) (l10n.uiModel, visibleText(run.model!.trim())),
+      if (run.tokens != null) (l10n.uiTokens, formatTokens(run.tokens!)),
+      if (run.cost != null) (l10n.uiCost, formatCost(run.cost!, 'USD')),
+      if (run.percent != null) (l10n.uiProgress, '${run.percent}%'),
     ];
     final retry = run.retry;
     final assignment = run.assignment?.trim() ?? '';
@@ -535,16 +537,18 @@ class _SubagentSummaryBodyState extends State<SubagentSummaryBody> {
           padding: const EdgeInsets.only(top: Gap.md),
           child: Text(
             [
-              retry.maxAttempts == null ? 'Retrying' : 'Retrying, attempt ${retry.attempt} of ${retry.maxAttempts}',
-              if (retry.delay != null) 'in ${Elapsed.words(retry.delay!)}',
+              retry.maxAttempts == null
+                  ? l10n.uiRetryingHeading
+                  : l10n.messageRetryingAttemptOf('${retry.attempt}', '${retry.maxAttempts}'),
+              if (retry.delay != null) l10n.messageInDelay(Elapsed.words(retry.delay!)),
               if (retry.message.trim().isNotEmpty) visibleText(retry.message.trim()),
             ].join(' · '),
             style: Type.secondary.copyWith(color: ds.textSecondary),
           ),
         ),
-      if (assignment.isNotEmpty) ...[(c) => section('Asked to'), (c) => AskedMarkdown(markdown: assignment)],
+      if (assignment.isNotEmpty) ...[(c) => section(l10n.uiAskedTo), (c) => AskedMarkdown(markdown: assignment)],
       if (run.recentTools.isNotEmpty || (run.lastToolLine ?? '').isNotEmpty) ...[
-        (c) => section(run.isActive ? 'Doing now' : 'Latest tools'),
+        (c) => section(run.isActive ? l10n.uiDoingNow : l10n.uiLatestTools),
         if ((run.lastToolLine ?? '').trim().isNotEmpty)
           (c) => Text(
             _clip(visibleText(run.lastToolLine!.trim()), 300),
@@ -562,7 +566,7 @@ class _SubagentSummaryBodyState extends State<SubagentSummaryBody> {
           ),
       ],
       if (output.isNotEmpty) ...[
-        (c) => section('Recent output'),
+        (c) => section(l10n.uiRecentOutput),
         (c) => Panel(
           child: Text(output.join('\n'), style: Mono.small.copyWith(color: ds.textSecondary)),
         ),
@@ -573,11 +577,11 @@ class _SubagentSummaryBodyState extends State<SubagentSummaryBody> {
           child: Text(visibleText(note), style: Type.secondary.copyWith(color: ds.textSecondary)),
         ),
       if (why != null && why.isNotEmpty) ...[
-        (c) => section('Why it stopped'),
+        (c) => section(l10n.uiWhyItStopped),
         (c) => Text(visibleText(why), style: Type.compact.copyWith(color: ds.dangerText)),
       ],
       if (doc != null) ...[
-        (c) => section('Result'),
+        (c) => section(l10n.uiResult),
         for (var i = 0; i < doc.blocks.length; i++)
           (c) => Padding(
             padding: EdgeInsets.only(top: gapBefore(i)),

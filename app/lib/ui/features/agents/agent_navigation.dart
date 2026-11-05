@@ -167,7 +167,7 @@ void swipeToAgent(BuildContext context, AgentRef agent, int delta) {
   final to = neighbourOf(context, agent, delta);
   if (to == null) {
     Haptics.tick();
-    final words = peekEndWords(next: delta > 0, working: agentsWorking(context));
+    final words = peekEndWords(next: delta > 0, working: agentsWorking(context), words: context.l10n);
     unawaited(SemanticsService.sendAnnouncement(View.of(context), words, Directionality.of(context)));
     return;
   }
@@ -282,7 +282,7 @@ Future<void> _open(
   final screen = _screenFor(context, agent, want, preconnect: preconnect);
   if (screen == null) {
     preconnect?.cancel();
-    showToast(context, 'That session is no longer available.');
+    showToast(context, context.l10n.uiThatSessionIsNoLongerAvailable);
     return;
   }
   final shows = switch (screen) {

@@ -122,10 +122,10 @@ class _ContentSelectionAreaState extends State<ContentSelectionArea> {
 }
 
 void copyMessage(BuildContext context, TranscriptMessage message) =>
-    copyText(context, messagePlainText(message), what: 'Message copied');
+    copyText(context, messagePlainText(message), what: context.l10n.uiMessageCopied);
 
 void copyMessageMarkdown(BuildContext context, TranscriptMessage message) =>
-    copyText(context, messageMarkdown(message), what: 'Markdown copied');
+    copyText(context, messageMarkdown(message), what: context.l10n.uiMarkdownCopied);
 
 /// The choice `Copy message` offers a screen reader: the text, or the Markdown
 /// source for an answer.

@@ -1,0 +1,36 @@
+{
+  "entries": [
+    {"key": "uiBlocked", "en": "blocked", "ja": "対応待ち"},
+    {"key": "uiSwitchAgent", "en": "Switch agent", "ja": "エージェントを切り替え"},
+    {"key": "uiNoPreviousAgent", "en": "No previous agent", "ja": "前のエージェントはありません"},
+    {"key": "uiAllCaughtUp", "en": "All caught up", "ja": "すべて確認済み"},
+    {
+      "key": "messageAllCaughtUpWorking",
+      "en": "All caught up · {p0} working",
+      "ja": "すべて確認済み · {p0}件が実行中",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "uiThatSessionIsNoLongerAvailable",
+      "en": "That session is no longer available.",
+      "ja": "そのセッションはもう利用できません。"
+    },
+    {"key": "uiAQuestionForYou", "en": "A question for you", "ja": "あなたへの質問"},
+    {"key": "uiPermissionNeeded", "en": "Permission needed", "ja": "許可が必要"},
+    {"key": "messageIdleJobs", "en": "idle · jobs {p0}", "ja": "待機 · ジョブ{p0}", "placeholders": {"p0": "String"}},
+    {"key": "uiLinkConnecting", "en": "connecting", "ja": "接続中"},
+    {"key": "uiLinkReconnecting", "en": "reconnecting", "ja": "再接続中"},
+    {"key": "uiLinkEnded", "en": "ended", "ja": "終了"},
+    {"key": "uiPickAnAnswerAbove", "en": "Pick an answer above", "ja": "上の回答を選んでください"},
+    {
+      "key": "messageCouldnTSend",
+      "en": "Couldn’t send: {p0}",
+      "ja": "送信できませんでした：{p0}",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "uiUnknownError", "en": "unknown error", "ja": "不明なエラー"},
+    {"key": "messageSent", "en": "Sent: {p0}", "ja": "送信しました：{p0}", "placeholders": {"p0": "String"}},
+    {"key": "uiAnswerOneByOne", "en": "Answer one by one", "ja": "1件ずつ回答"},
+    {"key": "messageQuiet", "en": "quiet {p0}", "ja": "{p0}静か", "placeholders": {"p0": "String"}}
+  ]
+}

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import '../../../data/acp/session_state.dart' show AgentPhase;
 import '../../../data/acp/background/background_work.dart';
 import '../../../data/repositories/agent_session.dart';
@@ -42,7 +44,7 @@ class BackgroundStrip extends StatelessWidget {
     same: _same,
     builder: (context, snap) {
       final (work, waiting, turnRunning, live) = snap;
-      final text = stripText(work, waiting: waiting, turnRunning: turnRunning);
+      final text = stripText(work, waiting: waiting, turnRunning: turnRunning, l10n: context.l10n);
       if (text == null) return const SizedBox(width: double.infinity);
       return HideWhenCompact(
         child: Padding(
@@ -50,7 +52,7 @@ class BackgroundStrip extends StatelessWidget {
           child: _StripRow(
             text: text,
             live: live,
-            semantics: stripSemantics(work, waiting: waiting, turnRunning: turnRunning),
+            semantics: stripSemantics(work, waiting: waiting, turnRunning: turnRunning, l10n: context.l10n),
             onTap: () => unawaited(showBackgroundWork(context, session)),
           ),
         ),
@@ -133,15 +135,17 @@ class BackgroundChip extends StatelessWidget {
       same: (a, b) => _same(a.$1, b.$1) && a.$2 == b.$2,
       builder: (context, v) {
         final ((work, waiting, turnRunning, _), besideSubagents) = v;
-        if (stripText(work, waiting: waiting, turnRunning: turnRunning) == null) return const SizedBox.shrink();
+        if (stripText(work, waiting: waiting, turnRunning: turnRunning, l10n: context.l10n) == null) {
+          return const SizedBox.shrink();
+        }
         return Padding(
           // The bar's row places the chips; this one follows the subagents chip.
           padding: besideSubagents
               ? const EdgeInsets.only(left: Gap.sm, bottom: Gap.hair)
               : const EdgeInsets.only(bottom: Gap.hair),
           child: AppChip(
-            label: chipLabel(work),
-            semanticLabel: stripSemantics(work, waiting: waiting, turnRunning: turnRunning),
+            label: chipLabel(work, context.l10n),
+            semanticLabel: stripSemantics(work, waiting: waiting, turnRunning: turnRunning, l10n: context.l10n),
             leading: Icon(LucideIcons.layers, size: IconSize.inline, color: context.ds.textSecondary),
             onTap: () => unawaited(showBackgroundWork(context, session)),
           ),

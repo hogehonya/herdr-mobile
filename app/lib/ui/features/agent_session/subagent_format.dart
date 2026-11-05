@@ -4,6 +4,7 @@ import '../../../data/acp/subagents/subagent_run.dart';
 import '../../../data/acp/turns/plain_text.dart' show safeEnd;
 import '../../../data/words/elapsed.dart';
 import '../../../data/words/plural.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../render/visible_text.dart';
 
 /// How a subagent shows itself: one tone per state the person can tell apart.
@@ -57,7 +58,8 @@ Set<String> blockedRunIds(AgentSessionState state) {
 bool runsAreLive(AgentSessionState state, {required bool linkLive}) => linkLive && !state.disconnected;
 
 /// `7 tools`, `1 tool`; null for none.
-String? toolsWord(int count) => count <= 0 ? null : countOf(count, 'tool');
+String? toolsWord(int count, [AppLocalizations? l10n]) =>
+    count <= 0 ? null : (l10n?.messageToolCount(count) ?? countOf(count, 'tool'));
 
 /// How long [run] has run, as best known. A run that is active and live
 /// counts from when this client first saw it ([now] - `startedAt`), else it
@@ -84,28 +86,34 @@ Duration? runElapsed(SubagentRun run, DateTime now, {required bool live}) {
 ///
 /// [withType] is false where the agent type is already said (the drill-in's
 /// bar subtitle).
-String runLine(SubagentRun run, RunTone tone, {required DateTime now, bool withType = true}) {
+String runLine(SubagentRun run, RunTone tone, {required DateTime now, bool withType = true, AppLocalizations? l10n}) {
   final live = tone != RunTone.stale;
   final elapsed = runElapsed(run, now, live: live);
   final time = elapsed == null ? null : Elapsed.compact(elapsed);
-  final tools = toolsWord(run.toolCount);
+  final tools = toolsWord(run.toolCount, l10n);
   final last = _lastTool(run);
   final type = withType ? _clean(run.agentType) : null;
   final retry = run.retry;
   final parts = switch (tone) {
-    RunTone.waitingForYou => ['Needs you', ?tools],
-    RunTone.starting => ['starting', ?time],
+    RunTone.waitingForYou => [l10n?.uiNeedsYou ?? 'Needs you', ?tools],
+    RunTone.starting => [l10n?.uiStartingWord ?? 'starting', ?time],
     RunTone.running => [
-      time == null ? 'running' : 'running $time',
-      if (retry != null) retry.maxAttempts == null ? 'retrying' : 'retrying ${retry.attempt} of ${retry.maxAttempts}',
+      time == null
+          ? (l10n?.uiRunningWord ?? 'running')
+          : (l10n?.messageRunningFor(time) ?? 'running $time'),
+      if (retry != null)
+        retry.maxAttempts == null
+            ? (l10n?.uiRetrying ?? 'retrying')
+            : (l10n?.messageRetryingAttempt('${retry.attempt}', '${retry.maxAttempts}') ??
+                  'retrying ${retry.attempt} of ${retry.maxAttempts}'),
       if (run.percent != null) '${run.percent}%',
       ?last,
       ?tools,
     ],
-    RunTone.stale => ['was running', ?time, ?last, ?tools],
-    RunTone.done => [?type, 'done', ?time, ?tools],
-    RunTone.failed => [?type, 'failed', ?time, ?tools],
-    RunTone.cancelled => [?type, 'cancelled', ?time, ?tools],
+    RunTone.stale => [l10n?.uiWasRunningWord ?? 'was running', ?time, ?last, ?tools],
+    RunTone.done => [?type, l10n?.uiDoneWord ?? 'done', ?time, ?tools],
+    RunTone.failed => [?type, l10n?.uiFailed ?? 'failed', ?time, ?tools],
+    RunTone.cancelled => [?type, l10n?.uiCancelled ?? 'cancelled', ?time, ?tools],
   };
   return parts.join(' · ');
 }
@@ -144,9 +152,9 @@ String? failureLine(SubagentRun run, {int max = 160}) {
 
 /// The title of a run as shown: its description, with a fallback when the
 /// agent gave none.
-String runTitle(SubagentRun run) {
+String runTitle(SubagentRun run, [AppLocalizations? l10n]) {
   final t = _clean(run.title) ?? _clean(run.name) ?? _clean(run.agentType);
-  return t ?? 'Subagent';
+  return t ?? (l10n?.uiSubagent ?? 'Subagent');
 }
 
 // ---------------------------------------------------------------------------
@@ -242,7 +250,12 @@ Set<String> attentionToolIds(AgentSessionView session) {
 
 /// `3 subagents · 2 running`, `3 subagents · 1 failed`, `3 subagents · all
 /// done`: counts of what the group's runs are, by tone ([toneOf]).
-String groupTitle(List<SubagentRun> runs, Set<String> blocked, {bool live = true}) {
+String groupTitle(
+  List<SubagentRun> runs,
+  Set<String> blocked, {
+  bool live = true,
+  AppLocalizations? l10n,
+}) {
   var running = 0, starting = 0, stale = 0, failed = 0, cancelled = 0, waitingForYou = 0;
   for (final r in runs) {
     switch (toneOf(r, blocked: blocked, live: live)) {
@@ -263,15 +276,16 @@ String groupTitle(List<SubagentRun> runs, Set<String> blocked, {bool live = true
     }
   }
   final parts = [
-    countOf(runs.length, 'subagent'),
-    if (running > 0) '$running running',
-    if (waitingForYou > 0) needYou(waitingForYou),
-    if (starting > 0) '$starting starting',
-    if (stale > 0) '$stale not updating',
-    if (failed > 0) '$failed failed',
-    if (cancelled > 0) '$cancelled cancelled',
+    l10n?.messageSubagentCount(runs.length) ?? countOf(runs.length, 'subagent'),
+    if (running > 0) l10n?.messageCountRunning('$running') ?? '$running running',
+    if (waitingForYou > 0) l10n?.messageNeedYouCount(waitingForYou) ?? needYou(waitingForYou),
+    if (starting > 0) l10n?.messageStartingCount('$starting') ?? '$starting starting',
+    if (stale > 0) l10n?.messageNotUpdatingCount('$stale') ?? '$stale not updating',
+    if (failed > 0) l10n?.messageFailedCount('$failed') ?? '$failed failed',
+    if (cancelled > 0) l10n?.messageCancelledCount('$cancelled') ?? '$cancelled cancelled',
   ];
-  return parts.length == 1 ? '${parts.first} · all done' : parts.join(' · ');
+  if (parts.length == 1) return '${parts.first} · ${l10n?.uiAllDone ?? 'all done'}';
+  return parts.join(' · ');
 }
 
 // ---------------------------------------------------------------------------
@@ -284,7 +298,15 @@ enum RosterSection {
   finished('Done');
 
   const RosterSection(this.title);
+
+  /// The words it goes by when no [AppLocalizations] is at hand.
   final String title;
+
+  String label(AppLocalizations l10n) => switch (this) {
+    RosterSection.waiting => l10n.uiWaiting,
+    RosterSection.running => l10n.uiRunning,
+    RosterSection.finished => l10n.uiDone,
+  };
 }
 
 /// One line of the roster list: a section header or a run.

@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -8,10 +9,10 @@ import 'attach_kit.dart';
 import 'tray.dart';
 
 extension AttachTabLook on AttachTab {
-  String get label => switch (this) {
-    AttachTab.gallery => 'Gallery',
-    AttachTab.files => 'Files',
-    AttachTab.host => 'Machine',
+  String label(AppLocalizations l10n) => switch (this) {
+    AttachTab.gallery => l10n.uiGallery,
+    AttachTab.files => l10n.uiFiles,
+    AttachTab.host => l10n.uiMachine,
   };
 
   IconData get icon => switch (this) {
@@ -21,10 +22,10 @@ extension AttachTabLook on AttachTab {
   };
 
   /// What the tab holds, for a screen reader.
-  String get hint => switch (this) {
-    AttachTab.gallery => 'Photos on this phone',
-    AttachTab.files => 'Files on this phone',
-    AttachTab.host => 'Files on the machine',
+  String hint(AppLocalizations l10n) => switch (this) {
+    AttachTab.gallery => l10n.uiPhotosOnThisPhone,
+    AttachTab.files => l10n.uiFilesOnThisPhone,
+    AttachTab.host => l10n.uiFilesOnTheMachine,
   };
 }
 
@@ -70,12 +71,13 @@ class _TabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ds = context.ds;
+    final l10n = context.l10n;
     return PressBuilder(
       onTap: onTap,
       haptic: !selected,
       scale: PressScale.chip,
       selected: selected,
-      semanticLabel: '${tab.label}, ${tab.hint}',
+      semanticLabel: '${tab.label(l10n)}, ${tab.hint(l10n)}',
       builder: (context, pressed) => AnimatedContainer(
         duration: Motion.pressing(pressed),
         curve: Motion.easeOut,
@@ -93,7 +95,7 @@ class _TabItem extends StatelessWidget {
             const SizedBox(width: Gap.sm),
             Flexible(
               child: Text(
-                tab.label,
+                tab.label(l10n),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Type.label.copyWith(color: selected ? ds.accentText : ds.textSecondary),

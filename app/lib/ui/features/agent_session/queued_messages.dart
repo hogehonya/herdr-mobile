@@ -57,7 +57,7 @@ class _QueuedMessagesState extends State<QueuedMessages> {
         if (m.held) m,
     ];
     final shown = _all || queued.length <= queuedRowsShown ? queued : queued.take(queuedRowsShown).toList();
-    final reason = held.isEmpty ? null : visibleText(held.first.heldReason ?? 'Held. Resume to send.');
+    final reason = held.isEmpty ? null : visibleText(held.first.heldReason ?? context.l10n.uiHeldResumeToSend);
     return Padding(
       padding: const EdgeInsets.only(bottom: Gap.sm),
       child: Column(
@@ -290,7 +290,7 @@ class _EditQueuedState extends State<_EditQueued> {
                 keyboardType: TextInputType.multiline,
                 autofocus: true,
                 helper: gone
-                    ? 'Already sent. It can no longer be changed.'
+                    ? context.l10n.uiAlreadySentItCanNoLongerBeChanged
                     : attachments > 0
                     ? '+ ${countOf(attachments, 'attachment')} stay with it'
                     : null,

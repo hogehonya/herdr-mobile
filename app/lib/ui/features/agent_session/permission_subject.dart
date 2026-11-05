@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../../../data/acp/acp_models.dart';
 import '../../../data/repositories/command_risk.dart';
 import '../../../data/repositories/prompt_detector.dart' show longCommand;
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import '../../render/visible_text.dart';
 
 /// Most characters of a command, input or path list that are drawn. What is
@@ -48,25 +49,26 @@ class PermissionInfo {
 }
 
 /// The tool's title, else the request's own, else a plain name.
-String permissionTitle(PermissionRequest request) {
+String permissionTitle(PermissionRequest request, {AppLocalizations? l10n}) {
   final t = request.toolCall.title;
   if (t != null && t.trim().isNotEmpty) return t.trim();
   final own = request.title;
   if (own != null && own.trim().isNotEmpty) return own.trim();
-  return 'Permission request';
+  return l10n?.uiPermissionRequest ?? 'Permission request';
 }
 
 /// What the request shows as its subject (see [PermissionInfo.subject]).
-String permissionSubject(PermissionRequest request) => describePermission(request).subject;
+String permissionSubject(PermissionRequest request, {AppLocalizations? l10n}) =>
+    describePermission(request, l10n: l10n).subject;
 
 /// [dropPlan]: the request carries its plan as Markdown of its own (see
 /// `permissionEvidence`), so the drawn subject leaves the `plan` field out
 /// (the mono copy of a plan would say it twice). What is judged is not
 /// touched: the risk rules still read the plan and every other field.
-PermissionInfo describePermission(PermissionRequest request, {bool dropPlan = false}) {
+PermissionInfo describePermission(PermissionRequest request, {bool dropPlan = false, AppLocalizations? l10n}) {
   final call = request.toolCall.applyTo(null);
   final input = call.rawInput;
-  final title = visibleText(permissionTitle(request));
+  final title = visibleText(permissionTitle(request, l10n: l10n));
 
   // -- what is drawn -------------------------------------------------------
   final commands = _commandTexts(input, request.command);
@@ -82,9 +84,9 @@ PermissionInfo describePermission(PermissionRequest request, {bool dropPlan = fa
       drawn = input;
     }
     final compact = _compactInput(drawn);
-    raw = compact.isEmpty ? permissionTitle(request) : compact;
+    raw = compact.isEmpty ? permissionTitle(request, l10n: l10n) : compact;
   }
-  final shown = _cap(_foldBlankRuns(visibleText(raw)));
+  final shown = _cap(_foldBlankRuns(visibleText(raw), l10n), l10n);
 
   // -- what is judged ------------------------------------------------------
   final paths = <String>[];
@@ -237,7 +239,7 @@ String _oneValue(Object? v) {
 /// Runs of three or more blank lines (empty, or only spaces) become one row,
 /// `↵ 8 blank lines`: eight newlines must not scroll a command out of sight
 /// and leave blank paper in its place.
-String _foldBlankRuns(String text) {
+String _foldBlankRuns(String text, AppLocalizations? l10n) {
   if (!text.contains('\n\n')) return text;
   final lines = text.split('\n');
   final out = <String>[];
@@ -249,7 +251,7 @@ String _foldBlankRuns(String text) {
     }
     final run = j - i;
     if (run >= 3) {
-      out.add('\u21b5 $run blank lines');
+      out.add(l10n?.messageBlankLines('$run') ?? '\u21b5 $run blank lines');
       i = j;
     } else {
       out.add(lines[i]);
@@ -259,12 +261,12 @@ String _foldBlankRuns(String text) {
   return out.join('\n');
 }
 
-(String, int) _cap(String s) {
+(String, int) _cap(String s, AppLocalizations? l10n) {
   if (s.length <= subjectCharLimit) return (s, 0);
   var cut = subjectCharLimit;
   // Never end on half of a surrogate pair.
   final unit = s.codeUnitAt(cut - 1);
   if (unit >= 0xD800 && unit <= 0xDBFF) cut--;
   final hidden = s.length - cut;
-  return ('${s.substring(0, cut)}\n\u2026 $hidden more characters', hidden);
+  return ('${s.substring(0, cut)}\n${l10n?.messageMoreCharacters('$hidden') ?? '\u2026 $hidden more characters'}', hidden);
 }

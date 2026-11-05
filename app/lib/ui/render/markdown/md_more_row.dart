@@ -1,3 +1,5 @@
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -12,7 +14,7 @@ import 'package:herdr_mobile/ui/core/kit.dart';
 /// [action] and [onTap] go together; a row with only [onCopy] says how long the
 /// panel is and offers the copy.
 class MoreRow extends StatelessWidget {
-  const MoreRow({super.key, required this.label, this.action, this.onTap, this.onCopy, this.copyLabel = 'Copy'});
+  const MoreRow({super.key, required this.label, this.action, this.onTap, this.onCopy, this.copyLabel});
 
   final String label;
   final String? action;
@@ -21,8 +23,9 @@ class MoreRow extends StatelessWidget {
   /// Copies what the panel holds; the owner says "Copied" and ticks.
   final VoidCallback? onCopy;
 
-  /// What a screen reader calls the copy button ("Copy output").
-  final String copyLabel;
+  /// What a screen reader calls the copy button ("Copy output"); null says
+  /// "Copy".
+  final String? copyLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,7 @@ class MoreRow extends StatelessWidget {
         Expanded(child: more),
         PressBuilder(
           onTap: onCopy,
-          semanticLabel: copyLabel,
+          semanticLabel: copyLabel ?? context.l10n.uiCopy,
           minTapSize: kMinTap,
           builder: (context, pressed) =>
               Icon(LucideIcons.copy, size: IconSize.row, color: pressed ? ds.text : ds.textSecondary),

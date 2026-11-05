@@ -1,0 +1,79 @@
+{
+  "entries": [
+    {
+      "key": "messageUpToCharactersOneLine",
+      "en": "Up to {p0} characters, one line.",
+      "ja": "1行で{p0}文字まで。",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "uiReadyToInstall",
+      "en": "Ready to install",
+      "ja": "インストールできます"
+    },
+    {
+      "key": "uiUpdateFailedOpenToSeeWhy",
+      "en": "Update failed, open to see why",
+      "ja": "更新に失敗しました（開いて確認）"
+    },
+    {
+      "key": "uiAskingGithubCom",
+      "en": "Asking github.com…",
+      "ja": "github.comに問い合わせ中…"
+    },
+    {
+      "key": "messageVersionIsAvailableAtTheTopOfThisPage",
+      "en": "Version {p0} is available, at the top of this page.",
+      "ja": "{p0}を利用できます。このページの先頭に表示しています。",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "uiYouHaveTheLatestVersion",
+      "en": "You have the latest version.",
+      "ja": "最新バージョンです。"
+    },
+    {
+      "key": "uiAsksGithubComForTheNewestRelease",
+      "en": "Asks github.com for the newest release.",
+      "ja": "github.comに最新リリースを問い合わせます。"
+    },
+    {
+      "key": "uiCopyrightNotice",
+      "en": "Copyright © 2026 Tuan Nguyen. herdr mobile is free software under the GNU General Public License v3.0, and comes with no warranty. Its source is at github.com/tuan3w/herdr-mobile.",
+      "ja": "Copyright © 2026 Tuan Nguyen. herdr mobile は GNU General Public License v3.0 に基づく自由ソフトウェアであり、無保証で提供されます。ソースは github.com/tuan3w/herdr-mobile にあります。"
+    },
+    {
+      "key": "uiUntitledSession",
+      "en": "Untitled session",
+      "ja": "無題のセッション"
+    },
+    {
+      "key": "uiNoMessages",
+      "en": "No messages",
+      "ja": "メッセージなし"
+    },
+    {
+      "key": "message1Message",
+      "en": "1 message",
+      "ja": "1件のメッセージ"
+    },
+    {
+      "key": "messageMessages",
+      "en": "{p0} messages",
+      "ja": "{p0}件のメッセージ",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "messageAskingWhichAgentsItHas",
+      "en": "Asking {p0} which agents it has…",
+      "ja": "{p0}で使えるエージェントを確認中…",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "messageReadingWhatRemembers",
+      "en": "Reading what {p0} remembers…",
+      "ja": "{p0}の記録を読み込み中…",
+      "placeholders": {"p0": "String"}
+    }
+  ]
+}

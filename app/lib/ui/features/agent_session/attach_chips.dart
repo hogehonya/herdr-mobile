@@ -80,7 +80,7 @@ Future<void> _open(BuildContext context, List<Attachment> all, Attachment at) {
           id: 'attachment:${a.id}',
           name: visibleText(a.label),
           mime: 'image/jpeg',
-          origin: 'Attached to your message (what is sent)',
+          origin: context.l10n.uiAttachedToYourMessageWhatIsSent,
           source: MemoryPhotoSource(() async => a.thumb!, size: a.thumb!.length),
         ),
     ],
@@ -99,20 +99,22 @@ class _Chip extends StatelessWidget {
   final VoidCallback? onOpen;
 
   /// The second line, without the live percentage of an upload.
-  String _status(double? progress) {
+  String _status(BuildContext context, double? progress) {
     final a = attachment;
     switch (a.phase) {
       case AttachPhase.preparing:
-        return 'Preparing\u2026';
+        return context.l10n.uiPreparing;
       case AttachPhase.uploading:
         final pct = ((progress ?? 0) * 100).floor();
-        return 'Uploading $pct%${a.size == null ? '' : ' \u00b7 ${formatBytes(a.size)}'}';
+        return a.size == null
+            ? context.l10n.messageUploadingPercent('$pct')
+            : context.l10n.messageUploadingPercentWithSize('$pct', formatBytes(a.size!));
       case AttachPhase.failed:
-        return a.error ?? 'Upload failed';
+        return a.error ?? context.l10n.uiUploadFailed;
       case AttachPhase.ready:
         if (a.note != null) return a.note!;
         if (a.kind == AttachmentKind.image) return formatBytes(a.thumb?.length);
-        return a.embedded ? 'Text included' : 'Sent as a path';
+        return a.embedded ? context.l10n.uiTextIncluded : context.l10n.uiSentAsAPath;
     }
   }
 
@@ -122,8 +124,8 @@ class _Chip extends StatelessWidget {
     final a = attachment;
     final label = visibleText(a.label);
     final progress = a.progress;
-    Widget status(double? value) => Text(
-      _status(value),
+    Widget status(BuildContext context, double? value) => Text(
+      _status(context, value),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: Type.caption.copyWith(color: a.failed ? ds.dangerText : ds.textMuted),
@@ -131,7 +133,7 @@ class _Chip extends StatelessWidget {
     return Semantics(
       container: true,
       label:
-          '${a.kind == AttachmentKind.image ? context.l10n.uiPicture : context.l10n.uiFile} $label, ${_status(progress?.value)}',
+          '${a.kind == AttachmentKind.image ? context.l10n.uiPicture : context.l10n.uiFile} $label, ${_status(context, progress?.value)}',
       child: DecoratedBox(
         decoration: BoxDecoration(color: ds.fill, borderRadius: BorderRadius.circular(Radii.sm)),
         child: ConstrainedBox(
@@ -167,10 +169,10 @@ class _Chip extends StatelessWidget {
                             if (progress != null && a.uploading)
                               ValueListenableBuilder<double>(
                                 valueListenable: progress,
-                                builder: (context, v, _) => status(v),
+                                builder: (context, v, _) => status(context, v),
                               )
                             else
-                              status(null),
+                              status(context, null),
                           ],
                         ),
                       ),

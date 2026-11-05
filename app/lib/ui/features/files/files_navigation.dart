@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/models/remote_file.dart';
 import '../../../data/repositories/machine_connection.dart';
 import '../../../data/repositories/path_finder.dart';
 import '../../../data/words/plural.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
 
@@ -146,6 +148,7 @@ Future<PathResolution> resolveRemotePath(
   bool search = false,
   SearchCancel? cancel,
   void Function(String what)? onLooking,
+  AppLocalizations? l10n,
 }) async {
   final loc = RemotePath.splitLocation(path);
   String? firstAbs;
@@ -171,16 +174,18 @@ Future<PathResolution> resolveRemotePath(
     final stripped = !RemotePath.isAbsolute(text) && text.length > 2 && (text.startsWith('a/') || text.startsWith('b/'))
         ? text.substring(2)
         : null;
-    onLooking?.call('Looking in other checkouts…');
+    onLooking?.call(l10n?.uiLookingInOtherCheckouts ?? 'Looking in other checkouts…');
     final others = await finder.inWorktrees([rel, ?stripped], cwd!, token);
     worktrees = others.worktreesLooked;
-    if (others.candidates.isNotEmpty) return _choose(others.candidates, line ?? loc.line);
+    if (others.candidates.isNotEmpty) return _choose(others.candidates, line ?? loc.line, l10n);
     final name = RemotePath.basename(rel);
     if (!token.isCancelled && (search || PathFinder.isDistinctive(name))) {
-      onLooking?.call('Searching $folder for $name…');
+      onLooking?.call(
+        (folder == null ? null : l10n?.messageSearchingFor(folder, name)) ?? 'Searching $folder for $name…',
+      );
       final named = await finder.byName(name, cwd, token);
       searched = true;
-      if (named.candidates.isNotEmpty) return _choose(named.candidates, line ?? loc.line);
+      if (named.candidates.isNotEmpty) return _choose(named.candidates, line ?? loc.line, l10n);
     }
   }
   throw PathNotFound(
@@ -190,12 +195,13 @@ Future<PathResolution> resolveRemotePath(
   );
 }
 
-PathResolution _choose(List<PathCandidate> found, int? line) {
+PathResolution _choose(List<PathCandidate> found, int? line, AppLocalizations? l10n) {
   if (found.length > 1) return PathChoices(found, line);
   final one = found.single;
+  final folder = one.folder == '.' ? one.rootName : one.folder;
   final from = switch (one.source) {
-    CandidateSource.worktree => 'From worktree ${one.rootName}',
-    CandidateSource.search => 'Found in ${one.folder == '.' ? one.rootName : one.folder}',
+    CandidateSource.worktree => l10n?.messageFromWorktree(one.rootName) ?? 'From worktree ${one.rootName}',
+    CandidateSource.search => l10n?.messageFoundIn(folder) ?? 'Found in $folder',
   };
   return PathFound(one.stat, line, from: from);
 }
@@ -218,7 +224,7 @@ Future<void> openRemoteFile(
 }) async {
   final navigator = Navigator.of(context);
   if (!machineSupportsFiles(machine)) {
-    Toaster.of(context).show('Files are not available on this machine.', kind: ToastKind.failed);
+    Toaster.of(context).show(context.l10n.uiFilesAreNotAvailableOnThisMachine, kind: ToastKind.failed);
     return;
   }
   // The keyboard would come back with Back, over the history someone is reading.
@@ -243,7 +249,7 @@ Future<void> openRemoteFile(
 Future<void> openFileBrowser(BuildContext context, MachineConnection machine, {String? startDir}) async {
   final navigator = Navigator.of(context);
   if (!machineSupportsFiles(machine)) {
-    Toaster.of(context).show('Files are not available on this machine.', kind: ToastKind.failed);
+    Toaster.of(context).show(context.l10n.uiFilesAreNotAvailableOnThisMachine, kind: ToastKind.failed);
     return;
   }
   final key = (navigator, 'browser');
@@ -341,6 +347,7 @@ class _OpenPathScreenState extends State<_OpenPathScreen> {
         line: widget.line,
         search: search,
         cancel: cancel,
+        l10n: context.l10n,
         onLooking: (what) {
           if (mounted && epoch == _epoch) setState(() => _looking = what);
         },
@@ -372,8 +379,8 @@ class _OpenPathScreenState extends State<_OpenPathScreen> {
           open(
             PathFound(picked.stat, line, from: null),
             picked.source == CandidateSource.worktree
-                ? 'From worktree ${picked.rootName}'
-                : 'Found in ${picked.folder}',
+                ? context.l10n.messageFromWorktree(picked.rootName)
+                : context.l10n.messageFoundIn(picked.folder),
           );
       }
     } on RemoteFileException catch (e) {

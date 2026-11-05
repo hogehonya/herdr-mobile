@@ -6,6 +6,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+
 import '../../../data/acp/acp_models.dart';
 import '../../../data/observed/log_picture.dart';
 import '../../../data/services/disk_cache.dart';
@@ -124,7 +126,7 @@ class _LogImageViewState extends State<LogImageView> {
       // The size first: at a large text size the type may wrap or be cut, and the
       // size is what tells the person whether a tap is worth it.
       detail: [if (size != null) formatBytes(size), if (block.mimeType.isNotEmpty) block.mimeType].join(' · '),
-      note: scope == null ? 'Not available here' : 'Tap to load',
+      note: scope == null ? context.l10n.uiNotAvailableHere : context.l10n.uiTapToLoad,
       muted: scope == null,
       onTap: scope == null ? null : _load,
     );
@@ -153,7 +155,7 @@ class ImageReferenceLine extends StatelessWidget {
       case null:
         detail = uri.length > 80 ? '${uri.substring(0, 80)}…' : uri;
     }
-    final note = problem ?? (uri.isEmpty ? 'The agent sent no picture data.' : null);
+    final note = problem ?? (uri.isEmpty ? context.l10n.uiTheAgentSentNoPictureData : null);
     return ContentChip(
       icon: HerdrIcons.picture,
       title: context.l10n.uiImage,
@@ -188,14 +190,18 @@ class _InlineImageState extends State<_InlineImage> {
   // A retry is a tap too.
   var _retried = false;
 
+  var _held = false;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_held) return;
+    _held = true;
     _hold();
   }
 
   void _hold() {
-    _entry = widget.cache.acquire(widget.block, fetch: widget.fetch)..addListener(_changed);
+    _entry = widget.cache.acquire(widget.block, fetch: widget.fetch, words: context.l10n)..addListener(_changed);
   }
 
   void _letGo() {
@@ -237,7 +243,7 @@ class _InlineImageState extends State<_InlineImage> {
         icon: HerdrIcons.picture,
         title: context.l10n.uiImage,
         detail: widget.block.mimeType,
-        note: retryable ? '$problem Tap to retry.' : problem,
+        note: retryable ? context.l10n.messageTapToRetry(problem) : problem,
         muted: !retryable,
         onTap: retryable
             ? () {
@@ -280,7 +286,7 @@ class _InlineImageState extends State<_InlineImage> {
               Haptics.tick();
               unawaited(showContentImage(context, widget.block));
             },
-            semanticLabel: imageSemanticLabel(widget.block, name),
+            semanticLabel: imageSemanticLabel(widget.block, name, words: context.l10n),
             minTapSize: kMinTap,
             builder: (context, pressed) => _Frame(
               width: size.width,
@@ -339,8 +345,11 @@ class _Frame extends StatelessWidget {
 }
 
 /// `Image, image/png, chart.png`: what a screen reader says for a picture.
-String imageSemanticLabel(ImageBlock block, String name) =>
-    ['Image', if (block.mimeType.isNotEmpty) block.mimeType, if (name.isNotEmpty) visibleText(name)].join(', ');
+String imageSemanticLabel(ImageBlock block, String name, {AppLocalizations? words}) => [
+  words?.uiImage ?? 'Image',
+  if (block.mimeType.isNotEmpty) block.mimeType,
+  if (name.isNotEmpty) visibleText(name),
+].join(', ');
 
 /// The frame an image that has not loaded (or cannot) holds.
 const _placeholder = Size(120, 96);

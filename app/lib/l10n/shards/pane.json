@@ -1,0 +1,57 @@
+{
+  "entries": [
+    { "key": "uiThatMachineWasRemoved", "en": "That machine was removed", "ja": "そのマシンは削除されました" },
+    { "key": "messageIsOffline", "en": "{p0} is offline", "ja": "{p0}はオフラインです", "placeholders": { "p0": "String" } },
+    { "key": "uiThePaneIsGone", "en": "The pane is gone", "ja": "ペインはもうありません" },
+    { "key": "uiTitleCopied", "en": "Title copied", "ja": "タイトルをコピーしました" },
+    { "key": "uiPaneIdCopied", "en": "Pane id copied", "ja": "ペインIDをコピーしました" },
+    { "key": "uiPickAnAnswerAbove", "en": "Pick an answer above", "ja": "上から回答を選んでください" },
+    {
+      "key": "uiThisPaneNoLongerRunsAnAgent",
+      "en": "This pane no longer runs an agent. Remove the attachments to send the line.",
+      "ja": "このペインではエージェントが動いていません。送信するには添付を外してください。"
+    },
+    { "key": "uiPaneClosed", "en": "Pane closed", "ja": "ペインは閉じています" },
+    { "key": "uiWaitingForSignInApproval", "en": "Waiting for sign-in approval", "ja": "サインインの承認待ち" },
+    { "key": "uiOfflineReconnecting", "en": "Offline · reconnecting", "ja": "オフライン · 再接続中" },
+    { "key": "uiNeedsAttentionSeeAbove", "en": "Needs attention · see above", "ja": "対応が必要 · 上を確認" },
+    { "key": "uiMachineDisabled", "en": "Machine disabled", "ja": "マシンは無効" },
+    {
+      "key": "messageThisAddressIsOnOpenPage",
+      "en": "This address is on {p0}. Open page shows it in herdr, over your SSH connection.",
+      "ja": "このアドレスは{p0}上にあります。ページを開くで、SSH接続経由でherdrに表示します。",
+      "placeholders": { "p0": "String" }
+    },
+    {
+      "key": "uiHTTPSOnTheMachineCanTBeOpened",
+      "en": "HTTPS on the machine can’t be opened on the phone yet.",
+      "ja": "マシン上のHTTPSはまだこの端末で開けません。"
+    },
+    {
+      "key": "uiThisAddressIsOnTheMachineNotYourPhone",
+      "en": "This address is on the machine, not your phone.",
+      "ja": "このアドレスはマシン上のもので、この端末のものではありません。"
+    },
+    { "key": "uiThisLinkIsnTEncrypted", "en": "This link isn’t encrypted.", "ja": "このリンクは暗号化されていません。" },
+    { "key": "uiTypeACommand", "en": "Type a command…", "ja": "コマンドを入力…" },
+    {
+      "key": "messageMessage",
+      "en": "Message {p0}…",
+      "ja": "{p0}にメッセージ…",
+      "placeholders": { "p0": "String" }
+    },
+    { "key": "uiItsSettings", "en": "its settings", "ja": "その設定" },
+    { "key": "uiProject", "en": "project", "ja": "プロジェクト" },
+    { "key": "uiUser", "en": "user", "ja": "ユーザー" },
+    { "key": "uiLeft", "en": "Left", "ja": "左へ" },
+    { "key": "uiRight", "en": "Right", "ja": "右へ" },
+    { "key": "uiSpace", "en": "Space", "ja": "スペース" },
+    { "key": "uiNewLine", "en": "New line", "ja": "改行" },
+    {
+      "key": "messageStale",
+      "en": "stale · {p0}",
+      "ja": "未更新 · {p0}",
+      "placeholders": { "p0": "String" }
+    }
+  ]
+}

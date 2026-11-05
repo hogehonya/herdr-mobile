@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 
 import 'dart:convert';
@@ -10,7 +11,6 @@ import '../../../data/acp/session_state.dart';
 import '../../../data/models/herdr_models.dart' show AgentStatus;
 import '../../../data/acp/turns/turns.dart';
 import '../../../data/acp/turns/plain_text.dart' show safeEnd;
-import '../../../data/words/plural.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
 
@@ -47,33 +47,33 @@ IconData toolIcon(ToolKind kind) => switch (kind) {
   ToolKind.other => LucideIcons.wrench,
 };
 
-String toolKindLabel(ToolKind kind) => switch (kind) {
-  ToolKind.read => 'Read',
-  ToolKind.edit => 'Edit',
-  ToolKind.delete => 'Delete',
-  ToolKind.move => 'Move',
-  ToolKind.search => 'Search',
-  ToolKind.execute => 'Run',
-  ToolKind.think => 'Think',
-  ToolKind.fetch => 'Fetch',
-  ToolKind.switchMode => 'Switch mode',
-  ToolKind.other => 'Tool call',
+String toolKindLabel(ToolKind kind, [AppLocalizations? l10n]) => switch (kind) {
+  ToolKind.read => l10n?.uiRead ?? 'Read',
+  ToolKind.edit => l10n?.uiEdit ?? 'Edit',
+  ToolKind.delete => l10n?.uiDelete ?? 'Delete',
+  ToolKind.move => l10n?.uiMove ?? 'Move',
+  ToolKind.search => l10n?.uiSearch ?? 'Search',
+  ToolKind.execute => l10n?.uiRun ?? 'Run',
+  ToolKind.think => l10n?.uiThink ?? 'Think',
+  ToolKind.fetch => l10n?.uiFetch ?? 'Fetch',
+  ToolKind.switchMode => l10n?.uiSwitchMode ?? 'Switch mode',
+  ToolKind.other => l10n?.uiToolCall ?? 'Tool call',
 };
 
-String toolStatusWord(ToolStatus status) => switch (status) {
-  ToolStatus.pending => 'pending',
-  ToolStatus.inProgress => 'running',
-  ToolStatus.completed => 'done',
-  ToolStatus.failed => 'failed',
-  ToolStatus.cancelled => 'cancelled',
+String toolStatusWord(ToolStatus status, [AppLocalizations? l10n]) => switch (status) {
+  ToolStatus.pending => l10n?.uiPending ?? 'pending',
+  ToolStatus.inProgress => l10n?.uiRunningWord ?? 'running',
+  ToolStatus.completed => l10n?.uiDoneWord ?? 'done',
+  ToolStatus.failed => l10n?.uiFailed ?? 'failed',
+  ToolStatus.cancelled => l10n?.uiCancelled ?? 'cancelled',
 };
 
 /// The words a tool call goes by: its title, else its name, else its kind.
-String toolTitle(ToolCall call) {
+String toolTitle(ToolCall call, [AppLocalizations? l10n]) {
   if (call.title.trim().isNotEmpty) return visibleText(call.title.trim());
   final name = call.name;
   if (name != null && name.isNotEmpty) return visibleText(name);
-  return toolKindLabel(call.kind);
+  return toolKindLabel(call.kind, l10n);
 }
 
 /// The status of a tool call as a shape: empty ring (waiting), half ring
@@ -136,7 +136,7 @@ class ToolRow extends StatelessWidget {
     final summary = toolSummary(call);
     final failed = toolFailed(call);
     final state = failed ? ToolStatus.failed : call.status;
-    final title = toolTitle(call);
+    final title = toolTitle(call, context.l10n);
     final stats = summary.kind == ToolKind.edit && (summary.added ?? 0) + (summary.removed ?? 0) > 0;
     return Padding(
       padding: nested ? EdgeInsets.only(top: gap, left: Gap.xl) : EdgeInsets.only(top: gap),
@@ -147,7 +147,7 @@ class ToolRow extends StatelessWidget {
             expanded: open,
             child: PressRow(
               onTap: () => onToggle(rowKey),
-              semanticLabel: _toolLabel(summary, state, call.detailTrimmed),
+              semanticLabel: _toolLabel(summary, state, call.detailTrimmed, context.l10n),
               minHeight: kMinTap,
               padding: const EdgeInsets.symmetric(horizontal: Gap.xs, vertical: Gap.xs),
               child: Row(
@@ -248,10 +248,10 @@ class FoldRail extends StatelessWidget {
   }
 }
 
-String _toolLabel(ToolSummary summary, ToolStatus state, bool trimmed) {
-  final line = '${toolKindLabel(summary.kind)} ${visibleText(summary.plain)}';
-  final stated = state == ToolStatus.completed ? line : '$line, ${toolStatusWord(state)}';
-  return trimmed ? '$stated, details trimmed' : stated;
+String _toolLabel(ToolSummary summary, ToolStatus state, bool trimmed, AppLocalizations l10n) {
+  final line = '${toolKindLabel(summary.kind, l10n)} ${visibleText(summary.plain)}';
+  final stated = state == ToolStatus.completed ? line : '$line, ${toolStatusWord(state, l10n)}';
+  return trimmed ? '$stated, ${l10n.uiDetailsTrimmed}' : stated;
 }
 
 /// The words of a tool row, one line (two for a failed command).
@@ -277,7 +277,8 @@ class _ToolLine extends StatelessWidget {
         text: text,
         style: mono,
         children: [
-          if (summary.extraLines > 0) TextSpan(text: '  +${countOf(summary.extraLines, 'line')}', style: muted),
+          if (summary.extraLines > 0)
+            TextSpan(text: '  +${context.l10n.messageLineCount(summary.extraLines)}', style: muted),
           if (trimmed) TextSpan(text: context.l10n.uiDetailsTrimmed, style: muted),
         ],
       ),
@@ -285,7 +286,8 @@ class _ToolLine extends StatelessWidget {
         text: text,
         style: main,
         children: [
-          if (summary.hits != null) TextSpan(text: '  ${_hitsWords(summary.hits!)}', style: muted),
+          if (summary.hits != null)
+            TextSpan(text: '  ${_hitsWords(summary.hits!, context.l10n)}', style: muted),
           if (trimmed) TextSpan(text: context.l10n.uiDetailsTrimmed, style: muted),
         ],
       ),
@@ -302,8 +304,8 @@ class _ToolLine extends StatelessWidget {
     };
     final line = Text.rich(span, maxLines: 1, overflow: TextOverflow.ellipsis);
     final code = summary.signal != null
-        ? 'signal ${visibleText(summary.signal!)}'
-        : (summary.exitCode != null ? 'exit ${summary.exitCode}' : null);
+        ? context.l10n.messageSignalWord(visibleText(summary.signal!))
+        : (summary.exitCode != null ? context.l10n.messageExitCodeWord('${summary.exitCode}') : null);
     final why = summary.failure == null ? null : visibleText(summary.failure!);
     if (!failed || summary.kind != ToolKind.execute || (code == null && why == null)) return line;
     return Column(
@@ -336,7 +338,8 @@ class _ToolLine extends StatelessWidget {
   }
 }
 
-String _hitsWords(int hits) => hits == 0 ? 'no matches' : countOf(hits, 'match', 'matches');
+String _hitsWords(int hits, AppLocalizations l10n) =>
+    hits == 0 ? l10n.messageNoMatches : l10n.messageMatchCount(hits);
 
 // ---------------------------------------------------------------------------
 // the expanded body
@@ -380,6 +383,7 @@ class _NotePart extends _Part {
 }
 
 final _parts = Expando<List<_Part>>('tool parts');
+final _partsLang = Expando<String>('tool parts lang');
 final _diffParts = Expando<_DiffPart>('diff parts');
 
 _DiffPart _diffPart(ToolDiff diff) => _diffParts[diff] ??= _DiffPart(diff.path, diffLines(diff.oldText, diff.newText));
@@ -410,15 +414,17 @@ String compactJson(Object? value, {int max = 20000}) {
 
 /// "Exited with code 1." / "Stopped by signal SIGTERM." for a command that
 /// did not succeed.
-String exitWords(ToolOutput output) {
+String exitWords(ToolOutput output, [AppLocalizations? l10n]) {
   final signal = output.signal;
-  if (signal != null && signal.isNotEmpty) return 'Stopped by signal ${visibleText(signal)}.';
-  return 'Exited with code ${output.exitCode}.';
+  if (signal != null && signal.isNotEmpty) {
+    return l10n?.messageStoppedBySignal(visibleText(signal)) ?? 'Stopped by signal ${visibleText(signal)}.';
+  }
+  return l10n?.messageExitedWithCode('${output.exitCode}') ?? 'Exited with code ${output.exitCode}.';
 }
 
-List<_Part> _partsOf(ToolCall call) {
+List<_Part> _partsOf(ToolCall call, AppLocalizations l10n) {
   final cached = _parts[call];
-  if (cached != null) return cached;
+  if (cached != null && _partsLang[call] == l10n.localeName) return cached;
   final out = <_Part>[];
   final tail = call.kind == ToolKind.execute;
   final command = toolCommand(call);
@@ -431,8 +437,8 @@ List<_Part> _partsOf(ToolCall call) {
     if (text != null) {
       out.add(
         _TextPart(
-          textLines(text, fromEnd: tail),
-          label: tail ? 'Output' : null,
+          textLines(text, fromEnd: tail, l10n: l10n),
+          label: tail ? l10n.uiOutput : null,
           fromEnd: tail,
         ),
       );
@@ -444,20 +450,22 @@ List<_Part> _partsOf(ToolCall call) {
   final printed = call.output;
   void addPrinted(ToolOutput o) {
     if (o.text.isNotEmpty) {
-      final lines = textLines(terminalText(o.text), fromEnd: true);
+      final lines = textLines(terminalText(o.text), fromEnd: true, l10n: l10n);
       out.add(
         _TextPart(
-          [if (o.cutChars > 0) CodeLine('${countOf(o.cutChars, 'character')} not shown'), ...lines],
-          label: 'Output',
+          [if (o.cutChars > 0) CodeLine(l10n.messageCharactersNotShown(o.cutChars)), ...lines],
+          label: l10n.uiOutput,
           fromEnd: true,
         ),
       );
     }
-    if (o.progress.isNotEmpty) out.add(_TextPart(textLines(terminalText(o.progress)), label: 'Progress'));
+    if (o.progress.isNotEmpty) {
+      out.add(_TextPart(textLines(terminalText(o.progress)), label: l10n.uiProgress));
+    }
     if (o.failed) {
-      out.add(_NotePart(exitWords(o)));
+      out.add(_NotePart(exitWords(o, l10n)));
     } else if (o.text.isEmpty && o.progress.isEmpty && o.exited) {
-      out.add(const _NotePart('No output.'));
+      out.add(_NotePart(l10n.uiNoOutput));
     }
   }
 
@@ -488,12 +496,16 @@ List<_Part> _partsOf(ToolCall call) {
           // Nothing arrived in `_meta`: an agent that really keeps the output
           // in a terminal (`terminal/create`), or one still starting.
           out.add(
-            _NotePart(call.status.isFinished ? 'The output is in a terminal on the machine.' : 'Waiting for output…'),
+            _NotePart(
+              call.status.isFinished ? l10n.uiTheOutputIsInATerminalOnTheMachine : l10n.uiWaitingForOutput,
+            ),
           );
         }
       case UnknownToolContent(:final type):
         flush();
-        out.add(_NotePart('Content this app can’t show${type.isEmpty ? '' : ' ($type)'}.'));
+        out.add(
+          _NotePart('${l10n.uiContentThisAppCanTShow}${type.isEmpty ? '' : ' ($type)'}.'),
+        );
     }
   }
   flush();
@@ -510,20 +522,21 @@ List<_Part> _partsOf(ToolCall call) {
       if (text.trim().isNotEmpty) {
         out.add(
           _TextPart(
-            textLines(text, fromEnd: tail),
-            label: 'Output',
+            textLines(text, fromEnd: tail, l10n: l10n),
+            label: l10n.uiOutput,
             fromEnd: tail,
           ),
         );
       }
     } else if (command == null && call.rawInput != null) {
       final text = compactJson(call.rawInput);
-      if (text.isNotEmpty) out.add(_TextPart(textLines(text), label: 'Input'));
+      if (text.isNotEmpty) out.add(_TextPart(textLines(text, l10n: l10n), label: l10n.uiInput));
     }
   }
   // The host cut the output (and the rest of the heavy detail) of an old
   // call to keep its log small: say so where the output would be.
-  if (call.detailTrimmed) out.add(const _NotePart('Output trimmed'));
+  if (call.detailTrimmed) out.add(_NotePart(l10n.uiOutputTrimmed));
+  _partsLang[call] = l10n.localeName;
   return _parts[call] = out;
 }
 
@@ -539,15 +552,15 @@ class _ToolBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final ds = context.ds;
     final term = context.terminal;
-    final parts = _partsOf(call);
+    final parts = _partsOf(call, context.l10n);
 
     Widget panel(
       List<CodeLine> lines, {
       bool fromEnd = false,
       int cap = 40,
       String? body,
-      String copyLabel = 'Copy output',
-      String copied = 'Output copied',
+      String? copyLabel,
+      String? copied,
     }) => CodePanel(
       lines: lines,
       background: term.background,
@@ -557,8 +570,12 @@ class _ToolBody extends StatelessWidget {
       fromEnd: fromEnd,
       cap: cap,
       onToggleAll: onToggleAll,
-      onCopy: () => copyText(context, body ?? [for (final l in lines) l.text].join('\n'), what: copied),
-      copyLabel: copyLabel,
+      onCopy: () => copyText(
+        context,
+        body ?? [for (final l in lines) l.text].join('\n'),
+        what: copied ?? context.l10n.uiOutputCopied,
+      ),
+      copyLabel: copyLabel ?? context.l10n.uiCopyOutput,
     );
 
     Widget label(String text) => Padding(
@@ -575,13 +592,13 @@ class _ToolBody extends StatelessWidget {
           _CommandPart() => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              label('Command'),
+              label(context.l10n.uiCommand),
               panel(
-                textLines('\$ ${visibleText(part.command)}'),
+                textLines('\$ ${visibleText(part.command)}', l10n: context.l10n),
                 cap: 12,
                 body: part.command,
-                copyLabel: 'Copy command',
-                copied: 'Command copied',
+                copyLabel: context.l10n.uiCopyCommand,
+                copied: context.l10n.uiCommandCopied,
               ),
             ],
           ),
@@ -596,7 +613,7 @@ class _ToolBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               label(visibleText(part.path)),
-              panel(_colourDiff(part, term, context.ds), cap: 60, copyLabel: 'Copy diff'),
+              panel(_colourDiff(part, term, context.ds), cap: 60, copyLabel: context.l10n.uiCopyDiff),
             ],
           ),
           _BlockPart() => ContentBlockView(block: part.block, expanded: all, onToggle: onToggleAll),
@@ -673,9 +690,9 @@ class DiffPanel extends StatelessWidget {
           onCopy: () => copyText(
             context,
             [for (final l in _colourDiff(part, term, context.ds)) l.text].join('\n'),
-            what: 'Diff copied',
+            what: context.l10n.uiDiffCopied,
           ),
-          copyLabel: 'Copy diff',
+          copyLabel: context.l10n.uiCopyDiff,
         ),
       ],
     );

@@ -100,7 +100,7 @@ class _MdCodeBlockState extends State<MdCodeBlock> {
   /// button, where the eye is. The words are [copyText]'s, said only where
   /// the system does not say them itself.
   Future<void> _copy() async {
-    if (!await copyText(context, widget.code.text, what: 'Code copied')) return;
+    if (!await copyText(context, widget.code.text, what: context.l10n.uiCodeCopied)) return;
     if (!mounted) return;
     setState(() => _copied = true);
     _reset?.cancel();
@@ -133,9 +133,9 @@ class _MdCodeBlockState extends State<MdCodeBlock> {
     final charWidth = MediaQuery.textScalerOf(context).scale(style.fontSize!) * 0.6;
     final lineHeight = MediaQuery.textScalerOf(context).scale(style.fontSize!) * style.height!;
     final language = widget.code.language;
-    final label = StringBuffer('Code');
+    final label = StringBuffer(context.l10n.uiCode);
     if (language.isNotEmpty) label.write(', $language');
-    label.write(', $total ${total == 1 ? 'line' : 'lines'}');
+    label.write(', ${total == 1 ? context.l10n.uiLine : context.l10n.messageLines('$total')}');
 
     final Widget body;
     if (expanded && total > mdCodeBoundedFrom) {
@@ -186,7 +186,7 @@ class _MdCodeBlockState extends State<MdCodeBlock> {
     final more = over
         ? MoreRow(
             label: expanded ? context.l10n.messageLines('$total') : context.l10n.messageMoreLines('$hidden'),
-            action: expanded ? 'Show less' : 'Show all',
+            action: expanded ? context.l10n.uiShowLess : context.l10n.uiShowAll,
             onTap: widget.onToggleExpanded ?? () {},
           )
         : null;

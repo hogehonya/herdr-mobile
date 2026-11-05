@@ -75,7 +75,9 @@ class WorkingLabel extends StatelessWidget {
     return MinuteBuilder(
       builder: (context, now) {
         final at = since;
-        final text = at == null ? 'Working' : 'Working · ${Elapsed.compact(now.difference(at))}';
+        final text = at == null
+            ? context.l10n.uiWorking
+            : context.l10n.messageWorkingSince(Elapsed.compact(now.difference(at)));
         return Text(
           text,
           maxLines: 1,

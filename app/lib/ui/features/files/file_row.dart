@@ -5,8 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/models/remote_file.dart';
 import '../../../data/services/remote_files.dart';
 import '../../../data/words/elapsed.dart';
-
-import 'package:herdr_mobile/l10n/app_localizations.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
 
@@ -53,18 +52,18 @@ class FileRow extends StatelessWidget {
   /// has no selection at all.
   final bool? selected;
 
-  /// `12 KB · 3 min ago`, `Link → target`, `No permission`. The words follow
-  /// the phone's language; the size, the time and the target do not.
-  String subtitle(AppLocalizations l10n) {
+  /// `12 KB · 3 min ago`, `Link → target`, `No permission`.
+  String subtitle([AppLocalizations? l10n]) {
     final e = entry;
-    if (denied) return l10n.uiNoPermission;
-    final when = e.modified == null ? '' : formatAgo(e.modified!, now, l10n: l10n);
+    if (denied) return l10n?.uiNoPermission ?? 'No permission';
+    final when = e.modified == null ? '' : formatAgo(e.modified!, now);
     if (e.kind == RemoteEntryKind.link) {
       final to = e.linkTarget == null ? '' : ' → ${e.linkTarget}';
-      return e.isBrokenLink ? '${l10n.uiBrokenLink}$to' : '${l10n.uiLink}$to';
+      final kind = e.isBrokenLink ? l10n?.uiBrokenLink ?? 'Broken link' : l10n?.uiLink ?? 'Link';
+      return '$kind$to';
     }
     if (e.isDirectory) return when;
-    final size = formatBytes(e.size, l10n: l10n);
+    final size = formatBytes(e.size, l10n);
     return when.isEmpty ? size : '$size · $when';
   }
 

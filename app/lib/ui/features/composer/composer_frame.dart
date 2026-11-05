@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 
 import 'dart:async';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/ui/core/kit.dart';
 
 /// The one composer every terminal agent and chat shares: the chat's
@@ -35,12 +35,13 @@ void showComposerKeyboard(FocusNode focus) {
 /// The one composer placeholder: `Message Claude Code…` while the agent can
 /// be written to, else what is in the way ([linkWord]: `Offline`,
 /// `Connecting…`). [agent] is the agent's display name (`agentName`); null
-/// for a pane with no agent, where what is typed is a command. The English
-/// words are the default for callers outside the widget tree; a screen passes
-/// [l10n] so its app-owned words follow the phone's language.
-String composerHint(String? agent, {String? linkWord, AppLocalizations? l10n}) =>
-    linkWord ??
-    (agent == null ? l10n?.uiTypeACommand ?? 'Type a command…' : l10n?.messageMessageAgent(agent) ?? 'Message $agent…');
+/// for a pane with no agent, where what is typed is a command. [l10n] is
+/// optional so a caller outside the widget tree keeps the English words.
+String composerHint(String? agent, {String? linkWord, AppLocalizations? l10n}) {
+  if (linkWord != null) return linkWord;
+  if (agent == null) return l10n?.uiTypeACommand ?? 'Type a command…';
+  return l10n?.messageMessage(agent) ?? 'Message $agent…';
+}
 
 /// One line of the field is [inner] tall at any text size (the strut fixes the
 /// line). The field is a stadium of that height and the round buttons sit the

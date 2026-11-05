@@ -1,0 +1,294 @@
+{
+  "entries": [
+    {"key": "uiTheAgent", "en": "The agent", "ja": "エージェント"},
+    {"key": "messageWaitingForJobs", "en": "Waiting for jobs", "ja": "処理の完了待ち"},
+    {"key": "messageWaitingFor", "en": "Waiting for {p0}", "ja": "{p0}の完了待ち", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageContinuesByItselfWhenOneFinishes",
+      "en": "{p0} continues by itself when one finishes",
+      "ja": "{p0}は1件終わると自動で再開します",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "messageContinuesByItselfWhenItFinishes",
+      "en": "{p0} continues by itself when it finishes",
+      "ja": "{p0}は終わると自動で再開します",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "messageContinuesByItselfWhenAJobFinishes",
+      "en": "{p0} continues by itself when a job finishes.",
+      "ja": "{p0}は処理が終わると自動で再開します。",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "messageBackgroundWorkDetailsUnavailable", "en": "Background work · details unavailable", "ja": "バックグラウンドの処理 · 詳細不明"},
+    {
+      "key": "messageRunningInBackground",
+      "en": "{p0} running in background",
+      "ja": "{p0}件をバックグラウンドで実行中",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "messageCountRunning", "en": "{p0} running", "ja": "{p0}実行中", "placeholders": {"p0": "String"}},
+    {"key": "messageJobCount", "en": "{p0, plural, =1{1 job} other{{p0} jobs}}", "ja": "{p0}件", "placeholders": {"p0": "int"}},
+    {
+      "key": "messageSubagentCount",
+      "en": "{p0, plural, =1{1 subagent} other{{p0} subagents}}",
+      "ja": "サブエージェント{p0}件",
+      "placeholders": {"p0": "int"}
+    },
+    {"key": "uiJobs", "en": "Jobs", "ja": "処理"},
+    {"key": "uiDetailsUnavailable", "en": "details unavailable", "ja": "詳細不明"},
+    {"key": "uiDoubleTapToOpen", "en": "double tap to open", "ja": "ダブルタップで開く"},
+    {"key": "messageTurnStoppedJobsStillRunning", "en": "Turn stopped · jobs still running", "ja": "ターンを停止 · 処理は実行中"},
+    {
+      "key": "messageTurnStoppedStillRunning",
+      "en": "Turn stopped · {p0} still running",
+      "ja": "ターンを停止 · {p0}実行中",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "uiAskToStop", "en": "Ask to stop", "ja": "停止を依頼"},
+    {"key": "messageAskToStop", "en": "Ask {p0} to stop", "ja": "{p0}に停止を依頼", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageConfirmActivateAgainToConfirm",
+      "en": "Confirm: {p0} {p1}, activate again to confirm",
+      "ja": "確認: {p0} {p1}。もう一度操作で確定",
+      "placeholders": {"p0": "String", "p1": "String"}
+    },
+    {
+      "key": "messageHoldToConfirm",
+      "en": "{p0} {p1}, hold to confirm",
+      "ja": "{p0} {p1}。長押しで確定",
+      "placeholders": {"p0": "String", "p1": "String"}
+    },
+    {"key": "messageAskedToStop", "en": "Asked to stop {p0}", "ja": "{p0}件に停止を依頼しました", "placeholders": {"p0": "String"}},
+    {"key": "messageStoppedCount", "en": "Stopped {p0}", "ja": "{p0}件を停止しました", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageHasNoStopControl",
+      "en": "{p0, plural, =1{1 has no stop control} other{{p0} have no stop control}}",
+      "ja": "{p0}件は停止できません",
+      "placeholders": {"p0": "int"}
+    },
+    {"key": "uiAlreadyDone", "en": "Already done", "ja": "完了済み"},
+    {"key": "uiNothingHereHasAStopControl", "en": "Nothing here has a stop control", "ja": "ここに停止できる処理はありません"},
+    {"key": "uiCouldnTConfirm", "en": "Couldn’t confirm", "ja": "確認できませんでした"},
+    {"key": "uiHoldToStop", "en": "Hold to stop", "ja": "長押しで停止"},
+    {"key": "uiHoldToStopAll", "en": "Hold to stop all", "ja": "長押しで全て停止"},
+    {"key": "messageStopping", "en": "Stopping {p0}", "ja": "{p0}を停止中", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageHasNoStopKey",
+      "en": "{p0} has no stop key for this. The phone sends {p0} a message asking it to.",
+      "ja": "{p0}にはこれを停止するキーがありません。端末から{p0}に依頼のメッセージを送ります。",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "uiRunning", "en": "Running", "ja": "実行中"},
+    {
+      "key": "messageDetailsAreUnavailable",
+      "en": "Details are unavailable: the agent waits on something its log doesn’t list.",
+      "ja": "詳細は不明です。ログにない処理の完了を待っています。"
+    },
+    {"key": "uiNotConnectedLastKnown", "en": "Not connected. This is the last known list.", "ja": "未接続です。最後に分かっている一覧です。"},
+    {
+      "key": "uiStopOnTheMessageBarEndsTheTurnOnly",
+      "en": "Stop on the message bar ends the turn only. Work listed here keeps running until you stop it.",
+      "ja": "メッセージバーの停止はターンだけを終えます。ここに並ぶ処理は、停止するまで実行が続きます。"
+    },
+    {"key": "uiNothingIsRunningInTheBackground", "en": "Nothing is running in the background.", "ja": "バックグラウンドで実行中の処理はありません。"},
+    {"key": "uiEnded", "en": "ended?", "ja": "終了?"},
+    {"key": "uiPaused", "en": "paused", "ja": "一時停止"},
+    {"key": "uiStopped", "en": "stopped", "ja": "停止済み"},
+    {"key": "uiWasRunning", "en": "Was running", "ja": "実行中だった"},
+    {"key": "uiWaiting", "en": "Waiting", "ja": "待機中"},
+    {"key": "uiFailedHeader", "en": "Failed", "ja": "失敗"},
+    {"key": "uiNoneStartedYet", "en": "None started yet.", "ja": "まだ何も始まっていません。"},
+    {
+      "key": "uiStopOnTheMessageBarEndsTheTurnOnlySubagents",
+      "en": "Stop on the message bar ends the turn only. Subagents keep running until you stop them.",
+      "ja": "メッセージバーの停止はターンだけを終えます。サブエージェントは停止するまで実行が続きます。"
+    },
+    {"key": "messageWorkingSince", "en": "Working · {p0}", "ja": "実行中 · {p0}", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageToolCount",
+      "en": "{p0, plural, =1{1 tool} other{{p0} tools}}",
+      "ja": "ツール{p0}件",
+      "placeholders": {"p0": "int"}
+    },
+    {"key": "uiRunningWord", "en": "running", "ja": "実行中"},
+    {"key": "uiDoneWord", "en": "done", "ja": "完了"},
+    {"key": "uiStartingWord", "en": "starting", "ja": "開始中"},
+    {"key": "uiCancelled", "en": "cancelled", "ja": "キャンセル"},
+    {"key": "messageRunningFor", "en": "running {p0}", "ja": "実行中 {p0}", "placeholders": {"p0": "String"}},
+    {"key": "uiRetrying", "en": "retrying", "ja": "再試行中"},
+    {
+      "key": "messageRetryingAttempt",
+      "en": "retrying {p0} of {p1}",
+      "ja": "再試行 {p0}/{p1}",
+      "placeholders": {"p0": "String", "p1": "String"}
+    },
+    {"key": "uiWasRunningWord", "en": "was running", "ja": "実行中だった"},
+    {"key": "uiNotUpdating", "en": "not updating", "ja": "更新なし"},
+    {"key": "messageStartingCount", "en": "{p0} starting", "ja": "{p0}開始中", "placeholders": {"p0": "String"}},
+    {"key": "messageNotUpdatingCount", "en": "{p0} not updating", "ja": "{p0}件が更新なし", "placeholders": {"p0": "String"}},
+    {"key": "messageFailedCount", "en": "{p0} failed", "ja": "{p0}件失敗", "placeholders": {"p0": "String"}},
+    {"key": "messageCancelledCount", "en": "{p0} cancelled", "ja": "{p0}件キャンセル", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageNeedYouCount",
+      "en": "{p0, plural, =1{1 needs you} other{{p0} need you}}",
+      "ja": "{p0}件が対応待ち",
+      "placeholders": {"p0": "int"}
+    },
+    {"key": "uiAllDone", "en": "all done", "ja": "すべて完了"},
+    {
+      "key": "messageRunningOfTotal",
+      "en": "{p0} of {p1} running",
+      "ja": "{p1}件中{p0}件が実行中",
+      "placeholders": {"p0": "String", "p1": "String"}
+    },
+    {
+      "key": "messageFailedOfTotal",
+      "en": "{p0} of {p1} failed",
+      "ja": "{p1}件中{p0}件が失敗",
+      "placeholders": {"p0": "String", "p1": "String"}
+    },
+    {"key": "messagePlusSubagents", "en": "{p0}+ subagents", "ja": "サブエージェント{p0}件以上", "placeholders": {"p0": "String"}},
+    {"key": "messagePlusSubagent", "en": "{p0}+ subagent", "ja": "サブエージェント{p0}件以上", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageFromLogOnTheMachine",
+      "en": "From {p0}’s log on the machine",
+      "ja": "マシン上の{p0}のログから",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "uiEarlierPartNotShown", "en": "Earlier part not shown", "ja": "前半は表示していません"},
+    {
+      "key": "messageOversizedLinesLeftOut",
+      "en": "{p0, plural, =1{1 oversized line left out} other{{p0} oversized lines left out}}",
+      "ja": "長すぎる行を{p0}件省略",
+      "placeholders": {"p0": "int"}
+    },
+    {"key": "uiModel", "en": "Model", "ja": "モデル"},
+    {"key": "uiCost", "en": "Cost", "ja": "コスト"},
+    {"key": "uiProgress", "en": "Progress", "ja": "進捗"},
+    {"key": "uiRetryingHeading", "en": "Retrying", "ja": "再試行中"},
+    {
+      "key": "messageRetryingAttemptOf",
+      "en": "Retrying, attempt {p0} of {p1}",
+      "ja": "再試行中 {p0}/{p1}回目",
+      "placeholders": {"p0": "String", "p1": "String"}
+    },
+    {"key": "messageInDelay", "en": "in {p0}", "ja": "{p0}後", "placeholders": {"p0": "String"}},
+    {"key": "uiDoingNow", "en": "Doing now", "ja": "現在の作業"},
+    {"key": "uiLatestTools", "en": "Latest tools", "ja": "最近のツール"},
+    {"key": "uiRecentOutput", "en": "Recent output", "ja": "最近の出力"},
+    {"key": "uiWhyItStopped", "en": "Why it stopped", "ja": "停止した理由"},
+    {"key": "uiResult", "en": "Result", "ja": "結果"},
+    {
+      "key": "messageSubagentsConversationIsReadOnly",
+      "en": "A subagent’s conversation is read-only.",
+      "ja": "サブエージェントの会話は読み取り専用です。"
+    },
+    {"key": "uiRead", "en": "Read", "ja": "読み取り"},
+    {"key": "uiMove", "en": "Move", "ja": "移動"},
+    {"key": "uiRun", "en": "Run", "ja": "実行"},
+    {"key": "uiThink", "en": "Think", "ja": "思考"},
+    {"key": "uiFetch", "en": "Fetch", "ja": "取得"},
+    {"key": "uiSwitchMode", "en": "Switch mode", "ja": "モード切替"},
+    {"key": "uiToolCall", "en": "Tool call", "ja": "ツール呼び出し"},
+    {"key": "uiPending", "en": "pending", "ja": "待機中"},
+    {"key": "messageNoMatches", "en": "no matches", "ja": "一致なし"},
+    {
+      "key": "messageMatchCount",
+      "en": "{p0, plural, =1{1 match} other{{p0} matches}}",
+      "ja": "{p0}件一致",
+      "placeholders": {"p0": "int"}
+    },
+    {
+      "key": "messageLineCount",
+      "en": "{p0, plural, =1{1 line} other{{p0} lines}}",
+      "ja": "{p0}行",
+      "placeholders": {"p0": "int"}
+    },
+    {
+      "key": "messageCharactersNotShown",
+      "en": "{p0, plural, =1{1 character not shown} other{{p0} characters not shown}}",
+      "ja": "{p0}文字を表示していません",
+      "placeholders": {"p0": "int"}
+    },
+    {"key": "uiCommand", "en": "Command", "ja": "コマンド"},
+    {"key": "uiOutput", "en": "Output", "ja": "出力"},
+    {"key": "uiInput", "en": "Input", "ja": "入力"},
+    {"key": "uiOutputTrimmed", "en": "Output trimmed", "ja": "出力は切り詰め済み"},
+    {
+      "key": "uiTheOutputIsInATerminalOnTheMachine",
+      "en": "The output is in a terminal on the machine.",
+      "ja": "出力はマシン上のターミナルにあります。"
+    },
+    {"key": "uiContentThisAppCanTShow", "en": "Content this app can’t show", "ja": "このアプリでは表示できない内容"},
+    {"key": "uiCopy", "en": "Copy", "ja": "コピー"},
+    {"key": "uiCopyOutput", "en": "Copy output", "ja": "出力をコピー"},
+    {"key": "uiOutputCopied", "en": "Output copied", "ja": "出力をコピーしました"},
+    {"key": "uiCommandCopied", "en": "Command copied", "ja": "コマンドをコピーしました"},
+    {"key": "uiCopyDiff", "en": "Copy diff", "ja": "差分をコピー"},
+    {"key": "uiDiffCopied", "en": "Diff copied", "ja": "差分をコピーしました"},
+    {"key": "messageStoppedBySignal", "en": "Stopped by signal {p0}.", "ja": "シグナル{p0}で停止しました。", "placeholders": {"p0": "String"}},
+    {"key": "messageExitedWithCode", "en": "Exited with code {p0}.", "ja": "終了コード{p0}で終了しました。", "placeholders": {"p0": "String"}},
+    {"key": "messageSignalWord", "en": "signal {p0}", "ja": "シグナル{p0}", "placeholders": {"p0": "String"}},
+    {"key": "messageExitCodeWord", "en": "exit {p0}", "ja": "終了コード{p0}", "placeholders": {"p0": "String"}},
+    {"key": "uiShowAll", "en": "Show all", "ja": "すべて表示"},
+    {
+      "key": "messageEarlierLineCount",
+      "en": "{p0, plural, =1{1 earlier line} other{{p0} earlier lines}}",
+      "ja": "{p0}行（前半）",
+      "placeholders": {"p0": "int"}
+    },
+    {
+      "key": "messageMoreLineCount",
+      "en": "{p0, plural, =1{1 more line} other{{p0} more lines}}",
+      "ja": "{p0}行（続き）",
+      "placeholders": {"p0": "int"}
+    },
+    {"key": "messagePlusCharacters", "en": "+{p0} characters", "ja": "+{p0}文字", "placeholders": {"p0": "String"}},
+    {
+      "key": "uiFilesAreNotAvailableOnThisMachine",
+      "en": "Files are not available on this machine",
+      "ja": "このマシンではファイルを利用できません"
+    },
+    {
+      "key": "messageFilesAreNotAvailableOnThisMachine",
+      "en": "Files are not available on this machine.",
+      "ja": "このマシンではファイルを利用できません。"
+    },
+    {"key": "uiReadingEarlierHistory", "en": "Reading earlier history…", "ja": "以前の履歴を読み込み中…"},
+    {"key": "uiPages", "en": "Pages", "ja": "ページ"},
+    {"key": "uiPictures", "en": "Pictures", "ja": "画像"},
+    {"key": "uiDocs", "en": "Docs", "ja": "ドキュメント"},
+    {"key": "uiApps", "en": "Apps", "ja": "アプリ"},
+    {
+      "key": "messageThatIsAServicePort",
+      "en": "That is a {p0} port. Open the link from the chat if you mean to.",
+      "ja": "{p0}のポートです。意図している場合はチャットのリンクから開いてください。",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "messageStillOpening", "en": "Still opening {p0}…", "ja": "{p0}を開いています…", "placeholders": {"p0": "String"}},
+    {"key": "uiNotAWebPage", "en": "not a web page", "ja": "Webページではありません"},
+    {"key": "uiStatusUnknown", "en": "Status unknown", "ja": "状態不明"},
+    {
+      "key": "messageStatusUnknownMentioned",
+      "en": "Status unknown · mentioned {p0}",
+      "ja": "状態不明 · {p0}に言及",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "messageWaysToSignIn", "en": "Ways to sign in: {p0}.", "ja": "ログイン方法: {p0}。", "placeholders": {"p0": "String"}},
+    {
+      "key": "messageInATerminalRun",
+      "en": "1. In a terminal, run {p0} and sign in.",
+      "ja": "1. ターミナルで{p0}を実行してログインします。",
+      "placeholders": {"p0": "String"}
+    },
+    {
+      "key": "messageAddExportToZshEnv",
+      "en": "2. Add export {p0}=<the token> to ~/.zshenv.",
+      "ja": "2. ~/.zshenvにexport {p0}=<トークン>を追加します。",
+      "placeholders": {"p0": "String"}
+    },
+    {"key": "uiStartANewSession", "en": "3. Start a new session.", "ja": "3. 新しいセッションを開始します。"}
+  ]
+}

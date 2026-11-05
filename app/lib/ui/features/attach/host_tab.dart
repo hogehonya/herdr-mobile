@@ -345,8 +345,8 @@ class _HostTabState extends State<HostTab> {
     final up = parent == null
         ? null
         : switch (failed.kind) {
-            RemoteFileErrorKind.notFound => context.l10n.uiGoUp,
-            RemoteFileErrorKind.permission => context.l10n.uiOpenParent,
+            RemoteFileErrorKind.notFound => 'Go up',
+            RemoteFileErrorKind.permission => 'Open parent',
             _ => null,
           };
     return FileErrorPanel(

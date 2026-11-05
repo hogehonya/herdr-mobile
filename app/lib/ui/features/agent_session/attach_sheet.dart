@@ -31,7 +31,7 @@ Future<void> showAttachSheet(
   required ComposerAttachments attachments,
 }) async {
   if (attachments.full) {
-    showToast(context, 'At most $maxAttachments attachments per message.');
+    showToast(context, context.l10n.messageAtMostAttachmentsPerMessage('$maxAttachments'));
     return;
   }
   // A second tap while the sheet is coming up is the same tap.

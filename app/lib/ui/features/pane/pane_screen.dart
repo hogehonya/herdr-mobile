@@ -192,13 +192,12 @@ class _PaneScreenState extends State<PaneScreen> {
   SheetAction _duplicateAction() {
     final machine = _machine;
     final pane = machine?.paneById(_paneId);
-    final l10n = context.l10n;
     final reason = machine == null
-        ? l10n.uiThatMachineWasRemoved
+        ? context.l10n.uiThatMachineWasRemoved
         : !machine.isLive
-        ? l10n.messageMachineIsOffline(machine.profile.label)
+        ? context.l10n.messageIsOffline(machine.profile.label)
         : pane == null
-        ? l10n.uiThePaneIsGone
+        ? context.l10n.uiThePaneIsGone
         : null;
     return SheetAction(
       label: context.l10n.uiDuplicate,
@@ -505,7 +504,7 @@ class _PaneViewState extends State<_PaneView> {
   bool _refusesEnter(List<String> keys) {
     if (!_dockAsking.value || keys.length != 1 || keys.single != 'enter') return false;
     Haptics.failed();
-    showToast(context, 'Pick an answer above');
+    showToast(context, context.l10n.uiPickAnAnswerAbove);
     return true;
   }
 
@@ -568,11 +567,7 @@ class _PaneViewState extends State<_PaneView> {
       // The paperclip is gone from a pane that stopped being an agent, but the
       // chips are the person's: they stay, and nothing is typed into a shell.
       if (context.read<MachineConnection>().paneById(_paneId)?.agent == null) {
-        showToast(
-          context,
-          'This pane no longer runs an agent. Remove the attachments to send the line.',
-          kind: ToastKind.failed,
-        );
+        showToast(context, context.l10n.uiThisPaneNoLongerRunsAnAgent, kind: ToastKind.failed);
         Haptics.failed();
         return;
       }
@@ -1011,18 +1006,17 @@ class _Composer extends StatelessWidget {
     });
     final sending = context.select<PaneViewModel, bool>((v) => v.sending);
     final enabled = state == LinkState.online && open;
-    final l10n = context.l10n;
     final hint = composerHint(
       agent == null || agent.isEmpty ? null : agentName(agent),
+      l10n: context.l10n,
       linkWord: switch (state) {
-        LinkState.online => open ? null : l10n.uiPaneClosed,
-        LinkState.connecting => l10n.uiConnecting,
-        LinkState.approval => l10n.uiWaitingForSignInApproval,
-        LinkState.reconnecting || LinkState.offline => l10n.uiOfflineReconnecting,
-        LinkState.attention => l10n.uiNeedsAttentionSeeAbove,
-        LinkState.disabled => l10n.uiMachineDisabled,
+        LinkState.online => open ? null : context.l10n.uiPaneClosed,
+        LinkState.connecting => context.l10n.uiConnecting,
+        LinkState.approval => context.l10n.uiWaitingForSignInApproval,
+        LinkState.reconnecting || LinkState.offline => context.l10n.uiOfflineReconnecting,
+        LinkState.attention => context.l10n.uiNeedsAttentionSeeAbove,
+        LinkState.disabled => context.l10n.uiMachineDisabled,
       },
-      l10n: l10n,
     );
     return ComposerFrame(
       // An agent's prompt takes pictures and files, as the chat's does; a

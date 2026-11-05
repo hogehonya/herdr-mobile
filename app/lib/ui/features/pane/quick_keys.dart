@@ -1,3 +1,5 @@
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -123,16 +125,18 @@ class QuickKeys extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
         itemCount: set.length,
         separatorBuilder: (_, _) => const SizedBox(width: Gap.sm),
-        itemBuilder: (_, i) => switch (set[i]) {
+        itemBuilder: (context, i) => switch (set[i]) {
           final _Send key => _cap(
+            context,
             key,
             onTap: enabled ? () => unawaited(onKeys(key.keys)) : null,
             onRepeat: enabled && key.repeat ? () => onKeys(key.keys) : null,
           ),
-          final _Insert key => _cap(key, onTap: enabled ? () => onInsert(key.text) : null),
+          final _Insert key => _cap(context, key, onTap: enabled ? () => onInsert(key.text) : null),
           final _Modifier key => ListenableBuilder(
             listenable: modifiers,
-            builder: (_, _) => _cap(
+            builder: (context, _) => _cap(
+              context,
               key,
               active: key.ctrl ? modifiers.ctrl : modifiers.alt,
               onTap: !enabled
@@ -152,13 +156,34 @@ class QuickKeys extends StatelessWidget {
   }
 
   /// Icon keys are named; text keys are read from their text.
-  static Widget _cap(_Key key, {required VoidCallback? onTap, Future<void> Function()? onRepeat, bool? active}) =>
-      KeyCap(
-        label: key.icon == null ? key.label : null,
-        icon: key.icon,
-        semanticLabel: key.icon != null ? key.semantic : null,
-        onTap: onTap,
-        onRepeat: onRepeat,
-        active: active,
-      );
+  static Widget _cap(
+    BuildContext context,
+    _Key key, {
+    required VoidCallback? onTap,
+    Future<void> Function()? onRepeat,
+    bool? active,
+  }) => KeyCap(
+    label: key.icon == null ? key.label : null,
+    icon: key.icon,
+    semanticLabel: key.icon != null ? _semantic(context, key) : null,
+    onTap: onTap,
+    onRepeat: onRepeat,
+    active: active,
+  );
+
+  /// The name a screen reader says for an icon key: the key set is const, so
+  /// its words are looked up here, where the phone's language is known.
+  static String _semantic(BuildContext context, _Key key) {
+    final words = context.l10n;
+    return switch (key.semantic) {
+      'Up' => words.uiUp,
+      'Down' => words.uiDown,
+      'Left' => words.uiLeft,
+      'Right' => words.uiRight,
+      'Enter' => words.uiEnter,
+      'Space' => words.uiSpace,
+      'New line' => words.uiNewLine,
+      _ => key.semantic,
+    };
+  }
 }

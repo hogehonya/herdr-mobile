@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../data/decision/permission_evidence.dart';
 import '../../../data/words/plural.dart';
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
 
@@ -263,7 +264,7 @@ Future<void> showPlanSheet(BuildContext context, MdDocument document, {bool prev
   return showEvidenceSheet(
     context,
     title: context.l10n.uiThePlan,
-    note: preview ? planPreviewNote : null,
+    note: preview ? context.l10n.uiFirst12LinesOfThePlan : null,
     count: blocks.length,
     itemBuilder: (context, i) => planBlock(blocks, i),
   );
@@ -342,7 +343,7 @@ class _PlanEvidenceState extends State<PlanEvidence> {
         ),
         ReadAllCue(
           text: preview
-              ? planPreviewNote
+              ? context.l10n.uiFirst12LinesOfThePlan
               : (_overflows && !_atEnd ? context.l10n.messageMoreBelowLines('$_lines') : null),
           onOpen: _overflows ? () => unawaited(showPlanSheet(context, _document, preview: preview)) : null,
         ),
@@ -380,35 +381,46 @@ class DiffNoteRow extends DiffRow {
 
 /// The rows of every diff of [evidence]: per file a header, the changed lines
 /// with two lines of context, and a note where text was cut.
-List<DiffRow> diffRowsOf(PermissionEvidence evidence) {
+List<DiffRow> diffRowsOf(PermissionEvidence evidence, {AppLocalizations? l10n}) {
   final rows = <DiffRow>[];
   for (final d in evidence.diffs) {
     rows.add(DiffHeaderRow(d));
     for (final line in diffLines(d.oldText, d.newText)) {
       rows.add(DiffTextRow(line));
     }
-    if (d.cutChars > 0) rows.add(DiffNoteRow('\u2026 ${d.cutChars} characters of this file are not compared'));
+    if (d.cutChars > 0) {
+      rows.add(
+        DiffNoteRow(
+          l10n?.messageCharactersOfThisFileNotCompared('${d.cutChars}') ??
+              '\u2026 ${d.cutChars} characters of this file are not compared',
+        ),
+      );
+    }
   }
   if (evidence.hiddenDiffs > 0) {
     final n = evidence.hiddenDiffs;
-    rows.add(DiffNoteRow('${countOf(n, 'more file')} not shown'));
+    rows.add(
+      DiffNoteRow(l10n?.messageMoreFilesNotShown(n) ?? '${countOf(n, 'more file')} not shown'),
+    );
   }
   return rows;
 }
 
 /// `+3 −1`, `new file +40`, `up to +300 −200` when the count is an upper
 /// bound.
-String diffCounts(EvidenceDiff d) {
+String diffCounts(EvidenceDiff d, {AppLocalizations? l10n}) {
   final counts = d.removed == 0 ? '+${d.added}' : '+${d.added} \u2212${d.removed}';
-  final bounded = d.approximate ? 'up to $counts' : counts;
-  return d.isNew ? 'new file $bounded' : bounded;
+  final bounded = d.approximate
+      ? (l10n?.messageUpToCounts(counts) ?? 'up to $counts')
+      : counts;
+  return d.isNew ? (l10n?.messageNewFileCounts(bounded) ?? 'new file $bounded') : bounded;
 }
 
 Widget diffRowView(BuildContext context, DiffRow row) {
   final ds = context.ds;
   switch (row) {
     case DiffHeaderRow(:final diff):
-      final counts = diffCounts(diff);
+      final counts = diffCounts(diff, l10n: context.l10n);
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: Gap.hair),
         child: Semantics(
@@ -446,8 +458,8 @@ Widget diffRowView(BuildContext context, DiffRow row) {
       final term = context.terminal;
       final text = visibleText(clipLine(line.text));
       final (prefix, color, spoken) = switch (line.kind) {
-        DiffKind.add => ('+ ', term.ansi[2], 'added'),
-        DiffKind.del => ('- ', term.ansi[1], 'removed'),
+        DiffKind.add => ('+ ', term.ansi[2], context.l10n.uiAdded),
+        DiffKind.del => ('- ', term.ansi[1], context.l10n.uiRemoved),
         DiffKind.same => ('  ', null, null),
         DiffKind.gap => ('\u2026 ', term.dim, null),
       };
@@ -486,7 +498,7 @@ class DiffEvidence extends StatefulWidget {
 }
 
 class _DiffEvidenceState extends State<DiffEvidence> {
-  late final List<DiffRow> _rows = diffRowsOf(widget.evidence);
+  late final List<DiffRow> _rows = diffRowsOf(widget.evidence, l10n: context.l10n);
   final _controller = ScrollController();
   bool _overflows = false;
   bool _atEnd = false;

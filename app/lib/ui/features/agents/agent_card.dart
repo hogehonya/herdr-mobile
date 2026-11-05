@@ -467,14 +467,15 @@ class StateTime extends StatelessWidget {
     if (agent.quietMinutes > 0) {
       // design-lint: allow(raw-duration) a count of minutes the machine measured, not a timer
       final quiet = Duration(minutes: agent.quietMinutes);
-      return label('quiet ${Elapsed.compact(quiet, seconds: false)}', 'working, quiet for ${Elapsed.words(quiet)}');
+      final quietLabel = Elapsed.compact(quiet, seconds: false, l10n: context.l10n);
+      return label(context.l10n.messageQuiet(quietLabel), 'working, quiet for ${Elapsed.words(quiet)}');
     }
     final time = agent.since;
     if (time == null) return const SizedBox.shrink();
     return MinuteBuilder(
       builder: (context, now) {
         final d = time.since(now);
-        final text = timeInState(agent.status, d, exact: time.exact);
+        final text = timeInState(agent.status, d, exact: time.exact, words: context.l10n);
         if (text.isEmpty) return const SizedBox.shrink();
         return label(text, timeInStateWords(agent.status, d, exact: time.exact));
       },

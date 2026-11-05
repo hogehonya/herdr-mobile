@@ -1,3 +1,4 @@
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 import 'package:herdr_mobile/l10n/l10n_context.dart';
 import 'package:flutter/material.dart';
 
@@ -39,19 +40,19 @@ class CodeLine {
 
 /// The lines of [text] for a panel: cut to [panelTextLimit], split, and each
 /// line cut to [panelLineLimit]. [fromEnd] says which side survives the cut.
-List<CodeLine> textLines(String text, {bool fromEnd = false, Color? color}) {
+List<CodeLine> textLines(String text, {bool fromEnd = false, Color? color, AppLocalizations? l10n}) {
   var source = text;
   var note = '';
   if (source.length > panelTextLimit) {
     final cut = source.length - panelTextLimit;
     source = fromEnd ? source.substring(cut) : source.substring(0, safeEnd(source, panelTextLimit));
-    note = '${countOf(cut, 'character')} not shown';
+    note = l10n?.messageCharactersNotShown(cut) ?? '${countOf(cut, 'character')} not shown';
   }
   final raw = source.split('\n');
   if (raw.length > 1 && raw.last.isEmpty) raw.removeLast();
   return [
     if (fromEnd && note.isNotEmpty) CodeLine(note, color: color),
-    for (final line in raw) CodeLine(clipLine(line), color: color),
+    for (final line in raw) CodeLine(clipLine(line, l10n), color: color),
     if (!fromEnd && note.isNotEmpty) CodeLine(note, color: color),
   ];
 }
@@ -60,11 +61,12 @@ List<CodeLine> textLines(String text, {bool fromEnd = false, Color? color}) {
 /// escape sequence, a direction override, half of a surrogate pair, which would
 /// make the paragraph builder throw), cut to [panelLineLimit] without splitting
 /// a pair, the rest named.
-String clipLine(String line) {
+String clipLine(String line, [AppLocalizations? l10n]) {
   final text = visibleText(line);
-  return text.length <= panelLineLimit
-      ? text
-      : '${text.substring(0, safeEnd(text, panelLineLimit))} … +${text.length - panelLineLimit} characters';
+  if (text.length <= panelLineLimit) return text;
+  final rest = text.length - panelLineLimit;
+  return '${text.substring(0, safeEnd(text, panelLineLimit))} … '
+      '${l10n?.messagePlusCharacters('$rest') ?? '+$rest characters'}';
 }
 
 /// Lines of mono text on a quiet panel, capped to [cap] lines with a "Show
@@ -84,7 +86,7 @@ class CodePanel extends StatelessWidget {
     this.wrap = true,
     this.cap = 40,
     this.onCopy,
-    this.copyLabel = 'Copy',
+    this.copyLabel,
   });
 
   final List<CodeLine> lines;
@@ -103,29 +105,31 @@ class CodePanel extends StatelessWidget {
   /// A panel longer than [copyRowFrom] lines then has a foot with the copy
   /// button, quiet, in the same row "Show all" lives in.
   final VoidCallback? onCopy;
-  final String copyLabel;
+  final String? copyLabel;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final total = lines.length;
     final over = total > cap;
     final shown = !over || all ? lines : (fromEnd ? lines.sublist(total - cap) : lines.sublist(0, cap));
     final style = Mono.base.copyWith(color: foreground);
     final hidden = total - cap;
+    final copy = copyLabel ?? context.l10n.uiCopy;
     final more = over
         ? MoreRow(
             label: all
-                ? countOf(total, context.l10n.uiLine)
+                ? l10n.messageLineCount(total)
                 : fromEnd
-                ? countOf(hidden, 'earlier line')
-                : countOf(hidden, 'more line'),
-            action: all ? 'Show less' : 'Show all',
+                ? l10n.messageEarlierLineCount(hidden)
+                : l10n.messageMoreLineCount(hidden),
+            action: all ? l10n.uiShowLess : l10n.uiShowAll,
             onTap: onToggleAll,
             onCopy: onCopy,
-            copyLabel: copyLabel,
+            copyLabel: copy,
           )
         : (onCopy != null && total > copyRowFrom
-              ? MoreRow(label: countOf(total, context.l10n.uiLine), onCopy: onCopy, copyLabel: copyLabel)
+              ? MoreRow(label: l10n.messageLineCount(total), onCopy: onCopy, copyLabel: copy)
               : null);
 
     Widget line(CodeLine l) {

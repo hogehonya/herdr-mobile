@@ -40,13 +40,16 @@ class UpdateGroup extends StatelessWidget {
       final release = update.release;
       if (release == null) return const SizedBox.shrink();
       final summary = switch (update.stage) {
-        UpdateStage.downloading => 'Downloading ${megabytes(update.received)} of ${megabytes(release.size)}',
-        UpdateStage.ready => 'Ready to install',
+        UpdateStage.downloading => context.l10n.messageDownloadingOf(
+          megabytes(update.received),
+          megabytes(release.size),
+        ),
+        UpdateStage.ready => context.l10n.uiReadyToInstall,
         // The sentence itself (red, whole) is in the sheet; a row's line
         // is a summary.
         _ =>
           update.problem != null
-              ? 'Update failed, open to see why'
+              ? context.l10n.uiUpdateFailedOpenToSeeWhy
               : '${release.version} \u00b7 ${megabytes(release.size)}',
       };
       return SettingsGroup(

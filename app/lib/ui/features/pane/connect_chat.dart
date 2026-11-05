@@ -18,7 +18,7 @@ Future<void> showConnectChat(BuildContext context, MachineConnection machine, St
   final home = switch (target) {
     'claude' => '~/.claude',
     'codex' => '~/.codex',
-    _ => 'its settings',
+    _ => words.uiItsSettings,
   };
   final toaster = Toaster.of(context);
   final ok = await showConfirmSheet(

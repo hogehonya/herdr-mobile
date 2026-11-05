@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math' show Random;
 
 import 'package:flutter/foundation.dart';
+import 'package:herdr_mobile/l10n/app_localizations.dart';
+import 'package:herdr_mobile/l10n/app_localizations_en.dart';
 import 'package:herdr_mobile/ui/core/kit.dart' show Dwell;
 
 import '../../../data/acp/agent_host.dart';
@@ -19,10 +21,11 @@ import 'session_start_support.dart' show NewSessionError, folderError, recentFol
 /// Null when [folder] can be the working directory of an ACP session: the
 /// agent gets it as `cwd`, and ACP wants an absolute path (a `~` would reach
 /// the agent unexpanded).
-String? agentFolderError(String? folder) {
-  final problem = folderError(folder);
+String? agentFolderError(String? folder, {AppLocalizations? l10n}) {
+  final words = l10n ?? AppLocalizationsEn();
+  final problem = folderError(folder, l10n: words);
   if (problem != null) return problem;
-  return folder!.trim().startsWith('/') ? null : 'An absolute path, starting with /';
+  return folder!.trim().startsWith('/') ? null : words.uiAnAbsolutePathStartingWith;
 }
 
 /// Where the session runs, within the repo of the typed folder.
@@ -64,7 +67,9 @@ class NewAgentSessionViewModel extends ChangeNotifier {
     String? machineId,
     this.prefill,
     Random? random,
-  }) : _random = random ?? Random() {
+    AppLocalizations? l10n,
+  }) : _random = random ?? Random(),
+       _l10n = l10n {
     // A duplicate keeps its machine even when it is offline: the form then
     // says so, rather than starting the folder somewhere else.
     _machineId = prefill?.machineId ?? _initialMachine(machineId);
@@ -82,6 +87,12 @@ class NewAgentSessionViewModel extends ChangeNotifier {
   final FleetRepository _fleet;
   final AgentSessions _sessions;
   final AgentSessionSettings _settings;
+
+  /// Null only in tests and other callers outside the widget tree: English
+  /// then, as the form's own fallback.
+  final AppLocalizations? _l10n;
+
+  AppLocalizations get words => _l10n ?? AppLocalizationsEn();
 
   String? _machineId;
   late String _agent;
@@ -136,7 +147,7 @@ class NewAgentSessionViewModel extends ChangeNotifier {
   String? unavailableReason(AgentRoute route) {
     final m = machine;
     if (m == null || isAvailable(route.id) != false) return null;
-    return 'Not installed on ${m.profile.label}';
+    return words.messageNotInstalledOn(m.profile.label);
   }
 
   /// The chosen agent can be started (as far as is known).
@@ -293,8 +304,8 @@ class NewAgentSessionViewModel extends ChangeNotifier {
   String? branchError(String? branch) {
     final b = branch?.trim() ?? '';
     if (b.isEmpty) return null;
-    if (_unfit.hasMatch(b)) return 'No spaces or control characters';
-    if (b.startsWith('-')) return 'Can’t start with -';
+    if (_unfit.hasMatch(b)) return words.uiNoSpacesOrControlCharacters;
+    if (b.startsWith('-')) return words.uiCanTStartWith;
     return null;
   }
 
@@ -330,14 +341,14 @@ class NewAgentSessionViewModel extends ChangeNotifier {
     final m = machine;
     final path = folder.trim();
     if (m == null) {
-      return _fail(const NewSessionError('No machine online', 'Pick a machine that is online.'));
+      return _fail(NewSessionError(words.uiNoMachineOnline, words.uiPickAMachineThatIsOnline));
     }
-    final problem = agentFolderError(path);
-    if (problem != null) return _fail(NewSessionError('Check the form', problem));
+    final problem = agentFolderError(path, l10n: words);
+    if (problem != null) return _fail(NewSessionError(words.uiCheckTheForm, problem));
     final choice = _choiceFor(path);
     if (choice is NewWorktree) {
       final bad = branchError(branch);
-      if (bad != null) return _fail(NewSessionError('Check the form', bad));
+      if (bad != null) return _fail(NewSessionError(words.uiCheckTheForm, bad));
     }
     final agentId = _agent;
 
@@ -360,17 +371,16 @@ class NewAgentSessionViewModel extends ChangeNotifier {
             final v = m.snapshot.version;
             return _fail(
               NewSessionError(
-                'Worktrees aren’t supported',
-                'herdr${v.isEmpty ? '' : ' $v'} on ${m.profile.label} can’t create worktrees. '
-                    'Update herdr on that machine, or choose This folder.',
+                words.uiWorktreesArenTSupported,
+                words.messageHerdrOnCanTCreateWorktrees(v.isEmpty ? '' : ' $v', m.profile.label),
               ),
             );
           } on HerdrApiException catch (e) {
-            return _fail(NewSessionError('Couldn’t create the worktree', e.message));
+            return _fail(NewSessionError(words.uiCouldnTCreateTheWorktree, e.message));
           } on HerdrTransportException catch (e) {
             return _fail(await _createUnanswered(m, path, e.message));
           } on TimeoutException {
-            return _fail(await _createUnanswered(m, path, 'The machine didn’t answer in time.'));
+            return _fail(await _createUnanswered(m, path, words.uiTheMachineDidnTAnswerInTime));
           }
           final worktree = created.worktree;
           made = worktree;
@@ -393,8 +403,8 @@ class NewAgentSessionViewModel extends ChangeNotifier {
       final w = made;
       return _fail(
         NewSessionError(
-          'Couldn’t start the session',
-          w == null ? e.message : '${e.message} The worktree ${w.name} was created; Start again to use it.',
+          words.uiCouldnTStartTheSession,
+          w == null ? e.message : '${e.message} ${words.messageTheWorktreeWasCreatedStartAgain(w.name)}',
         ),
       );
     } finally {
@@ -428,17 +438,14 @@ class NewAgentSessionViewModel extends ChangeNotifier {
         m.noteBranches(now);
         _adopt(folder, fresh.single);
         return NewSessionError(
-          'The worktree was created',
-          '${fresh.single.name} exists, but the machine answered late. Start again to use it.',
+          words.uiTheWorktreeWasCreated,
+          words.messageExistsButTheMachineAnsweredLate(fresh.single.name),
         );
       }
     } on Exception {
       // Still not answering: say so below.
     }
-    return NewSessionError(
-      'Couldn’t create the worktree',
-      '$why It may still have been created: check Checkout before trying again.',
-    );
+    return NewSessionError(words.uiCouldnTCreateTheWorktree, words.messageItMayStillHaveBeenCreated(why));
   }
 
   AgentSessionView? _fail(NewSessionError error) {

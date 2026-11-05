@@ -151,9 +151,10 @@ class _BodyState extends State<_Body> {
           ),
         ];
       case PastPhase.checking:
-        return [_waiting('Asking ${machine?.profile.label ?? 'the machine'} which agents it has…')];
+        // No machine chosen yet: the sentence falls back to "the machine".
+        return [_waiting(context.l10n.messageAskingWhichAgentsItHas(machine?.profile.label ?? 'the machine'))];
       case PastPhase.loading:
-        return [_waiting('Reading what ${vm.agentLabel} remembers…')];
+        return [_waiting(context.l10n.messageReadingWhatRemembers(vm.agentLabel))];
       case PastPhase.failed:
         return [
           filler(

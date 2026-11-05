@@ -126,7 +126,7 @@ class SubagentGroupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ds = context.ds;
-    final title = groupTitle(runs, blocked, live: live);
+    final title = groupTitle(runs, blocked, live: live, l10n: context.l10n);
     return Padding(
       padding: const EdgeInsets.fromLTRB(Gap.xs, Gap.sm, Gap.xs, Gap.xs),
       child: Row(
@@ -352,8 +352,8 @@ class _SubagentCardState extends State<SubagentCard> {
     final ds = context.ds;
     final run = widget.run;
     final tone = widget.tone;
-    final title = visibleText(runTitle(run));
-    final line = runLine(run, tone, now: now);
+    final title = visibleText(runTitle(run, context.l10n));
+    final line = runLine(run, tone, now: now, l10n: context.l10n);
     final why = tone == RunTone.failed ? failureLine(run) : null;
     return Semantics(
       label: [title, line, ?why].join(', '),
@@ -419,7 +419,7 @@ class _SubagentCardState extends State<SubagentCard> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (assignment.isNotEmpty) ...[
-                _Label('Asked to'),
+                _Label(context.l10n.uiAskedTo),
                 AskedPreview(
                   markdown: assignment,
                   maxLines: 5,
@@ -428,7 +428,7 @@ class _SubagentCardState extends State<SubagentCard> {
                 const SizedBox(height: Gap.sm),
               ],
               if (doc != null) ...[
-                _Label('Result'),
+                _Label(context.l10n.uiResult),
                 MdToneScope(
                   tone: MdTone.quiet,
                   child: MdDocumentView(document: doc),

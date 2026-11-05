@@ -13,6 +13,7 @@ import '../../../data/decision/permission_evidence.dart';
 import '../../../data/repositories/agent_session.dart';
 import '../../../data/repositories/command_risk.dart';
 import '../../../data/words/plural.dart';
+import 'package:herdr_mobile/l10n/app_localizations.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
 
@@ -179,44 +180,49 @@ bool _allows(PermissionOption option) => option.kind.isAllow || option.kind == P
 /// always does; so does an option that allows something the request's [risk]
 /// flags, or whose own words are risky. The gate is a hint: the command is on
 /// screen either way.
-String? optionGate(PermissionOption option, String? risk) {
+String? optionGate(PermissionOption option, String? risk, {AppLocalizations? l10n}) {
   final name = visibleText(option.name);
-  if (option.kind == PermissionOptionKind.rejectAlways) return 'refuses from now on';
+  if (option.kind == PermissionOptionKind.rejectAlways) return l10n?.uiRefusesFromNowOn ?? 'refuses from now on';
   if (option.kind.isStanding || grantsStandingPermission(name)) return standingPermission;
   if (_allows(option)) return risk ?? option.gate ?? proseRisk(name);
   return null;
 }
 
-/// Why an allow waits for a hold while the command box has not been read to
-/// its end.
-const unreadReason = 'long command, read it all';
-
 /// The toast that tells why a request left the dock: another client of the
 /// keeper answered it first (`Allowed once in Terminal on mac-mini`).
-String answeredElsewhereText(AnsweredElsewhere a) {
+String answeredElsewhereText(AnsweredElsewhere a, {AppLocalizations? l10n}) {
   final by = visibleText(a.by).trim();
   final where = by.isEmpty
-      ? 'elsewhere'
+      ? (l10n?.uiElsewhere ?? 'elsewhere')
       : by == AcpClient.herdrMobile.title
-      ? 'on another phone'
-      : 'in $by';
-  final verb = a.question
-      ? switch (a.answer) {
-          'accept' => 'Answered',
-          'decline' => 'Declined',
-          'cancel' => 'Cancelled',
-          _ => null,
-        }
-      : switch (a.kind) {
-          PermissionOptionKind.allowOnce => 'Allowed once',
-          PermissionOptionKind.allowAlways => 'Always allowed',
-          PermissionOptionKind.rejectOnce => 'Refused',
-          PermissionOptionKind.rejectAlways => 'Always refused',
-          PermissionOptionKind.other || null => null,
-        };
-  if (verb != null) return '$verb $where';
+      ? (l10n?.uiOnAnotherPhone ?? 'on another phone')
+      : (l10n == null ? 'in $by' : l10n.messageIn(by));
+  if (a.question) {
+    switch (a.answer) {
+      case 'accept':
+        return l10n == null ? 'Answered $where' : l10n.messageAnsweredIn(where);
+      case 'decline':
+        return l10n == null ? 'Declined $where' : l10n.messageDeclinedIn(where);
+      case 'cancel':
+        return l10n == null ? 'Cancelled $where' : l10n.messageCancelledIn(where);
+    }
+  } else {
+    switch (a.kind) {
+      case PermissionOptionKind.allowOnce:
+        return l10n == null ? 'Allowed once $where' : l10n.messageAllowedOnceIn(where);
+      case PermissionOptionKind.allowAlways:
+        return l10n == null ? 'Always allowed $where' : l10n.messageAlwaysAllowedIn(where);
+      case PermissionOptionKind.rejectOnce:
+        return l10n == null ? 'Refused $where' : l10n.messageRefusedIn(where);
+      case PermissionOptionKind.rejectAlways:
+        return l10n == null ? 'Always refused $where' : l10n.messageAlwaysRefusedIn(where);
+      case PermissionOptionKind.other || null:
+        break;
+    }
+  }
   final answer = visibleText(a.answer).trim();
-  return answer.isEmpty ? 'Answered $where' : 'Answered $where \u00b7 $answer';
+  if (l10n == null) return answer.isEmpty ? 'Answered $where' : 'Answered $where \u00b7 $answer';
+  return answer.isEmpty ? l10n.messageAnsweredIn(where) : l10n.messageAnsweredInWith(where, answer);
 }
 
 /// A permission request: what it will run or touch, why to look closely, and
@@ -258,7 +264,11 @@ class _PermissionPanelState extends State<PermissionPanel> with TapGuardState<Pe
   /// What lets the person judge the request (the plan, the edits, the agent's
   /// last sentence), worked out once for this request, never per frame.
   late final PermissionEvidence _evidence = permissionEvidence(widget.request, items: widget.items);
-  late final PermissionInfo _info = describePermission(widget.request, dropPlan: _evidence.hasPlan);
+  late final PermissionInfo _info = describePermission(
+    widget.request,
+    dropPlan: _evidence.hasPlan,
+    l10n: context.l10n,
+  );
 
   /// A request that carries its plan shows it as Markdown instead of the
   /// mono copy of the `plan` field; what is left of the input (other fields)
@@ -345,10 +355,14 @@ class _PermissionPanelState extends State<PermissionPanel> with TapGuardState<Pe
     );
   }
 
+  /// Why an allow waits for a hold while the command box has not been read to
+  /// its end.
+  String get _unreadReason => context.l10n.uiLongCommandReadItAll;
+
   /// The reason [option] waits for a hold, or null.
   String? _gate(PermissionOption option) {
-    if (_allows(option) && _unread) return unreadReason;
-    return optionGate(option, _info.risk);
+    if (_allows(option) && _unread) return _unreadReason;
+    return optionGate(option, _info.risk, l10n: context.l10n);
   }
 
   /// Primes [option] for a second activation or a hold, for [Dwell.confirm].
@@ -382,7 +396,7 @@ class _PermissionPanelState extends State<PermissionPanel> with TapGuardState<Pe
     if (gate != null && _confirming != option.optionId) {
       Haptics.armed();
       // An unread command is shown to its end by the first activation.
-      if (gate == unreadReason) _showEnd();
+      if (_allows(option) && _unread) _showEnd();
       _prime(option, gate);
       return;
     }
@@ -394,9 +408,9 @@ class _PermissionPanelState extends State<PermissionPanel> with TapGuardState<Pe
   /// option, and the next one sends.
   void _held(PermissionOption option) {
     if (_sent != null || !settled) return;
-    if (_gate(option) == unreadReason) {
+    if (_allows(option) && _unread) {
       _showEnd();
-      _prime(option, unreadReason);
+      _prime(option, _unreadReason);
       return;
     }
     _send(option);

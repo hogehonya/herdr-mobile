@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import '../../../data/models/web_bridge.dart' show isWebPageName;
 import '../../../data/services/image_prep.dart' show pictureExtensions;
+import '../../../l10n/app_localizations.dart';
 
 /// How the viewer shows a file.
 enum FileKind {
@@ -38,6 +39,46 @@ class FileType {
 
   @override
   String toString() => 'FileType($kind, $label)';
+}
+
+/// [type]'s [FileType.label] in the app's language: "PNG image", "PDF document",
+/// "Markdown". The label itself stays English so detection reads the same
+/// everywhere (the photos area shows it too); this is the one that reaches a
+/// person.
+String typeLabel(FileType type, AppLocalizations? l10n) {
+  final label = type.label;
+  final words = l10n;
+  if (words == null) return label;
+  switch (label) {
+    case 'PDF document':
+      return words.uiPdfDocument;
+    case 'Markdown':
+      return words.uiMarkdown;
+    case 'JSON':
+      return words.uiJSON;
+    case 'Text':
+      return words.uiText;
+    case 'Empty file':
+      return words.uiEmptyFile;
+    case 'Binary data':
+      return words.uiBinaryData;
+    case 'Executable (ELF)':
+      return words.uiExecutableElf;
+    case 'SQLite database':
+      return words.uiSqliteDatabase;
+    case 'WebAssembly':
+      return words.uiWebAssembly;
+  }
+  // "PNG image", "MP4 video", "APK file", "tar archive": the format is the name.
+  for (final (suffix, build) in [
+    (' image', words.messageImageType),
+    (' video', words.messageVideoType),
+    (' file', words.messageFileType),
+    (' archive', words.messageArchiveType),
+  ]) {
+    if (label.endsWith(suffix)) return build(label.substring(0, label.length - suffix.length));
+  }
+  return label;
 }
 
 const _imageExt = pictureExtensions;

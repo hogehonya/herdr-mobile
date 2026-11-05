@@ -4,6 +4,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
+import 'package:herdr_mobile/l10n/l10n_context.dart';
+
 import 'package:herdr_mobile/ui/core/kit.dart';
 
 import '../../render/mermaid/mermaid_cache.dart';
@@ -33,7 +35,7 @@ Future<void> openDiagramViewer(BuildContext context, MermaidDrawn drawn) {
         id: 'mermaid:${identityHashCode(drawn)}',
         name: '${drawn.kind.label}.png',
         mime: 'image/png',
-        origin: 'Diagram',
+        origin: context.l10n.uiDiagram,
         source: MemoryPhotoSource(() => _png(drawn, surface)),
       ),
     ],

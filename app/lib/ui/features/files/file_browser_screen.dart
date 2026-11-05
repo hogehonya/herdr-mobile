@@ -6,15 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 
-import 'package:herdr_mobile/l10n/app_localizations.dart';
-
 import '../../../data/models/remote_file.dart';
 import '../../../data/repositories/machine_connection.dart';
 
 import 'package:herdr_mobile/ui/core/kit.dart';
 
 import 'file_browser_view_model.dart';
-import 'file_format.dart';
 import 'file_listing.dart';
 import 'file_row.dart';
 import 'file_thumb.dart';
@@ -422,65 +419,24 @@ class _BrowserViewState extends State<_BrowserView> {
   }
 
   String _countLine(FileBrowserViewModel vm, {required bool grid}) {
+    final l10n = context.l10n;
     if (grid) {
-      return photoCountLine(
-        context.l10n,
-        photos: vm.photos.length,
-        folders: vm.entries.where((e) => e.isDirectory).length,
-      );
+      // Folders are not in the grid: say so, and where they went.
+      final photos = vm.photos.length;
+      final folders = vm.entries.where((e) => e.isDirectory).length;
+      final counted = l10n.photoCount(photos);
+      return folders > 0 ? '$counted · ${l10n.messageFoldersInList(folders)}' : counted;
     }
-    return fileCountLine(
-      context.l10n,
-      failed: vm.error != null,
-      path: vm.path,
-      shown: vm.entries.length,
-      hidden: vm.hiddenCount,
-      base: vm.baseCount,
-      filtered: vm.filtered,
-      folders: _pick,
-      pickFile: _pickFile,
-    );
+    final shown = vm.entries.length;
+    final hidden = vm.hiddenCount;
+    if (vm.error != null) return vm.path;
+    final base = vm.baseCount;
+    String counted(int n) => _pick ? l10n.folderCount(n) : l10n.itemCount(n);
+    final line = vm.filtered
+        ? (_pick ? l10n.messageShownOfFolders(shown, base) : l10n.messageShownOfItems(shown, base))
+        : (hidden > 0 ? '${counted(shown)} · ${l10n.messageHiddenCount(hidden)}' : counted(shown));
+    return _pickFile ? '$line · ${l10n.uiChooseAFile}' : line;
   }
-}
-
-/// The photo grid's count: pictures shown, then where the folders went (they
-/// are not in the grid). Typed counts keep the English plurals and digits
-/// grouped while every app-owned word follows the phone's language.
-String photoCountLine(AppLocalizations l10n, {required int photos, required int folders}) {
-  final counted = l10n.messagePhotoCount(photos, groupDigits(photos));
-  return folders > 0 ? '$counted · ${l10n.messagePhotoCountFoldersInList(folders, groupDigits(folders))}' : counted;
-}
-
-/// The list's count line: `15 items · 3 hidden`, `5 of 8 folders`, or the path
-/// when the folder could not be read. The words are app-owned chrome; the path
-/// stays exactly as the host gave it.
-String fileCountLine(
-  AppLocalizations l10n, {
-  required bool failed,
-  required String path,
-  required int shown,
-  required int hidden,
-  required int base,
-  required bool filtered,
-  required bool folders,
-  required bool pickFile,
-}) {
-  if (failed) return path;
-  final shownText = groupDigits(shown);
-  final String counted;
-  if (filtered) {
-    final baseText = groupDigits(base);
-    counted = folders
-        ? l10n.messageFileCountFoldersOf(shownText, base, baseText)
-        : l10n.messageFileCountItemsOf(shownText, base, baseText);
-  } else if (hidden > 0) {
-    counted = folders
-        ? l10n.messageFileCountFoldersHidden(shown, shownText, hidden)
-        : l10n.messageFileCountItemsHidden(shown, shownText, hidden);
-  } else {
-    counted = folders ? l10n.messageFileCountFolders(shown, shownText) : l10n.messageFileCountItems(shown, shownText);
-  }
-  return pickFile ? '$counted · ${l10n.uiChooseAFile}' : counted;
 }
 
 /// Find-in-folder, and the two things to do to the list: how it is sorted and

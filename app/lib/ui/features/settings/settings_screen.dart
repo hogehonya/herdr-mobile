@@ -456,12 +456,6 @@ class _AboutGroup extends StatelessWidget {
 
   static const _repoLabel = 'github.com/tuan3w/herdr-mobile · GPL-3.0';
 
-  /// The notice GPL-3.0 section 5(d) asks an interactive program to show.
-  static const _legalese =
-      'Copyright © 2026 Tuan Nguyen. herdr mobile is free '
-      'software under the GNU General Public License v3.0, and comes with no '
-      'warranty. Its source is at github.com/tuan3w/herdr-mobile.';
-
   Future<void> _openRepo(BuildContext context) async {
     final toaster = Toaster.of(context);
     final openFailed = context.l10n.uiCouldnTOpenOnThisPhoneNoBrowserCould;
@@ -474,7 +468,8 @@ class _AboutGroup extends StatelessWidget {
     context: context,
     applicationName: 'herdr mobile',
     applicationVersion: appVersion,
-    applicationLegalese: _legalese,
+    // The notice GPL-3.0 section 5(d) asks an interactive program to show.
+    applicationLegalese: context.l10n.uiCopyrightNotice,
   );
 
   @override
@@ -553,13 +548,13 @@ class _UpdateRows extends StatelessWidget {
       final checking = update.stage == UpdateStage.checking;
       final problem = update.checkProblem;
       final subtitle = checking
-          ? 'Asking github.com\u2026'
+          ? context.l10n.uiAskingGithubCom
           : problem ??
                 (release != null
-                    ? 'Version ${release.version} is available, at the top of this page.'
+                    ? context.l10n.messageVersionIsAvailableAtTheTopOfThisPage(release.version)
                     : update.upToDate
-                    ? 'You have the latest version.'
-                    : 'Asks github.com for the newest release.');
+                    ? context.l10n.uiYouHaveTheLatestVersion
+                    : context.l10n.uiAsksGithubComForTheNewestRelease);
       return RowColumn(
         rows: [
           EntityRow(
