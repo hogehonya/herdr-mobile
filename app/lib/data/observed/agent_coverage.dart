@@ -107,3 +107,54 @@ const codexFunctionCoverage = <String, String>{
   'shell': 'shown: command row (legacy)',
   'spawn_agent': 'shown: row, subagent roster',
 };
+
+/// The events of a dsh chat mirror (`~/.dsh/herdr/<session>/<pane>.jsonl`,
+/// written by the dsh-herdr plugin). The plugin already drops what a chat never
+/// shows (the system prompt, tool schemas, provider streams, injected
+/// instructions, `request/*`, `step/end`), so every row here is an event the app
+/// has decided about.
+const dshEventCoverage = <String, String>{
+  'herdr/mirror': 'ignored: the header (pane, session, pid)',
+  'user/message': 'shown: message',
+  'agent/inbox/spliced': 'shown: message (steering)',
+  'assistant/message': 'shown: thought, message, tool calls',
+  'tool/call': 'shown: tool row (same id as its step\'s tool-call block)',
+  'tool/result': 'shown: what the call printed',
+  'turn/start': 'shown: the turn is running',
+  'turn/end': 'shown: turn over, error, interrupted calls cancelled',
+  'step/start': 'ignored: a step is not a turn',
+  'todo/write': 'shown: plan',
+  'session/title': 'shown: title',
+  'compaction/start': 'ignored: the end says it happened',
+  'compaction/end': 'shown: note that earlier messages were summarised',
+  'command/run': 'ignored: a command typed into the terminal',
+  'command/done': 'ignored: a command typed into the terminal',
+};
+
+/// dsh's tool names (`tool/call` `data.name`), with what the chat does with each.
+const dshToolCoverage = <String, String>{
+  'bash': 'shown: command row',
+  'read': 'shown: row, location',
+  'read_image': 'shown: row, location',
+  'write': 'shown: diff',
+  'edit': 'shown: diff',
+  'grep': 'shown: row',
+  'glob': 'shown: row',
+  'list': 'shown: row, location',
+  'skill': 'shown: row',
+  'todo_write': 'shown: plan',
+  'job_output': 'shown: row',
+  'job_kill': 'shown: row',
+  'job_list': 'shown: row',
+  'subagent': 'shown: row',
+  'subagent_fork': 'shown: row',
+  'send_message': 'shown: row',
+  'interrupt_agent': 'shown: row',
+  'list_agents': 'shown: row',
+  'web_fetch': 'shown: row',
+  'web_search': 'shown: row',
+  'workflow': 'shown: row',
+  'create_goal': 'shown: row',
+  'update_goal': 'shown: row',
+  'get_goal': 'shown: row',
+};

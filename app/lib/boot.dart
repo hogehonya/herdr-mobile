@@ -27,6 +27,7 @@ import 'data/repositories/pane_answerer.dart';
 import 'data/repositories/pane_previews.dart';
 import 'data/observed/claude_kind.dart';
 import 'data/observed/codex_kind.dart';
+import 'data/observed/dsh_kind.dart';
 import 'data/observed/omp_kind.dart';
 import 'data/services/apk_installer.dart';
 import 'data/services/local_notifier.dart';
@@ -223,7 +224,7 @@ Future<HerdrMobileApp> bootApp({
           fleet: fleet,
           previews: previews,
           sourceFor: (machine) => SshLogSource(SshAgentHost(machine.api.transport)),
-          kinds: {'omp': ompKind, 'claude': claudeKind, 'codex': codexKind},
+          kinds: {'omp': ompKind, 'claude': claudeKind, 'codex': codexKind, 'dsh': dshKind},
         );
   // What needs the person, computed once per change of the fleet or the
   // sessions: built before the notifier, so it is current when that reads it.

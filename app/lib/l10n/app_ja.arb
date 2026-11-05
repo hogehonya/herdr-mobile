@@ -341,7 +341,7 @@
   "uiNumber": "数値",
   "uiOff": "オフ",
   "uiOffline": "オフライン",
-  "uiAgentsOpenAsAChatHint": "omp、Codex、Claude Code、pi は、セッションのログが見つかればチャットで開きます。dsh はターミナルで開きます。ターミナルへはワンタップで切り替えられます。それ以外のエージェントやログが見つからない場合もターミナルで開きます。",
+  "uiAgentsOpenAsAChatHint": "omp、Codex、Claude Code、pi、dsh は、セッションのログが見つかればチャットで開きます。ターミナルへはワンタップで切り替えられます。それ以外のエージェントやログが見つからない場合もターミナルで開きます。",
   "uiOn": "オン",
   "uiThisMachine": "このマシン",
   "uiWholeNumber": "整数",

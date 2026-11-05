@@ -62,6 +62,73 @@ void main() {
     });
   });
 
+  group('dsh', () {
+    test('every event and tool in the captured mirrors is in the coverage tables', () {
+      final events = <String>{};
+      final tools = <String>{};
+      for (final f in Directory('test/fixtures/dsh_logs').listSync().whereType<File>()) {
+        if (!f.path.endsWith('.jsonl')) continue;
+        for (final l in f.readAsLinesSync()) {
+          final d = jsonDecode(l);
+          if (d is! Map) continue;
+          final type = d['type'];
+          if (type is! String) continue;
+          events.add(type);
+          final data = d['data'];
+          if (type == 'tool/call' && data is Map && data['name'] is String) tools.add(data['name'] as String);
+          if (type == 'assistant/message' && data is Map) {
+            final message = data['message'];
+            final content = message is Map ? message['content'] : null;
+            if (content is List) {
+              for (final b in content) {
+                if (b is Map && b['type'] == 'tool-call' && b['name'] is String) tools.add(b['name'] as String);
+              }
+            }
+          }
+        }
+      }
+      expect(events, isNotEmpty);
+      expect(
+        events.where((e) => !dshEventCoverage.containsKey(e)),
+        isEmpty,
+        reason: 'new dsh events: add them to dshEventCoverage',
+      );
+      expect(
+        tools.where((t) => !dshToolCoverage.containsKey(t)),
+        isEmpty,
+        reason: 'new dsh tools: add them to dshToolCoverage',
+      );
+    });
+
+    test('the table is exactly the set of events dsh-herdr writes', () {
+      // dsh-herdr's CHAT_EVENT_TYPES (lib/chatlog.js) plus the header line: a
+      // new event on that side has to be decided about here.
+      const written = {
+        'herdr/mirror',
+        'user/message',
+        'assistant/message',
+        'tool/call',
+        'tool/result',
+        'turn/start',
+        'turn/end',
+        'step/start',
+        'todo/write',
+        'session/title',
+        'agent/inbox/spliced',
+        'compaction/start',
+        'compaction/end',
+        'command/run',
+        'command/done',
+      };
+      expect(dshEventCoverage.keys.toSet().difference(written), isEmpty, reason: 'the mirror never writes these');
+      expect(
+        written.difference(dshEventCoverage.keys.toSet()),
+        isEmpty,
+        reason: 'a written event is not decided about',
+      );
+    });
+  });
+
   group('Codex', () {
     test('every item type of the installed protocol schema is in the coverage table', () {
       final items = _kinds('codex-items.txt', 'item').map(_pascal).toSet();
